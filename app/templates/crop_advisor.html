@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+{% block title %}Crop Lifecycle Advisor | Smart Agri Assistant{% endblock %}
+{% block content %}
+<section class="page-hero guidance-hero">
+  <span class="section-kicker">Precision Agriculture Roadmap</span>
+  <h1 class="hero-title">Step-by-Step Crop Excellence</h1>
+  <p>Our intelligent advisor guides you through every critical phase of your crop's journey, providing localized prescriptions and expert interventions.</p>
+</section>
+
+<div id="advisor-interactive-shell" class="advisor-layout">
+  <!-- STEP 1: CROP SELECTION GRID -->
+  <div id="step-selection" class="selection-step">
+    <div class="section-heading-row">
+      <div>
+        <span class="section-kicker">Phase 1</span>
+        <h2 class="section-title">Select your crop</h2>
+      </div>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-lg-12">
+        <div class="glass-panel p-4">
+          {% set categories = [] %}
+          {% for crop in supported_crops %}
+            {% if crop.category not in categories %}
+              {% set _ = categories.append(crop.category) %}
+            {% endif %}
+          {% endfor %}
+
+          {% for category in categories %}
+          <div class="category-group">
+            <h4 class="category-title">{{ category }}</h4>
+            <div class="crop-card-grid">
+              {% for crop in supported_crops %}
+                {% if crop.category == category %}
+                <div class="crop-card-selectable" data-crop="{{ crop.name }}" onclick="selectCrop(this)">
+                  <div class="card-emoji">{{ crop.emoji }}</div>
+                  <div class="card-name">{{ crop.name }}</div>
+                  <div class="card-tag">{{ crop.category }}</div>
+                </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: DATE CONFIGURATION (HIDDEN BY DEFAULT) -->
+  <div id="step-config" class="config-step d-none">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="glass-panel form-panel text-center">
+          <button class="btn btn-link btn-sm position-absolute top-0 start-0 m-3 text-muted" onclick="goBackToSelection()">
+            <i class="bi bi-arrow-left me-1"></i> Change Crop
+          </button>
+          
+          <div class="selected-crop-badge mb-4 mt-2">
+            <span id="target-crop-emoji" class="display-1 d-block mb-2">🌾</span>
+            <h2 id="target-crop-name">Crop Name</h2>
+          </div>
+
+          <div id="date-input-area" class="stacked-form text-start">
+             <div class="mb-4">
+                <label class="field-label" for="sowing_date">
+                  Sowing Date
+                  <input type="date" id="sowing_date" class="form-control" max="{{ current_date }}">
+                </label>
+                <p class="field-hint">Optional: Enter the date you planted to see current growth stage advice.</p>
+             </div>
+             
+             <button class="btn btn-success btn-lg w-100 py-3 mb-3 shadow-lg" onclick="startGuidance('live')">
+               <i class="bi bi-play-circle-fill me-2"></i> Start Live Tracking
+             </button>
+             <button class="btn btn-outline-success w-100 py-3" onclick="startGuidance('explorer')">
+               <i class="bi bi-search me-2"></i> Just Explore Lifecycle
+             </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: GUIDANCE VIEWER (HIDDEN BY DEFAULT) -->
+  <div id="step-viewer" class="viewer-step d-none">
+    <div class="row g-4">
+      <!-- Sidebar Info -->
+      <div class="col-lg-4">
+          <div class="glass-panel advisor-progress-panel h-100 p-4">
+             <div class="d-flex justify-content-between w-100 mb-4">
+                <button class="btn btn-outline-secondary btn-sm rounded-pill" onclick="resetFlow()">
+                    <i class="bi bi-arrow-left"></i> Change
+                </button>
+                <div id="mode-badge" class="stage-badge">Explorer Mode</div>
+             </div>
+
+             <div class="progress-circle-shell mx-auto">
+                <svg class="progress-circle-svg" width="140" height="140" viewBox="0 0 140 140">
+                  <circle class="progress-bg" cx="70" cy="70" r="60"></circle>
+                  <circle class="progress-value" id="progress-circle-fill" cx="70" cy="70" r="60" 
+                          stroke-dasharray="377" stroke-dashoffset="377"></circle>
+                </svg>
+                <div class="progress-text">
+                  <strong id="progress-val-text">0%</strong>
+                  <span>Complete</span>
+                </div>
+             </div>
+
+             <div class="progress-meta mt-3">
+                <h2 id="view-crop-name" class="mb-1">Crop</h2>
+                <div id="view-day-info" class="text-muted small">Day -</div>
+             </div>
+
+             <div class="mt-4 w-100 text-start">
+                <span class="section-kicker">Timeline</span>
+                <div class="timeline-shell mt-2">
+                    <div id="mini-timeline" class="list-group list-group-flush rounded-3 border">
+                        <!-- Mini timeline items -->
+                    </div>
+                </div>
+             </div>
+          </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-8">
+          <div class="glass-panel p-4 mb-4">
+             <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="section-kicker">Detailed Prescription</span>
+                <div class="stage-badge" id="view-stage-counter">Stage 1 of 4</div>
+             </div>
+             
+             <h1 id="view-stage-name" class="mb-3">Growth Stage Name</h1>
+             <p id="view-stage-days" class="text-success font-monospace mb-4">Duration: Days 1-20</p>
+             
+             <div class="advice-grid">
+               <div class="advice-card shadow-sm">
+                 <div class="advice-icon icon-blue"><i class="bi bi-droplet-half"></i></div>
+                 <h4>Irrigation</h4>
+                 <p id="adv-irrigation">Instructions go here.</p>
+               </div>
+               <div class="advice-card shadow-sm">
+                 <div class="advice-icon icon-orange"><i class="bi bi-capsule"></i></div>
+                 <h4>Fertilization</h4>
+                 <p id="adv-fertilizer">Instructions go here.</p>
+               </div>
+               <div class="advice-card shadow-sm">
+                 <div class="advice-icon icon-red"><i class="bi bi-shield-exclamation"></i></div>
+                 <h4>Protection</h4>
+                 <p id="adv-protection">Instructions go here.</p>
+               </div>
+               <div class="advice-card shadow-sm">
+                 <div class="advice-icon icon-gold"><i class="bi bi-magic"></i></div>
+                 <h4>Pro Tip</h4>
+                 <p id="adv-tips">Instructions go here.</p>
+               </div>
+             </div>
+
+             <div class="nav-controls">
+                <button class="btn-nav" id="btn-prev-stage" onclick="navigateStage(-1)">
+                    <i class="bi bi-chevron-left"></i> Previous Stage
+                </button>
+                <button class="btn-nav" id="btn-next-stage" onclick="navigateStage(1)">
+                    Next Stage <i class="bi bi-chevron-right"></i>
+                </button>
+             </div>
+          </div>
+
+          <div id="viewer-notifications" class="notification-stack">
+              <!-- Smart system alerts -->
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let state = {
+    selectedCrop: null,
+    selectedEmoji: '🌾',
+    sowingDate: null,
+    currentData: null,
+    viewingIdx: 0
+};
+
+function selectCrop(element) {
+    state.selectedCrop = element.dataset.crop;
+    state.selectedEmoji = element.querySelector('.card-emoji').textContent;
+    
+    // Update labels in step 2
+    document.getElementById('target-crop-name').textContent = state.selectedCrop;
+    document.getElementById('target-crop-emoji').textContent = state.selectedEmoji;
+    
+    // Switch steps
+    document.getElementById('step-selection').classList.add('d-none');
+    document.getElementById('step-config').classList.remove('d-none');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBackToSelection() {
+    document.getElementById('step-selection').classList.remove('d-none');
+    document.getElementById('step-config').classList.add('d-none');
+    state.selectedCrop = null;
+}
+
+function resetFlow() {
+    document.getElementById('step-selection').classList.remove('d-none');
+    document.getElementById('step-viewer').classList.add('d-none');
+    document.getElementById('step-config').classList.add('d-none');
+    state.selectedCrop = null;
+    state.sowingDate = null;
+}
+
+async function startGuidance(mode) {
+    const dateInput = document.getElementById('sowing_date').value;
+    state.sowingDate = mode === 'live' ? dateInput : null;
+    
+    await fetchAndUpdateGuidance(null);
+    
+    // Switch to viewer
+    document.getElementById('step-config').classList.add('d-none');
+    document.getElementById('step-viewer').classList.remove('d-none');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function navigateStage(direction) {
+    const newIdx = state.viewingIdx + direction;
+    if (newIdx < 0 || newIdx >= state.currentData.num_stages) return;
+    
+    await fetchAndUpdateGuidance(newIdx);
+}
+
+async function fetchAndUpdateGuidance(idx) {
+    try {
+        const response = await fetch('/get_crop_guidance', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                crop: state.selectedCrop,
+                sowing_date: state.sowingDate,
+                stage_idx: idx
+            })
+        });
+        
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+        
+        state.currentData = data;
+        state.viewingIdx = data.selected_stage_idx;
+        renderViewer(data);
+    } catch (err) {
+        showAppMessage(err.message, true);
+    }
+}
+
+function renderViewer(data) {
+    // Mode Badge
+    const modeBadge = document.getElementById('mode-badge');
+    modeBadge.textContent = data.mode === 'live' ? 'Live Mode' : 'Explorer Mode';
+    modeBadge.className = data.mode === 'live' ? 'stage-badge bg-success-subtle' : 'stage-badge bg-info-subtle';
+
+    // Progress
+    const radius = 60;
+    const circumference = 2 * Math.PI * radius;
+    const progressFill = document.getElementById('progress-circle-fill');
+    const offset = circumference - (data.progress_pct / 100) * circumference;
+    progressFill.style.strokeDashoffset = offset;
+    document.getElementById('progress-val-text').textContent = `${data.progress_pct}%`;
+
+    // Labels
+    document.getElementById('view-crop-name').textContent = data.crop;
+    const dayInfo = document.getElementById('view-day-info');
+    if (data.current_day_live > 0) {
+        dayInfo.textContent = `Current Day: ${data.current_day_live} of ${data.total_days}`;
+    } else {
+        dayInfo.textContent = `Full cycle: ${data.total_days} days`;
+    }
+
+    // Stage Main
+    document.getElementById('view-stage-name').textContent = data.current_stage.name;
+    document.getElementById('view-stage-days').textContent = `Activity Period: Days ${data.current_stage.start_day} - ${data.current_stage.end_day}`;
+    document.getElementById('view-stage-counter').textContent = `Stage ${data.selected_stage_idx + 1} of ${data.num_stages}`;
+
+    // Advice
+    document.getElementById('adv-irrigation').textContent = data.current_stage.advice.irrigation;
+    document.getElementById('adv-fertilizer').textContent = data.current_stage.advice.fertilizer;
+    document.getElementById('adv-protection').textContent = data.current_stage.advice.protection;
+    document.getElementById('adv-tips').textContent = data.current_stage.advice.tips;
+
+    // Controls
+    document.getElementById('btn-prev-stage').disabled = !data.has_prev;
+    document.getElementById('btn-next-stage').disabled = !data.has_next;
+
+    // Mini Timeline
+    const timeline = document.getElementById('mini-timeline');
+    timeline.innerHTML = '';
+    data.all_stages.forEach((s, idx) => {
+        const item = document.createElement('a');
+        item.className = `list-group-item list-group-item-action border-0 py-3 ${idx === state.viewingIdx ? 'bg-success text-white' : ''}`;
+        item.href = "javascript:void(0)";
+        item.onclick = () => fetchAndUpdateGuidance(idx);
+        
+        let prefix = '';
+        if (data.current_day_live > s.end_day) prefix = '✅ ';
+        else if (data.current_day_live >= s.start_day && data.current_day_live <= s.end_day) prefix = '🌱 ';
+        
+        item.innerHTML = `<div class="d-flex justify-content-between">
+            <span>${prefix}${s.name}</span>
+            <small class="${idx === state.viewingIdx ? 'text-white' : 'text-muted'}">Days ${s.start_day}+</small>
+        </div>`;
+        timeline.appendChild(item);
+    });
+
+    // Alerts
+    const alerts = document.getElementById('viewer-notifications');
+    alerts.innerHTML = '';
+    if (data.mode === 'live') {
+        createAlert(alerts, 'Daily System Check', 'Current environmental conditions are optimal for the ' + data.current_stage.name + ' phase.', 'bi-check-circle-fill', 'text-success');
+    }
+}
+
+function createAlert(container, title, msg, icon, iconClass) {
+    const alert = document.createElement('div');
+    alert.className = 'daily-reminder-card shadow-sm mb-3';
+    alert.innerHTML = `
+        <div class="reminder-icon ${iconClass}"><i class="bi ${icon}"></i></div>
+        <div class="reminder-content">
+            <h5 class="mb-1">${title}</h5>
+            <p class="mb-0 text-muted small">${msg}</p>
+        </div>
+    `;
+    container.appendChild(alert);
+}
+</script>
+{% endblock %}

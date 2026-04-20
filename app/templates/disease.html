@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Disease Detection | Smart Agri Assistant{% endblock %}
+{% block content %}
+<section class="page-hero compact-hero">
+  <span class="section-kicker">Leaf image diagnosis</span>
+  <h1 class="section-title">Detect plant disease from an uploaded image or browser webcam</h1>
+  <p>Upload a clean leaf image, or capture one live. Optionally provide the crop name to tighten disease filtering.</p>
+</section>
+
+<div class="row g-4">
+  <div class="col-xl-7">
+    <form id="disease-detection-form" class="stacked-form" enctype="multipart/form-data" novalidate>
+      <input type="hidden" name="captured_image_data" data-capture-input>
+      <div class="glass-panel form-panel">
+        <div class="panel-heading">
+          <span class="section-kicker">Image input</span>
+          <h2>Upload or capture a leaf image</h2>
+        </div>
+
+        <div class="upload-dropzone" data-dropzone>
+          <input class="d-none" type="file" name="leaf_image" accept=".jpg,.jpeg,.png,.webp" data-image-input>
+          <div class="dropzone-copy">
+            <i class="bi bi-cloud-arrow-up-fill"></i>
+            <h3>Drop an image here</h3>
+            <p>or click to browse from your device</p>
+          </div>
+        </div>
+
+        <div class="preview-shell mt-3">
+          <div class="preview-state" data-preview-empty>No image selected yet.</div>
+          <img class="preview-image d-none" alt="Leaf preview" data-preview-image>
+        </div>
+
+        <div class="row g-3 mt-1">
+          <div class="col-md-6">
+            <label class="field-label">Optional crop name
+              <input class="form-control form-control-lg" name="provided_crop" type="text" placeholder="Tomato, Potato, Rice...">
+            </label>
+          </div>
+          <div class="col-md-6">
+            <label class="field-label">Capture with webcam
+              <div class="button-cluster">
+                <button class="btn btn-outline-success" type="button" data-webcam-start>Start Camera</button>
+                <button class="btn btn-outline-dark" type="button" data-webcam-capture disabled>Capture</button>
+                <button class="btn btn-outline-secondary" type="button" data-webcam-stop disabled>Stop</button>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="webcam-shell d-none" data-webcam-shell>
+          <video playsinline autoplay muted data-webcam-video></video>
+          <canvas class="d-none" data-webcam-canvas></canvas>
+        </div>
+
+        <button class="btn btn-success btn-lg w-100 mt-4" type="submit">
+          <i class="bi bi-search-heart me-2"></i>Analyze Leaf
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-xl-5">
+    <section class="glass-panel result-panel sticky-panel" id="disease-result-panel">
+      <div class="panel-heading">
+        <span class="section-kicker">Diagnosis output</span>
+        <h2>Awaiting leaf image</h2>
+      </div>
+      <p class="result-placeholder">
+        The result panel will show crop name, disease name, confidence, Grad-CAM heatmap, and treatment guidance.
+      </p>
+      {% if not dashboard.disease_ready %}
+        <div class="inline-note mt-3">
+          Disease inference becomes available after TensorFlow is installed and the disease model files exist under <code>models/disease/</code>.
+        </div>
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

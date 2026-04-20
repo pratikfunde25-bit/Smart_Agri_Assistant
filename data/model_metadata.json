@@ -1,0 +1,27 @@
+{
+  "feature_importance": {
+    "N": 0.012518876232206821,
+    "P": 0.0075730918906629086,
+    "K": 0.009187959134578705,
+    "pH": 0.008409269154071808,
+    "temperature": 0.010532432235777378,
+    "humidity": 0.014376441948115826,
+    "rainfall": 0.013292958959937096,
+    "soil_type": 0.013004319742321968,
+    "season": 0.012983663007616997,
+    "region": 0.007015278562903404
+  },
+  "model_type": "<class 'xgboost.sklearn.XGBClassifier'>",
+  "features": [
+    "N",
+    "P",
+    "K",
+    "pH",
+    "temperature",
+    "humidity",
+    "rainfall",
+    "soil_type",
+    "season",
+    "region"
+  ]
+}

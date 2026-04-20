@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Smart Agri Assistant{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body data-page="{{ active_page }}">
+  <div class="page-backdrop">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div id="loading-overlay" class="loading-overlay d-none" aria-live="polite" aria-busy="true">
+    <div class="loading-card">
+      <div class="leaf-spinner">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <p class="mb-0">Running AI inference and preparing results...</p>
+    </div>
+  </div>
+
+  <div id="message-host" class="message-host" aria-live="polite"></div>
+
+  <header class="site-header">
+    <div class="container-xxl">
+      <nav class="navbar navbar-expand-lg navbar-dark app-navbar">
+        <a class="navbar-brand brandmark" href="{{ url_for('home') }}">
+          <span class="brandmark-icon"><i class="bi bi-flower2"></i></span>
+          <span>
+            <strong>Smart Agri Assistant</strong>
+            <small>Hybrid crop prediction and disease intelligence</small>
+          </span>
+        </a>
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-controls="siteNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="siteNav">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li class="nav-item"><a class="nav-link {% if active_page == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a></li>
+            <li class="nav-item"><a class="nav-link {% if active_page == 'crop' %}active{% endif %}" href="{{ url_for('crop_page') }}">Crop Prediction</a></li>
+            <li class="nav-item"><a class="nav-link {% if active_page == 'disease' %}active{% endif %}" href="{{ url_for('disease_page') }}">Disease Detection</a></li>
+            <li class="nav-item"><a class="nav-link {% if active_page == 'hybrid' %}active{% endif %}" href="{{ url_for('hybrid_page') }}">Hybrid Results</a></li>
+            <li class="nav-item"><a class="nav-link {% if active_page == 'advisor' %}active{% endif %}" href="{{ url_for('advisor_page') }}">Crop Guidance</a></li>
+            <li class="nav-item"><a class="nav-link {% if active_page == 'insights' %}active{% endif %}" href="{{ url_for('insights') }}">Insights</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main container-xxl pb-5">
+    {% block content %}{% endblock %}
+  </main>
+
+  <script>
+    window.appConfig = {
+      weatherReady: {{ 'true' if weather_ready is defined and weather_ready else 'false' }},
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}Hybrid Prediction | Smart Agri Assistant{% endblock %}
+{% block content %}
+<section class="page-hero compact-hero">
+  <span class="section-kicker">Hybrid intelligence workflow</span>
+  <h1 class="section-title">Fuse crop prediction and disease detection for stronger field recommendations</h1>
+  <p>Provide structured crop inputs and a leaf image in one step. The system will combine both streams and explain the final result.</p>
+</section>
+
+<div class="row g-4">
+  <div class="col-xl-7">
+    <form id="hybrid-prediction-form" class="stacked-form" enctype="multipart/form-data" novalidate>
+      <input type="hidden" name="captured_image_data" data-capture-input>
+      <div class="glass-panel form-panel">
+        <div class="panel-heading d-flex justify-content-between align-items-start gap-3 flex-wrap">
+          <div>
+            <span class="section-kicker">Structured crop context</span>
+            <h2>Crop inputs and live weather</h2>
+          </div>
+          <button type="button" class="btn btn-outline-success" data-weather-button data-target-form="hybrid-prediction-form" {% if not weather_ready %}disabled{% endif %}>
+            <i class="bi bi-geo-alt-fill me-2"></i>Use My Location
+          </button>
+        </div>
+
+        <div class="weather-banner" data-weather-panel>
+          <div>
+            <strong>Weather not loaded yet</strong>
+            <p class="mb-0">
+              {% if weather_ready %}
+                Location-based weather will fill temperature, humidity, and rainfall for you.
+              {% else %}
+                Add <code>OPENWEATHER_API_KEY</code> to enable location-based autofill.
+              {% endif %}
+            </p>
+          </div>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="field-label">Nitrogen (N)
+              <input class="form-control form-control-lg" name="N" type="number" step="0.01" value="{{ form_defaults.N }}" required>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <label class="field-label">Phosphorus (P)
+              <input class="form-control form-control-lg" name="P" type="number" step="0.01" value="{{ form_defaults.P }}" required>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <label class="field-label">Potassium (K)
+              <input class="form-control form-control-lg" name="K" type="number" step="0.01" value="{{ form_defaults.K }}" required>
+            </label>
+          </div>
+          <div class="col-md-3">
+            <label class="field-label">Soil pH
+              <input class="form-control form-control-lg" name="pH" type="number" step="0.01" value="{{ form_defaults.pH }}" required>
+            </label>
+          </div>
+          <div class="col-md-3">
+            <label class="field-label">Temperature (°C)
+              <input class="form-control form-control-lg" name="temperature" type="number" step="0.1" value="{{ form_defaults.temperature }}" required>
+            </label>
+          </div>
+          <div class="col-md-3">
+            <label class="field-label">Humidity (%)
+              <input class="form-control form-control-lg" name="humidity" type="number" step="0.1" value="{{ form_defaults.humidity }}" required>
+            </label>
+          </div>
+          <div class="col-md-3">
+            <label class="field-label">Rainfall (mm)
+              <input class="form-control form-control-lg" name="rainfall" type="number" step="0.1" value="{{ form_defaults.rainfall }}" required>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <label class="field-label">Soil Type
+              <select class="form-select form-select-lg" name="soil_type">
+                {% for soil in soil_options %}
+                  <option value="{{ soil }}" {% if form_defaults.soil_type == soil %}selected{% endif %}>{{ soil }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <label class="field-label">Season
+              <select class="form-select form-select-lg" name="season">
+                {% for season in season_options %}
+                  <option value="{{ season }}" {% if form_defaults.season == season %}selected{% endif %}>{{ season }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <label class="field-label">Region
+              <select class="form-select form-select-lg" name="region">
+                {% for region in region_options %}
+                  <option value="{{ region }}" {% if form_defaults.region == region %}selected{% endif %}>{{ region }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-panel form-panel mt-4">
+        <div class="panel-heading">
+          <span class="section-kicker">Leaf image source</span>
+          <h2>Upload or capture the leaf</h2>
+        </div>
+
+        <div class="upload-dropzone" data-dropzone>
+          <input class="d-none" type="file" name="leaf_image" accept=".jpg,.jpeg,.png,.webp" data-image-input>
+          <div class="dropzone-copy">
+            <i class="bi bi-camera2"></i>
+            <h3>Leaf image required</h3>
+            <p>Drag, browse, or capture with webcam</p>
+          </div>
+        </div>
+
+        <div class="preview-shell mt-3">
+          <div class="preview-state" data-preview-empty>No image selected yet.</div>
+          <img class="preview-image d-none" alt="Hybrid leaf preview" data-preview-image>
+        </div>
+
+        <div class="row g-3 mt-1">
+          <div class="col-md-6">
+            <label class="field-label">Optional crop override
+              <input class="form-control form-control-lg" name="provided_crop" type="text" placeholder="Only use if the crop is already known">
+            </label>
+          </div>
+          <div class="col-md-6">
+            <label class="field-label">Webcam controls
+              <div class="button-cluster">
+                <button class="btn btn-outline-success" type="button" data-webcam-start>Start Camera</button>
+                <button class="btn btn-outline-dark" type="button" data-webcam-capture disabled>Capture</button>
+                <button class="btn btn-outline-secondary" type="button" data-webcam-stop disabled>Stop</button>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="webcam-shell d-none" data-webcam-shell>
+          <video playsinline autoplay muted data-webcam-video></video>
+          <canvas class="d-none" data-webcam-canvas></canvas>
+        </div>
+
+        <button class="btn btn-success btn-lg w-100 mt-4" type="submit">
+          <i class="bi bi-magic me-2"></i>Run Hybrid Prediction
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-xl-5">
+    <section class="glass-panel result-panel sticky-panel" id="hybrid-result-panel">
+      <div class="panel-heading">
+        <span class="section-kicker">Main output page</span>
+        <h2>Awaiting crop data and leaf image</h2>
+      </div>
+      <p class="result-placeholder">
+        Final output will combine crop prior, disease diagnosis, Grad-CAM visualization, confidence, remedies, and additional field tips.
+      </p>
+    </section>
+  </div>
+</div>
+{% endblock %}

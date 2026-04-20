@@ -1,0 +1,88 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+.venv312/
+venv312/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Model files (keep structure but ignore large weights)
+models/**/*.h5
+models/**/*.pth
+models/**/*.pkl
+models/**/*.joblib
+models/**/*.keras
+models/**/*.onnx
+models/**/*.tflite
+!models/.gitkeep
+
+# Data files (keep structure but ignore large data)
+data/raw/
+data/processed/
+data/external/
+!data/.gitkeep
+
+# Reports
+reports/*.json
+reports/metrics.json
+!reports/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Kaggle (if used)
+.kaggle/
+
+# TensorFlow
+*.pb
+*.tflite
+!models/disease/*.tflite
+
+# Documentation build
+docs/_build/
+site/

@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block title %}Smart Agri Assistant{% endblock %}
+{% block content %}
+<section class="hero-shell">
+  <div class="row g-4 align-items-stretch">
+    <div class="col-lg-7">
+      <div class="glass-panel hero-panel h-100">
+        <span class="section-kicker">Production-ready agricultural AI</span>
+        <h1 class="hero-title">Crop recommendation, weather-assisted input, and leaf disease diagnosis in one workflow.</h1>
+        <p class="hero-copy">
+          Smart Agri Assistant combines structured crop prediction, image-based disease detection, hybrid reasoning,
+          and Grad-CAM explainability so the same web app can support field scouting and treatment decisions.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-success btn-lg" href="{{ url_for('hybrid_page') }}">Run Hybrid Prediction</a>
+          <a class="btn btn-outline-light btn-lg" href="{{ url_for('crop_page') }}">Start With Crop Inputs</a>
+        </div>
+        <div class="status-strip">
+          <div class="status-pill {% if dashboard.crop_ready %}is-ready{% else %}is-pending{% endif %}">
+            <i class="bi bi-cpu"></i>
+            <span>Crop model {% if dashboard.crop_ready %}ready{% else %}not found{% endif %}</span>
+          </div>
+          <div class="status-pill {% if dashboard.disease_ready %}is-ready{% else %}is-pending{% endif %}">
+            <i class="bi bi-virus"></i>
+            <span>Disease pipeline {% if dashboard.disease_ready %}ready{% else %}setup required{% endif %}</span>
+          </div>
+          <div class="status-pill {% if dashboard.weather_ready %}is-ready{% else %}is-pending{% endif %}">
+            <i class="bi bi-cloud-sun"></i>
+            <span>Weather API {% if dashboard.weather_ready %}connected{% else %}add key{% endif %}</span>
+          </div>
+        </div>
+        {% if dashboard.disease_runtime_note %}
+          <div class="inline-note mt-3">{{ dashboard.disease_runtime_note }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="glass-panel metrics-panel h-100">
+        <div class="panel-heading">
+          <span class="section-kicker">System snapshot</span>
+          <h2>What the stack can do right now</h2>
+        </div>
+        <div class="metric-grid-home">
+          <article>
+            <span>Crop Accuracy</span>
+            <strong>
+              {% if dashboard.crop_metrics %}{{ '%.1f'|format(dashboard.crop_metrics.accuracy * 100) }}%{% else %}--{% endif %}
+            </strong>
+          </article>
+          <article>
+            <span>Crop Macro F1</span>
+            <strong>
+              {% if dashboard.crop_metrics %}{{ '%.3f'|format(dashboard.crop_metrics.f1_macro) }}{% else %}--{% endif %}
+            </strong>
+          </article>
+          <article>
+            <span>Disease Accuracy</span>
+            <strong>
+              {% if dashboard.disease_metrics %}{{ '%.1f'|format(dashboard.disease_metrics.accuracy * 100) }}%{% else %}--{% endif %}
+            </strong>
+          </article>
+          <article>
+            <span>Backbone</span>
+            <strong>{{ dashboard.disease_metrics.backbone if dashboard.disease_metrics else 'MobileNetV2' }}</strong>
+          </article>
+        </div>
+        <div class="insight-stack">
+          <div class="insight-card-mini">
+            <i class="bi bi-geo-alt"></i>
+            <div>
+              <h3>Weather Autofill</h3>
+              <p>Use browser geolocation to pull live temperature, humidity, and rainfall into crop forms.</p>
+            </div>
+          </div>
+          <div class="insight-card-mini">
+            <i class="bi bi-camera"></i>
+            <div>
+              <h3>Live Diagnosis</h3>
+              <p>Upload a leaf image or capture one from the browser webcam to run image inference instantly.</p>
+            </div>
+          </div>
+          <div class="insight-card-mini">
+            <i class="bi bi-activity"></i>
+            <div>
+              <h3>Explainable Results</h3>
+              <p>See Grad-CAM overlays, confidence scores, and treatment guidance on the same output screen.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="section-heading-row">
+    <div>
+      <span class="section-kicker">Core workflows</span>
+      <h2 class="section-title">Choose the workflow that matches the field situation</h2>
+    </div>
+  </div>
+  <div class="row g-4">
+    <div class="col-md-4">
+      <article class="glass-panel feature-panel h-100">
+        <div class="feature-icon"><i class="bi bi-grid-1x2-fill"></i></div>
+        <h3>Crop Prediction</h3>
+        <p>Submit soil nutrients, pH, region, and weather-aware inputs to get ranked crop recommendations with confidence.</p>
+        <a class="feature-link" href="{{ url_for('crop_page') }}">Open crop prediction</a>
+      </article>
+    </div>
+    <div class="col-md-4">
+      <article class="glass-panel feature-panel h-100">
+        <div class="feature-icon"><i class="bi bi-image-fill"></i></div>
+        <h3>Disease Detection</h3>
+        <p>Run leaf image diagnosis with optional crop hints, top disease candidates, remedies, and Grad-CAM heatmaps.</p>
+        <a class="feature-link" href="{{ url_for('disease_page') }}">Open disease detection</a>
+      </article>
+    </div>
+    <div class="col-md-4">
+      <article class="glass-panel feature-panel h-100">
+        <div class="feature-icon"><i class="bi bi-diagram-3-fill"></i></div>
+        <h3>Hybrid Inference</h3>
+        <p>Fuse structured crop priors and image predictions to narrow disease classes and improve the final recommendation.</p>
+        <a class="feature-link" href="{{ url_for('hybrid_page') }}">Open hybrid result page</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="glass-panel workflow-panel h-100">
+        <span class="section-kicker">End-to-end sequence</span>
+        <h2 class="section-title">How the application reasons</h2>
+        <div class="workflow-list">
+          <div class="workflow-step">
+            <span>1</span>
+            <div>
+              <h3>Capture context</h3>
+              <p>Weather autofill reduces manual entry by using browser permission and a live weather API call.</p>
+            </div>
+          </div>
+          <div class="workflow-step">
+            <span>2</span>
+            <div>
+              <h3>Predict crop prior</h3>
+              <p>The CSV model scores probable crops from environmental and soil features.</p>
+            </div>
+          </div>
+          <div class="workflow-step">
+            <span>3</span>
+            <div>
+              <h3>Analyze the leaf</h3>
+              <p>The vision model identifies healthy vs disease classes from PlantVillage-style labels and field imagery.</p>
+            </div>
+          </div>
+          <div class="workflow-step">
+            <span>4</span>
+            <div>
+              <h3>Deliver explanation</h3>
+              <p>The final page shows confidence, disease treatment, crop support hints, and a Grad-CAM highlight map.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="glass-panel checklist-panel h-100">
+        <span class="section-kicker">Deployment checklist</span>
+        <h2 class="section-title">Recommended production setup</h2>
+        <ul class="clean-list">
+          <li>Set `OPENWEATHER_API_KEY` before enabling live weather autofill.</li>
+          <li>Install TensorFlow to activate the disease and hybrid inference routes.</li>
+          <li>Use HTTPS in production because browser geolocation requires a secure context.</li>
+          <li>Keep disease artifacts under `models/disease/` and generated overlays under `app/static/generated/`.</li>
+        </ul>
+        <a class="btn btn-outline-success mt-3" href="{{ url_for('insights') }}">View model insights</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

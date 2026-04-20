@@ -1,0 +1,25 @@
+{
+  "excluded_crops": ["Teff", "Fallow"],
+  "crop_durations": {
+    "Rice": { "min": 4, "max": 5 },
+    "Wheat": { "min": 4, "max": 5 },
+    "Maize": { "min": 3, "max": 4 },
+    "Cotton": { "min": 6, "max": 8 },
+    "Sugarcane": { "min": 10, "max": 15 },
+    "Groundnut": { "min": 3, "max": 4 },
+    "Potato": { "min": 3, "max": 4 },
+    "Barley": { "min": 4, "max": 5 },
+    "Ginger": { "min": 8, "max": 10 },
+    "Turmeric": { "min": 8, "max": 10 },
+    "Grapes": { "min": 5, "max": 6 },
+    "Moong": { "min": 2, "max": 3 },
+    "Urad": { "min": 2, "max": 3 },
+    "Gram": { "min": 3, "max": 5 },
+    "Tur": { "min": 4, "max": 6 },
+    "Pea": { "min": 3, "max": 4 },
+    "Jowar": { "min": 3, "max": 4 },
+    "Sorghum": { "min": 3, "max": 4 },
+    "Bean": { "min": 2, "max": 4 },
+    "Red Pepper": { "min": 5, "max": 7 }
+  }
+}

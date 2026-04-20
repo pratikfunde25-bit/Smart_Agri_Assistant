@@ -1,0 +1,387 @@
+{
+  "Rice": {
+    "emoji": "🌾",
+    "category": "Cereals",
+    "total_days": 150,
+    "stages": [
+      {
+        "name": "Nursery/Sowing",
+        "start_day": 1,
+        "end_day": 20,
+        "advice": {
+          "irrigation": "Keep the soil moist but not flooded. Maintain 2-3 cm water level.",
+          "fertilizer": "Basal application of NPK (40:20:20 kg/ha equivalent).",
+          "protection": "Treat seeds with Carbendazim (2g/kg) before sowing.",
+          "tips": "Ensure 1/10th of the main field area for the nursery."
+        }
+      },
+      {
+        "name": "Transplanting",
+        "start_day": 21,
+        "end_day": 35,
+        "advice": {
+          "irrigation": "Maintain a standing water level of 2-5 cm.",
+          "fertilizer": "Apply Nitrogen (Urea) in splits. First top-dress now.",
+          "protection": "Keep field weed-free for the first 30 days.",
+          "tips": "Plant 2-3 seedlings per hill at a shallow depth."
+        }
+      },
+      {
+        "name": "Tillering & Growth",
+        "start_day": 36,
+        "end_day": 75,
+        "advice": {
+          "irrigation": "Critical stage! Maintain 5 cm water. Avoid drying.",
+          "fertilizer": "Apply second split of Nitrogen (Urea) with Potash.",
+          "protection": "Monitor for Leaf Folder and Yellow Stem Borer.",
+          "tips": "Hand weeding or use post-emergence herbicides."
+        }
+      },
+      {
+        "name": "Flowering & Maturity",
+        "start_day": 76,
+        "end_day": 150,
+        "advice": {
+          "irrigation": "Drain water 15 days before harvest.",
+          "fertilizer": "Final Nitrogen top-dress at panicle initiation.",
+          "protection": "Watch for Brown Plant Hopper and Blast disease.",
+          "tips": "Harvest when 80% of grains reach a straw color."
+        }
+      }
+    ]
+  },
+  "Wheat": {
+    "emoji": "🌾",
+    "category": "Cereals",
+    "total_days": 130,
+    "stages": [
+      {
+        "name": "Sowing & Germination",
+        "start_day": 1,
+        "end_day": 20,
+        "advice": {
+          "irrigation": "First irrigation at 21 days (Crown Root Initiation stage).",
+          "fertilizer": "120:60:40 NPK kg/ha. Basal dose of P and K.",
+          "protection": "Watch for termites in early stages.",
+          "tips": "Sow in lines with a 22.5 cm distance."
+        }
+      },
+      {
+        "name": "Tillering & Jointing",
+        "start_day": 21,
+        "end_day": 60,
+        "advice": {
+          "irrigation": "Regular intervals (15-20 days) based on soil moisture.",
+          "fertilizer": "First top-dress of Nitrogen after the first irrigation.",
+          "protection": "Spray for broad-leaved weeds like Phalaris minor.",
+          "tips": "Ensure second irrigation at the late tillering stage."
+        }
+      },
+      {
+        "name": "Flowering & Dough",
+        "start_day": 61,
+        "end_day": 130,
+        "advice": {
+          "irrigation": "Crucial: Flowering and Milk stages require moisture.",
+          "fertilizer": "Last Nitrogen application before heading.",
+          "protection": "Monitor for Yellow Rust (stripes on leaves).",
+          "tips": "Harvest when grains produce a metallic sound when bitten."
+        }
+      }
+    ]
+  },
+  "Cotton": {
+    "emoji": "☁️",
+    "category": "Fiber",
+    "total_days": 180,
+    "stages": [
+      {
+        "name": "Seedling",
+        "start_day": 1,
+        "end_day": 30,
+        "advice": {
+          "irrigation": "Light irrigation for uniform germination.",
+          "fertilizer": "Basal NPK application. High requirement of Potash.",
+          "protection": "Control sucking pests like Jassids and Aphids.",
+          "tips": "Gap filling to maintain the desired plant population."
+        }
+      },
+      {
+        "name": "Square & Flowering",
+        "start_day": 31,
+        "end_day": 90,
+        "advice": {
+          "irrigation": "Increase frequency during the flowering stage.",
+          "fertilizer": "Top-dress Nitrogen at the start of flowering.",
+          "protection": "Watch for Bollworms (American and Pink).",
+          "tips": "Use Pheromone traps to monitor bollworm activity."
+        }
+      },
+      {
+        "name": "Boll Opening & Pick",
+        "start_day": 91,
+        "end_day": 180,
+        "advice": {
+          "irrigation": "Reduce frequency to allow boll opening.",
+          "fertilizer": "None required at this stage.",
+          "protection": "Clean picking to avoid dry leaf mix.",
+          "tips": "Sun-dry the picked cotton to reduce moisture."
+        }
+      }
+    ]
+  },
+  "Maize": {
+    "emoji": "🌽",
+    "category": "Cereals",
+    "total_days": 110,
+    "stages": [
+      {
+        "name": "Germination",
+        "start_day": 1,
+        "end_day": 20,
+        "advice": {
+          "irrigation": "Maintain soil moisture for healthy seedlings.",
+          "fertilizer": "Application of Zinc Sulphate (25 kg/ha) is vital.",
+          "protection": "Prevent soil-borne diseases with seed treatment.",
+          "tips": "Thinning at 10-15 days to manage plant density."
+        }
+      },
+      {
+        "name": "Tasseling & Silking",
+        "start_day": 21,
+        "end_day": 70,
+        "advice": {
+          "irrigation": "Water stress at silking can reduce yield by 50%.",
+          "fertilizer": "Top-dress Nitrogen at the knee-high stage.",
+          "protection": "Control stem borer with granular insecticides.",
+          "tips": "Apply Nitrogen when leaves are dry to avoid burns."
+        }
+      },
+      {
+        "name": "Grain Filling",
+        "start_day": 71,
+        "end_day": 110,
+        "advice": {
+          "irrigation": "Stop irrigation a week before harvesting.",
+          "fertilizer": "No additional fertilizer needed.",
+          "protection": "Watch for cob borer and bird damage.",
+          "tips": "Harvest when husks turn dry/straw color."
+        }
+      }
+    ]
+  },
+  "Pulse crops (Moong/Tur/Gram)": {
+    "emoji": "🥗",
+    "category": "Pulses",
+    "total_days": 90,
+    "stages": [
+      {
+        "name": "Sowing",
+        "start_day": 1,
+        "end_day": 15,
+        "advice": {
+          "irrigation": "Pre-sowing irrigation is helpful for pulses.",
+          "fertilizer": "Use rhizobium culture for nitrogen fixation.",
+          "protection": "Seed treatment for wilt and root rot.",
+          "tips": "Ensure proper drainage in the field."
+        }
+      },
+      {
+        "name": "Pod Formation",
+        "start_day": 16,
+        "end_day": 90,
+        "advice": {
+          "irrigation": "Irrigate at the flowering and pod development stages.",
+          "fertilizer": "Application of DAP (100 kg/ha) at sowing.",
+          "protection": "Control pod borer (Helicoverpa armigera).",
+          "tips": "Nipping of gram at 40 days to increase branching."
+        }
+      }
+    ]
+  },
+  "Sugarcane": {
+    "emoji": "🎋",
+    "category": "Commercial",
+    "total_days": 365,
+    "stages": [
+      {
+        "name": "Germination",
+        "start_day": 1,
+        "end_day": 60,
+        "advice": {
+          "irrigation": "Frequent light irrigation at 10-day intervals.",
+          "fertilizer": "250 kg N/ha. Basal dose of P and K.",
+          "protection": "Control Early Shoot Borer with soil treatment.",
+          "tips": "Use healthy 3-budded setts for planting."
+        }
+      },
+      {
+        "name": "Tillering & Growth",
+        "start_day": 61,
+        "end_day": 250,
+        "advice": {
+          "irrigation": "Highest water demand. Irrigate weekly in summer.",
+          "fertilizer": "Final Nitrogen dose should be done by the 6th month.",
+          "protection": "Watch for Pyrilla and Whitefly.",
+          "tips": "Earthing up to prevent lodging and pests."
+        }
+      },
+      {
+        "name": "Ripening",
+        "start_day": 251,
+        "end_day": 365,
+        "advice": {
+          "irrigation": "Increase irrigation interval to 20 days.",
+          "fertilizer": "None. Nitrogen reduces juice quality now.",
+          "protection": "Protect against rats and wild boars.",
+          "tips": "Test maturity with a Brix refractometer."
+        }
+      }
+    ]
+  },
+  "Groundnut": {
+    "emoji": "🥜",
+    "category": "Oilseeds",
+    "total_days": 110,
+    "stages": [
+      {
+        "name": "Vegeatative",
+        "start_day": 1,
+        "end_day": 40,
+        "advice": {
+          "irrigation": "Light irrigation if rains fail.",
+          "fertilizer": "High requirement of Gypsum (500 kg/ha).",
+          "protection": "Control Ticka leaf spot and leaf miner.",
+          "tips": "Application of Gypsum during the flowering stage."
+        }
+      },
+      {
+        "name": "Pegging & Harvest",
+        "start_day": 41,
+        "end_day": 110,
+        "advice": {
+          "irrigation": "Avoid water stress at the pegging stage.",
+          "fertilizer": "No Nitrogen after flowering.",
+          "protection": "Monitor for root rot and white grub.",
+          "tips": "Harvest when shells develop internal dark markings."
+        }
+      }
+    ]
+  },
+  "Potato": {
+    "emoji": "🥔",
+    "category": "Vegetables",
+    "total_days": 100,
+    "stages": [
+      {
+        "name": "Tuberization",
+        "start_day": 1,
+        "end_day": 45,
+        "advice": {
+          "irrigation": "Frequent light irrigation for uniform tubers.",
+          "fertilizer": "150:100:100 NPK kg/ha. Full P and K basal.",
+          "protection": "Watch for Late Blight (brown spots).",
+          "tips": "Earthing up when plants are 15-20 cm high."
+        }
+      },
+      {
+        "name": "Growth & Harvest",
+        "start_day": 46,
+        "end_day": 100,
+        "advice": {
+          "irrigation": "Critical for tuber expansion. Maintain moisture.",
+          "fertilizer": "Apply Nitrogen in splits.",
+          "protection": "Stop irrigation 10 days before de-haulming.",
+          "tips": "De-haulming 10-15 days before harvest to harden skin."
+        }
+      }
+    ]
+  },
+  "Barley": {
+    "emoji": "🌾",
+    "category": "Cereals",
+    "total_days": 120,
+    "stages": [
+      {
+        "name": "Early Stage",
+        "start_day": 1,
+        "end_day": 40,
+        "advice": {
+          "irrigation": "First irrigation at 25-30 days.",
+          "fertilizer": "60:40:40 kg NPK/ha. Basal application.",
+          "protection": "Control weeds at the 35-day stage.",
+          "tips": "Barley is more salt-tolerant than wheat."
+        }
+      },
+      {
+        "name": "Late Stage",
+        "start_day": 41,
+        "end_day": 120,
+        "advice": {
+          "irrigation": "Ensure moisture at flowering and grain formation.",
+          "fertilizer": "None required.",
+          "protection": "Monitor for barley rust and smut.",
+          "tips": "Harvest at 18-20% grain moisture."
+        }
+      }
+    ]
+  },
+  "Ginger/Turmeric": {
+    "emoji": "🫚",
+    "category": "Spices",
+    "total_days": 270,
+    "stages": [
+      {
+        "name": "Rhizome Growth",
+        "start_day": 1,
+        "end_day": 90,
+        "advice": {
+          "irrigation": "Moderate. Avoid waterlogging at all costs.",
+          "fertilizer": "High organic manure (FYM) requirement.",
+          "protection": "Treat rhizomes with Mancozeb (0.3%).",
+          "tips": "Mulching is key for heat and moisture control."
+        }
+      },
+      {
+        "name": "Maturity",
+        "start_day": 91,
+        "end_day": 270,
+        "advice": {
+          "irrigation": "Regular intervals for development.",
+          "fertilizer": "Potash is vital for rhizome size.",
+          "protection": "Watch for soft rot and leaf spot.",
+          "tips": "Harvest when leaves stay yellow and dry."
+        }
+      }
+    ]
+  },
+  "Grapes": {
+    "emoji": "🍇",
+    "category": "Fruits",
+    "total_days": 150,
+    "stages": [
+      {
+        "name": "Pruning & Growth",
+        "start_day": 1,
+        "end_day": 60,
+        "advice": {
+          "irrigation": "Regular drip irrigation for canopy.",
+          "fertilizer": "Balance of N, P, K and Micronutrients.",
+          "protection": "Powdery Mildew control is critical.",
+          "tips": "Proper training and pruning for yield."
+        }
+      },
+      {
+        "name": "Berry Dev",
+        "start_day": 61,
+        "end_day": 150,
+        "advice": {
+          "irrigation": "Uniform moisture to avoid berry cracking.",
+          "fertilizer": "High Potash for sugar accumulation.",
+          "protection": "Monitor for Downy Mildew.",
+          "tips": "Girdling at berry set for size."
+        }
+      }
+    ]
+  }
+}
