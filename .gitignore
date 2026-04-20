@@ -29,6 +29,7 @@ env/
 venv312/
 
 # IDE
+blackbox_mcp_settings.json
 .vscode/
 .idea/
 *.swp

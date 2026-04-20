@@ -10,3 +10,6 @@ tensorflow
 opencv-python
 Pillow
 requests
+python-dotenv
+waitress; platform_system == 'Windows'
+gunicorn; platform_system != 'Windows'
