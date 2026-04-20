@@ -52,7 +52,7 @@ Smart_Agri_Assistant/
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/Pratik/Smart_Agri_Assistant.git
+git clone https://github.com/pratikfunde25-bit/Smart_Agri_Assistant.git
    cd Smart_Agri_Assistant
    ```
 
