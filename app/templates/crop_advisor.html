@@ -1,19 +1,49 @@
 {% extends "base.html" %}
-{% block title %}Crop Lifecycle Advisor | Smart Agri Assistant{% endblock %}
+{% block title %}Smart Agronomy Dashboard | Smart Agri Assistant{% endblock %}
 {% block content %}
-<section class="page-hero guidance-hero">
-  <span class="section-kicker">Precision Agriculture Roadmap</span>
-  <h1 class="hero-title">Step-by-Step Crop Excellence</h1>
-  <p>Our intelligent advisor guides you through every critical phase of your crop's journey, providing localized prescriptions and expert interventions.</p>
+<style>
+  /* Localized Typography Polish */
+  .lang-mr {
+    line-height: 1.7;
+    letter-spacing: 0.02rem;
+    word-spacing: 0.15rem;
+  }
+  .lang-mr .hero-title {
+    line-height: 1.3;
+    margin-bottom: 1rem;
+  }
+  .lang-mr .section-kicker {
+    letter-spacing: 0.05rem;
+  }
+  .lang-mr .btn {
+    letter-spacing: 0;
+  }
+</style>
+
+<section id="advisor-hero" class="page-hero guidance-hero">
+  <div class="d-flex justify-content-between align-items-start">
+      <div>
+          <span class="section-kicker" data-t="hero_kicker">Precision Intelligence Engine</span>
+          <h1 class="hero-title" data-t="hero_title">Daily Agronomy Advisor</h1>
+      </div>
+      <div class="btn-group btn-group-sm rounded-pill p-1 bg-white bg-opacity-10 border border-white border-opacity-25 shadow-sm" role="group">
+          <input type="radio" class="btn-check" name="lang-toggle" id="lang-en" autocomplete="off" checked onclick="setLanguage('en')">
+          <label class="btn btn-outline-light border-0 rounded-pill px-3" for="lang-en">EN</label>
+          
+          <input type="radio" class="btn-check" name="lang-toggle" id="lang-mr" autocomplete="off" onclick="setLanguage('mr')">
+          <label class="btn btn-outline-light border-0 rounded-pill px-3" for="lang-mr">मराठी</label>
+      </div>
+  </div>
+  <p data-t="hero_desc">Real-time, weather-aware intelligence for your crops. We analyze local conditions and growth stages to provide daily action plans and risk mitigation.</p>
 </section>
 
-<div id="advisor-interactive-shell" class="advisor-layout">
+<div id="advisor-v2-container" class="advisor-layout">
   <!-- STEP 1: CROP SELECTION GRID -->
   <div id="step-selection" class="selection-step">
     <div class="section-heading-row">
       <div>
-        <span class="section-kicker">Phase 1</span>
-        <h2 class="section-title">Select your crop</h2>
+        <span class="section-kicker" data-t="step1_kicker">Phase 1</span>
+        <h2 class="section-title" data-t="step1_title">What are you growing?</h2>
       </div>
     </div>
     
@@ -28,15 +58,19 @@
           {% endfor %}
 
           {% for category in categories %}
-          <div class="category-group">
-            <h4 class="category-title">{{ category }}</h4>
+          <div class="category-group mb-4">
+            <h4 class="category-title text-muted small text-uppercase fw-bold mb-3" data-t="category_{{ category|lower }}">{{ category }}</h4>
             <div class="crop-card-grid">
               {% for crop in supported_crops %}
                 {% if crop.category == category %}
                 <div class="crop-card-selectable" data-crop="{{ crop.name }}" onclick="selectCrop(this)">
                   <div class="card-emoji">{{ crop.emoji }}</div>
-                  <div class="card-name">{{ crop.name }}</div>
-                  <div class="card-tag">{{ crop.category }}</div>
+                  <div class="card-name" data-crop-name="{{ crop.name }}">{{ crop.name }}</div>
+                  {% if crop.readiness == 'production' %}
+                    <span class="badge bg-success-subtle text-success border-success-subtle rounded-pill px-2" data-t="readiness_production">Premium</span>
+                  {% else %}
+                    <span class="badge bg-secondary-subtle text-muted border-secondary-subtle rounded-pill px-2" data-t="readiness_starter">Starter</span>
+                  {% endif %}
                 </div>
                 {% endif %}
               {% endfor %}
@@ -48,34 +82,59 @@
     </div>
   </div>
 
-  <!-- STEP 2: DATE CONFIGURATION (HIDDEN BY DEFAULT) -->
+  <!-- STEP 2: CONFIGURATION -->
   <div id="step-config" class="config-step d-none">
     <div class="row justify-content-center">
-      <div class="col-lg-6">
-        <div class="glass-panel form-panel text-center">
-          <button class="btn btn-link btn-sm position-absolute top-0 start-0 m-3 text-muted" onclick="goBackToSelection()">
+      <div class="col-lg-7">
+        <div class="glass-panel form-panel">
+          <button class="btn btn-link btn-sm position-absolute top-0 start-0 m-3 text-muted text-decoration-none" onclick="goBackToSelection()">
             <i class="bi bi-arrow-left me-1"></i> Change Crop
           </button>
           
-          <div class="selected-crop-badge mb-4 mt-2">
-            <span id="target-crop-emoji" class="display-1 d-block mb-2">🌾</span>
-            <h2 id="target-crop-name">Crop Name</h2>
+          <div class="text-center mb-5 mt-2">
+            <div id="target-crop-emoji" class="display-1 mb-2">🌾</div>
+            <h2 id="target-crop-name" class="h1">Crop Name</h2>
+            <p class="text-muted">Configure your field context for personalized advice.</p>
           </div>
 
-          <div id="date-input-area" class="stacked-form text-start">
-             <div class="mb-4">
-                <label class="field-label" for="sowing_date">
-                  Sowing Date
-                  <input type="date" id="sowing_date" class="form-control" max="{{ current_date }}">
-                </label>
-                <p class="field-hint">Optional: Enter the date you planted to see current growth stage advice.</p>
-             </div>
-             
-             <button class="btn btn-success btn-lg w-100 py-3 mb-3 shadow-lg" onclick="startGuidance('live')">
-               <i class="bi bi-play-circle-fill me-2"></i> Start Live Tracking
+          <div class="row g-4">
+            <!-- Sowing Date -->
+            <div class="col-md-12">
+              <div class="glass-panel bg-white p-4 border-dashed">
+                <label class="field-label mb-2" for="sowing_date">Sowing Date</label>
+                <input type="date" id="sowing_date" class="form-control form-control-lg border-0 bg-light" max="{{ current_date }}" value="{{ current_date }}">
+                <p class="field-hint mb-0 mt-2">Required for Live Tracking Mode.</p>
+              </div>
+            </div>
+
+            <!-- Location for Weather -->
+            <div class="col-md-12">
+              <div class="glass-panel bg-white p-4">
+                <label class="field-label mb-3">Field Location (for Live Weather)</label>
+                <div class="row g-2">
+                    <div class="col-md-5">
+                        <input type="number" step="any" id="lat" class="form-control" placeholder="Latitude">
+                    </div>
+                    <div class="col-md-5">
+                        <input type="number" step="any" id="lon" class="form-control" placeholder="Longitude">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-outline-success w-100 h-100" onclick="detectLocation()" title="Detect My Location">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </button>
+                    </div>
+                </div>
+                <p class="field-hint mt-2 mb-0">Detecting location enables weather-aware irrigation and safety alerts.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-5 d-grid gap-3">
+             <button class="btn btn-success btn-lg py-3 shadow-lg" onclick="startGuidance('live')">
+               <i class="bi bi-lightning-charge-fill me-2"></i> Launch Smart Dashboard
              </button>
-             <button class="btn btn-outline-success w-100 py-3" onclick="startGuidance('explorer')">
-               <i class="bi bi-search me-2"></i> Just Explore Lifecycle
+             <button class="btn btn-outline-secondary py-3" onclick="startGuidance('explorer')">
+               <i class="bi bi-search me-2"></i> Explore Crop Lifecycle
              </button>
           </div>
         </div>
@@ -83,117 +142,538 @@
     </div>
   </div>
 
-  <!-- STEP 3: GUIDANCE VIEWER (HIDDEN BY DEFAULT) -->
+  <!-- STEP 3: SMART DASHBOARD -->
   <div id="step-viewer" class="viewer-step d-none">
+    <!-- Top Context Bar -->
+    <div class="glass-panel p-3 mb-4 d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn btn-outline-secondary btn-sm rounded-pill" onclick="resetFlow()" title="Back to Setup">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <div class="vr mx-1 opacity-10"></div>
+            <div>
+                <h4 id="view-crop-label" class="mb-0 h5">Crop Name</h4>
+                <div class="d-flex align-items-center gap-2">
+                    <span id="view-mode-badge" class="badge rounded-pill bg-success">LIVE TRACKING</span>
+                    <span id="view-day-badge" class="text-muted small">Day 45</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-flex align-items-center gap-3">
+            <div class="btn-group btn-group-sm rounded-pill p-1 bg-light border" role="group">
+                <input type="radio" class="btn-check" name="nav-mode" id="nav-auto" autocomplete="off" checked onclick="setNavMode('auto')">
+                <label class="btn btn-outline-success border-0 rounded-pill px-3" for="nav-auto" data-t="nav_auto"><i class="bi bi-magic me-1"></i> Auto</label>
+                
+                <input type="radio" class="btn-check" name="nav-mode" id="nav-manual" autocomplete="off" onclick="setNavMode('manual')">
+                <label class="btn btn-outline-secondary border-0 rounded-pill px-3" for="nav-manual" data-t="nav_manual"><i class="bi bi-hand-index-thumb me-1"></i> Manual</label>
+            </div>
+            
+            <div id="weather-context-bar" class="d-flex align-items-center gap-3 d-none d-lg-flex">
+                <!-- Weather signals injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- STAGE STEPPER (Attractive Horizontal Stepper) -->
+    <div class="glass-panel p-3 mb-4 overflow-hidden shadow-sm">
+        <div id="stage-stepper" class="stage-stepper-container">
+            <!-- Stepper items injected here -->
+        </div>
+    </div>
+
+    <!-- Main Grid -->
     <div class="row g-4">
-      <!-- Sidebar Info -->
-      <div class="col-lg-4">
-          <div class="glass-panel advisor-progress-panel h-100 p-4">
-             <div class="d-flex justify-content-between w-100 mb-4">
-                <button class="btn btn-outline-secondary btn-sm rounded-pill" onclick="resetFlow()">
-                    <i class="bi bi-arrow-left"></i> Change
-                </button>
-                <div id="mode-badge" class="stage-badge">Explorer Mode</div>
-             </div>
-
-             <div class="progress-circle-shell mx-auto">
-                <svg class="progress-circle-svg" width="140" height="140" viewBox="0 0 140 140">
-                  <circle class="progress-bg" cx="70" cy="70" r="60"></circle>
-                  <circle class="progress-value" id="progress-circle-fill" cx="70" cy="70" r="60" 
-                          stroke-dasharray="377" stroke-dashoffset="377"></circle>
-                </svg>
-                <div class="progress-text">
-                  <strong id="progress-val-text">0%</strong>
-                  <span>Complete</span>
-                </div>
-             </div>
-
-             <div class="progress-meta mt-3">
-                <h2 id="view-crop-name" class="mb-1">Crop</h2>
-                <div id="view-day-info" class="text-muted small">Day -</div>
-             </div>
-
-             <div class="mt-4 w-100 text-start">
-                <span class="section-kicker">Timeline</span>
-                <div class="timeline-shell mt-2">
-                    <div id="mini-timeline" class="list-group list-group-flush rounded-3 border">
-                        <!-- Mini timeline items -->
+      <!-- Sidebar: Insights & Risks -->
+      <div class="col-lg-3">
+          <div class="glass-panel p-3 h-100 bg-light-subtle">
+             <div class="text-center mb-3">
+                 <div class="progress-circle-shell mx-auto mb-2" style="width: 120px; height: 120px;">
+                    <svg class="progress-circle-svg" width="120" height="120" viewBox="0 0 160 160">
+                      <circle class="progress-bg" cx="80" cy="80" r="70"></circle>
+                      <circle class="progress-value" id="progress-circle-fill" cx="80" cy="80" r="70" 
+                              stroke-dasharray="440" stroke-dashoffset="440"></circle>
+                    </svg>
+                    <div class="progress-text">
+                      <strong id="progress-val-text" class="h4 mb-0">0%</strong>
+                      <span style="font-size: 0.6rem;" data-t="complete">Complete</span>
                     </div>
-                </div>
+                 </div>
+                 <h3 id="sidebar-stage-label" class="h6 mb-1">Growth Stage</h3>
+                 <div id="view-day-counter" class="text-muted" style="font-size: 0.7rem;">Day 1 of 110</div>
+             </div>
+
+             <hr class="opacity-10 my-2">
+
+             <div id="risk-alert-container" class="mt-3">
+                 <span class="section-kicker mb-2" data-t="risks_title">Risk & Weather alerts</span>
+                 <!-- Risks and weather alerts injected here -->
              </div>
           </div>
       </div>
 
-      <!-- Main Content -->
-      <div class="col-lg-8">
-          <div class="glass-panel p-4 mb-4">
-             <div class="d-flex justify-content-between align-items-center mb-3">
-                <span class="section-kicker">Detailed Prescription</span>
-                <div class="stage-badge" id="view-stage-counter">Stage 1 of 4</div>
-             </div>
-             
-             <h1 id="view-stage-name" class="mb-3">Growth Stage Name</h1>
-             <p id="view-stage-days" class="text-success font-monospace mb-4">Duration: Days 1-20</p>
-             
-             <div class="advice-grid">
-               <div class="advice-card shadow-sm">
-                 <div class="advice-icon icon-blue"><i class="bi bi-droplet-half"></i></div>
-                 <h4>Irrigation</h4>
-                 <p id="adv-irrigation">Instructions go here.</p>
-               </div>
-               <div class="advice-card shadow-sm">
-                 <div class="advice-icon icon-orange"><i class="bi bi-capsule"></i></div>
-                 <h4>Fertilization</h4>
-                 <p id="adv-fertilizer">Instructions go here.</p>
-               </div>
-               <div class="advice-card shadow-sm">
-                 <div class="advice-icon icon-red"><i class="bi bi-shield-exclamation"></i></div>
-                 <h4>Protection</h4>
-                 <p id="adv-protection">Instructions go here.</p>
-               </div>
-               <div class="advice-card shadow-sm">
-                 <div class="advice-icon icon-gold"><i class="bi bi-magic"></i></div>
-                 <h4>Pro Tip</h4>
-                 <p id="adv-tips">Instructions go here.</p>
-               </div>
-             </div>
+      <!-- Main Dashboard Content -->
+      <div class="col-lg-9">
+          <!-- Current Stage Spotlight Card (Attractive Design) -->
+          <div id="stage-spotlight-card" class="glass-panel spotlight-card mb-3">
+              <div class="spotlight-header p-3">
+                  <div class="d-flex align-items-center gap-3">
+                      <div class="stage-icon-box" id="view-stage-icon-box" style="width: 48px; height: 48px; font-size: 1.5rem;">🌱</div>
+                      <div>
+                          <span class="section-kicker mb-0 opacity-75" id="view-stage-code" style="font-size: 0.65rem;">STAGE V1</span>
+                          <h2 id="spotlight-stage-label" class="h4 mb-0">Growth Stage Name</h2>
+                      </div>
+                  </div>
+                  <div class="stage-status-pill py-1 px-3" id="view-stage-status" style="font-size: 0.65rem;" data-t="current_phase">Current Phase</div>
+              </div>
+              
+              <div class="spotlight-body p-3">
+                  <p id="focus-headline" class="fw-bold mb-3" style="font-size: 1rem;">Establishing a strong stand...</p>
+                  
+                  <div class="row g-3">
+                      <div class="col-md-7">
+                          <div class="action-stack" id="today-actions-list">
+                              <!-- Actions -->
+                          </div>
+                      </div>
+                      <div class="col-md-5">
+                          <div class="ai-insight-box p-3">
+                              <div class="d-flex align-items-center gap-2 mb-2">
+                                  <i class="bi bi-stars text-warning"></i>
+                                  <span class="fw-bold small text-uppercase" style="font-size: 0.6rem;" data-t="ai_strategy">AI Strategy</span>
+                              </div>
+                              <p id="ai-suggestion-text" class="small mb-2">Prioritize moisture conservation...</p>
+                              <div class="rationale-box p-2">
+                                  <p id="ai-why-text" class="mb-0" style="font-size: 0.75rem;">Reasoning goes here...</p>
+                              </div>
+                              <div id="motivation-box" class="mt-3 p-2 rounded-3 bg-white bg-opacity-50 border border-warning border-opacity-25 d-none">
+                                  <span id="motivation-text" class="small fw-bold text-success"></span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
 
-             <div class="nav-controls">
-                <button class="btn-nav" id="btn-prev-stage" onclick="navigateStage(-1)">
-                    <i class="bi bi-chevron-left"></i> Previous Stage
-                </button>
-                <button class="btn-nav" id="btn-next-stage" onclick="navigateStage(1)">
-                    Next Stage <i class="bi bi-chevron-right"></i>
-                </button>
-             </div>
+              <div class="spotlight-footer p-2 bg-light bg-opacity-50 d-flex justify-content-between align-items-center border-top">
+                  <div class="d-flex gap-2">
+                      <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 nav-manual-only d-none" onclick="navigateStageRelative(-1)" id="btn-prev-stage">
+                          <i class="bi bi-chevron-left"></i>
+                      </button>
+                      <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 nav-manual-only d-none" onclick="navigateStageRelative(1)" id="btn-next-stage">
+                          <i class="bi bi-chevron-right"></i>
+                      </button>
+                  </div>
+                  <div class="text-muted" id="stage-duration-label" style="font-size: 0.7rem;">Expected: Day 1 - 10</div>
+              </div>
           </div>
 
-          <div id="viewer-notifications" class="notification-stack">
-              <!-- Smart system alerts -->
+          <!-- Agri-Inputs Section -->
+          <div class="glass-panel p-3 bg-white mb-3 mt-3 border-success border-opacity-25 border-top border-3">
+              <h4 class="h6 mb-3 d-flex align-items-center gap-2">
+                  <i class="bi bi-droplet-half text-info"></i> <span data-t="inputs_title">Agri-Inputs (Chemicals & Fertilizers)</span>
+              </h4>
+              <div class="row g-3">
+                  <div class="col-md-4">
+                      <div class="p-2 bg-light rounded-3 h-100">
+                          <strong class="d-block small text-success mb-1" data-t="fertilizer_label"><i class="bi bi-bandaid"></i> Fertilizer</strong>
+                          <p id="input-fertilizer" class="small mb-0 text-muted">...</p>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="p-2 bg-light rounded-3 h-100">
+                          <strong class="d-block small text-warning mb-1" data-t="herbicide_label"><i class="bi bi-scissors"></i> Herbicide</strong>
+                          <p id="input-herbicide" class="small mb-0 text-muted">...</p>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="p-2 bg-light rounded-3 h-100">
+                          <strong class="d-block small text-danger mb-1" data-t="pesticide_label"><i class="bi bi-bug"></i> Pesticide/Insecticide</strong>
+                          <p id="input-pesticide" class="small mb-0 text-muted">...</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Secondary Outlook -->
+          <div class="glass-panel p-3 bg-white">
+              <h4 class="h6 mb-3 d-flex align-items-center gap-2">
+                  <i class="bi bi-calendar-range text-success"></i> <span data-t="outlook_title">Upcoming 5-Day Outlook</span>
+              </h4>
+              <div id="next-days-grid" class="row g-2">
+                  <!-- Outlook items -->
+              </div>
           </div>
       </div>
     </div>
   </div>
 </div>
 
+<style>
+/* PREMIUM ADVISOR V2 STYLES */
+:root {
+    --stage-active: var(--green);
+    --stage-past: #cbd5e1;
+    --stage-future: #f1f5f9;
+}
+
+.advisor-layout { margin-top: 20px; }
+
+/* Selection Grid */
+.crop-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+}
+.crop-card-selectable {
+    background: var(--surface-strong);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.crop-card-selectable:hover {
+    transform: translateY(-5px);
+    border-color: var(--green);
+    box-shadow: var(--shadow);
+}
+.crop-card-selectable .card-emoji { font-size: 2.5rem; margin-bottom: 10px; }
+.crop-card-selectable .card-name { font-weight: 700; margin-bottom: 8px; }
+
+/* Stepper Design */
+.stage-stepper-container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 10px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.stage-stepper-container::-webkit-scrollbar { display: none; }
+
+.stepper-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    min-width: 80px;
+    cursor: pointer;
+    z-index: 1;
+}
+.stepper-item::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    width: 100%;
+    height: 3px;
+    background: var(--stage-future);
+    z-index: -1;
+}
+.stepper-item:last-child::after { display: none; }
+
+.stepper-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--stage-future);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    margin-bottom: 6px;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 1px var(--line);
+    transition: all 0.3s ease;
+}
+.stepper-label { font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; text-align: center; }
+
+.stepper-item.active .stepper-dot { background: var(--stage-active); color: #fff; transform: scale(1.2); box-shadow: 0 0 15px rgba(45, 107, 65, 0.4); }
+.stepper-item.active .stepper-label { color: var(--stage-active); }
+.stepper-item.past .stepper-dot { background: var(--stage-past); color: #475569; }
+.stepper-item.past::after { background: var(--stage-active); }
+
+/* Spotlight Card */
+.spotlight-card {
+    border-color: var(--line-strong);
+    background: #fff;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.spotlight-header {
+    padding: 25px 25px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: linear-gradient(to bottom, rgba(45, 107, 65, 0.03), transparent);
+}
+.stage-icon-box {
+    width: 64px;
+    height: 64px;
+    background: #fff;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+}
+.stage-status-pill {
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--green);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    animation: glow 2s infinite;
+}
+@keyframes glow {
+    0% { box-shadow: 0 0 0 0 rgba(45, 107, 65, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(45, 107, 65, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(45, 107, 65, 0); }
+}
+
+.action-stack { display: grid; gap: 12px; }
+.action-item-v2 {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 14px;
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    transition: transform 0.2s ease;
+    font-size: 0.85rem;
+}
+.action-item-v2:hover { transform: scale(1.02); }
+.action-item-v2 i { color: var(--green); font-size: 1.2rem; }
+
+.ai-insight-box {
+    padding: 20px;
+    border-radius: 22px;
+    background: #fff9ed;
+    border: 1px solid #fee2b3;
+}
+.rationale-box {
+    padding: 12px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.6);
+    font-size: 0.85rem;
+    color: var(--muted);
+    border-left: 3px solid var(--gold);
+}
+
+.outlook-chip {
+    padding: 15px;
+    border-radius: 18px;
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    text-align: center;
+}
+
+.progress-circle-shell { position: relative; width: 140px; height: 140px; display: flex; align-items: center; justify-content: center; }
+.progress-circle-svg { transform: rotate(-90deg); }
+.progress-bg { fill: none; stroke: var(--line); stroke-width: 10; }
+.progress-value { fill: none; stroke: var(--green); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.8s ease; }
+.progress-text { position: absolute; text-align: center; }
+
+.weather-chip-v2 {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--line);
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+</style>
+
 <script>
 let state = {
     selectedCrop: null,
     selectedEmoji: '🌾',
     sowingDate: null,
+    location: { lat: null, lon: null },
     currentData: null,
-    viewingIdx: 0
+    viewingDay: null,
+    timeline: null,
+    navMode: 'auto',
+    lang: localStorage.getItem('agri_lang') || 'en'
 };
+
+const translations = {
+    en: {
+        hero_kicker: "Precision Intelligence Engine",
+        hero_title: "Daily Agronomy Advisor",
+        hero_desc: "Real-time, weather-aware intelligence for your crops. We analyze local conditions and growth stages to provide daily action plans and risk mitigation.",
+        step1_kicker: "Phase 1",
+        step1_title: "What are you growing?",
+        config_desc: "Configure your field context for personalized advice.",
+        sowing_date: "Sowing Date",
+        sowing_hint: "Required for Live Tracking Mode.",
+        location_label: "Field Location (for Live Weather)",
+        location_hint: "Detecting location enables weather-aware irrigation and safety alerts.",
+        btn_launch: "Launch Smart Dashboard",
+        btn_explore: "Explore Crop Lifecycle",
+        btn_back: "Change Crop",
+        today_action: "Today's Action",
+        outlook_title: "Upcoming 5-Day Outlook",
+        ai_strategy: "AI Strategy",
+        risks_title: "Risk & Weather alerts",
+        complete: "Complete",
+        current_phase: "Current Phase",
+        expected_range: "Expected Range",
+        msg_location: "Location detected successfully!",
+        msg_manual: "Manual mode enabled. You can now explore all stages.",
+        stage_prefix: "STAGE",
+        category_cereals: "Cereals",
+        category_commercial: "Commercial Crops",
+        category_fiber: "Fiber Crops",
+        category_oilseeds: "Oilseeds",
+        category_fruits: "Fruits",
+        category_pulses: "Pulses",
+        category_vegetables: "Vegetables",
+        readiness_production: "Premium",
+        readiness_starter: "Starter",
+        crop_Maize: "Maize",
+        crop_Rice: "Rice",
+        crop_Wheat: "Wheat",
+        crop_Cotton: "Cotton",
+        crop_Chili: "Chili",
+        crop_Jowar: "Jowar",
+        crop_Bajra: "Bajra",
+        crop_Tur: "Tur (Arhar)",
+        crop_Groundnut: "Groundnut",
+        crop_Mustard: "Mustard",
+        crop_Grapes: "Grapes",
+        crop_Tomato: "Tomato",
+        crop_Gram: "Gram (Chana)",
+        crop_Onion: "Onion",
+        nav_auto: "Auto",
+        nav_manual: "Manual",
+        inputs_title: "Agri-Inputs Recommendation",
+        fertilizer_label: "Fertilizer",
+        herbicide_label: "Herbicide (Weed Control)",
+        pesticide_label: "Pesticide (Pest Control)"
+    },
+    mr: {
+        hero_kicker: "स्मार्ट शेती सल्लागार",
+        hero_title: "दैनिक पीक सल्ला",
+        hero_desc: "तुमच्या पिकासाठी रिअल-टाइम आणि हवामानावर आधारित सल्ला. आम्ही स्थानिक परिस्थिती आणि वाढीच्या टप्प्यांचे विश्लेषण करून कृती आराखडा तयार करतो.",
+        step1_kicker: "टप्पा १",
+        step1_title: "तुम्ही काय पिकवत आहात?",
+        config_desc: "वैयक्तिक सल्ल्यासाठी तुमच्या शेताची माहिती द्या.",
+        sowing_date: "पेरणीची तारीख",
+        sowing_hint: "लाईव्ह ट्रॅकिंगसाठी आवश्यक आहे.",
+        location_label: "शेताचे स्थान (हवामानासाठी)",
+        location_hint: "स्थान निवडल्यामुळे हवामानानुसार पाणी आणि धोक्यांची सूचना मिळेल.",
+        btn_launch: "स्मार्ट डॅशबोर्ड सुरू करा",
+        btn_explore: "पीक चक्राची माहिती घ्या",
+        btn_back: "पीक बदला",
+        today_action: "आज काय करायचं?",
+        outlook_title: "पुढचे ५ दिवस",
+        ai_strategy: "सल्ला",
+        risks_title: "धोके आणि सूचना",
+        complete: "पूर्ण",
+        current_phase: "सध्याची अवस्था",
+        expected_range: "अपेक्षित दिवस",
+        msg_location: "स्थान यशस्वीरित्या प्राप्त झाले!",
+        msg_manual: "मॅन्युअल मोड सुरू झाला. तुम्ही सर्व टप्पे पाहू शकता.",
+        stage_prefix: "टप्पा",
+        category_cereals: "धान्ये",
+        category_fiber: "तंतू पिके",
+        category_commercial: "नगदी पिके",
+        category_oilseeds: "गळित धान्ये (तेलबीया)",
+        category_fruits: "फळे",
+        category_pulses: "कडधान्ये",
+        category_vegetables: "भाजीपाला",
+        readiness_production: "प्रीमियम",
+        readiness_starter: "सुरुवात",
+        crop_Maize: "मका",
+        crop_Rice: "भात (तांदूळ)",
+        crop_Wheat: "गहू",
+        crop_Cotton: "कापूस",
+        crop_Sugarcane: "ऊस",
+        crop_Chili: "मिरची",
+        crop_Jowar: "ज्वारी",
+        crop_Bajra: "बाजरी",
+        crop_Tur: "तूर",
+        crop_Groundnut: "भुईमूग",
+        crop_Mustard: "मोहरी",
+        crop_Grapes: "द्राक्षे",
+        crop_Tomato: "टोमॅटो",
+        crop_Gram: "हरभरा",
+        crop_Onion: "कांदा",
+        nav_auto: "स्वयंचलित",
+        nav_manual: "मॅन्युअल",
+        inputs_title: "खते आणि औषधे",
+        fertilizer_label: "खत व्यवस्थापन",
+        herbicide_label: "तणनाशक (औषध)",
+        pesticide_label: "कीटकनाशक / बुरशीनाशक"
+    }
+};
+
+function t(key) {
+    return translations[state.lang][key] || key;
+}
+
+function updateStaticUI() {
+    document.body.classList.toggle('lang-mr', state.lang === 'mr');
+    
+    document.querySelectorAll('[data-t]').forEach(el => {
+        const key = el.getAttribute('data-t');
+        el.textContent = t(key);
+    });
+    
+    // Update Crop Names in Selection Grid
+    document.querySelectorAll('[data-crop-name]').forEach(el => {
+        const cropKey = 'crop_' + el.getAttribute('data-crop-name');
+        el.textContent = t(cropKey);
+    });
+
+    // Update labels and placeholders
+    const sowingLabel = document.querySelector('label[for="sowing_date"]');
+    if (sowingLabel) sowingLabel.textContent = t('sowing_date');
+
+    const configDesc = document.querySelector('.config-step p');
+    if (configDesc) configDesc.textContent = t('config_desc');
+}
+
+function setLanguage(lang) {
+    state.lang = lang;
+    localStorage.setItem('agri_lang', lang);
+    updateStaticUI();
+    
+    // Sync radio buttons
+    const enRadio = document.getElementById('lang-en');
+    const mrRadio = document.getElementById('lang-mr');
+    if (lang === 'en' && enRadio) enRadio.checked = true;
+    if (lang === 'mr' && mrRadio) mrRadio.checked = true;
+
+    // Refresh data if already in dashboard
+    if (state.selectedCrop && (document.getElementById('step-viewer').classList.contains('d-none') === false)) {
+        fetchAdvisorUpdate(state.viewingDay);
+    }
+}
+
+// Initialize Language on Load
+document.addEventListener('DOMContentLoaded', () => {
+    setLanguage(state.lang);
+});
 
 function selectCrop(element) {
     state.selectedCrop = element.dataset.crop;
     state.selectedEmoji = element.querySelector('.card-emoji').textContent;
-    
-    // Update labels in step 2
-    document.getElementById('target-crop-name').textContent = state.selectedCrop;
+    document.getElementById('target-crop-name').textContent = t('crop_' + state.selectedCrop);
     document.getElementById('target-crop-emoji').textContent = state.selectedEmoji;
     
-    // Switch steps
     document.getElementById('step-selection').classList.add('d-none');
     document.getElementById('step-config').classList.remove('d-none');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -202,136 +682,329 @@ function selectCrop(element) {
 function goBackToSelection() {
     document.getElementById('step-selection').classList.remove('d-none');
     document.getElementById('step-config').classList.add('d-none');
-    state.selectedCrop = null;
 }
 
 function resetFlow() {
-    document.getElementById('step-selection').classList.remove('d-none');
-    document.getElementById('step-viewer').classList.add('d-none');
-    document.getElementById('step-config').classList.add('d-none');
-    state.selectedCrop = null;
-    state.sowingDate = null;
+    location.reload();
+}
+
+function setNavMode(mode) {
+    state.navMode = mode;
+    const manualElements = document.querySelectorAll('.nav-manual-only');
+    
+    // Sync Radio Buttons
+    const autoRadio = document.getElementById('nav-auto');
+    const manualRadio = document.getElementById('nav-manual');
+    if (mode === 'auto' && autoRadio) autoRadio.checked = true;
+    if (mode === 'manual' && manualRadio) manualRadio.checked = true;
+
+    if (mode === 'manual') {
+        manualElements.forEach(el => el.classList.remove('d-none'));
+    } else {
+        manualElements.forEach(el => el.classList.add('d-none'));
+        if (state.liveDay) {
+            fetchAdvisorUpdate(null); // Fetch live
+        }
+    }
+    
+    // Update badge
+    const badge = document.getElementById('view-mode-badge');
+    if (badge) {
+        const isAuto = mode === 'auto';
+        badge.textContent = isAuto ? (state.lang === 'mr' ? 'लाईव्ह ट्रॅकिंग' : 'LIVE TRACKING') : (state.lang === 'mr' ? 'एक्सप्लोरर मोड' : 'EXPLORER MODE');
+        badge.className = `badge rounded-pill ${isAuto ? 'bg-success' : 'bg-info'}`;
+    }
+}
+
+function detectLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+            document.getElementById('lat').value = pos.coords.latitude.toFixed(4);
+            document.getElementById('lon').value = pos.coords.longitude.toFixed(4);
+            showAppMessage("Location detected successfully!");
+        }, (err) => {
+            showAppMessage("Unable to detect location. Please enter manually.", true);
+        });
+    }
 }
 
 async function startGuidance(mode) {
-    const dateInput = document.getElementById('sowing_date').value;
-    state.sowingDate = mode === 'live' ? dateInput : null;
+    state.sowingDate = document.getElementById('sowing_date').value;
+    state.location.lat = document.getElementById('lat').value || null;
+    state.location.lon = document.getElementById('lon').value || null;
     
-    await fetchAndUpdateGuidance(null);
+    if (mode === 'explorer') {
+        setNavMode('manual');
+        document.getElementById('nav-manual').checked = true;
+    }
     
-    // Switch to viewer
+    await fetchAdvisorUpdate(null);
+    
     document.getElementById('step-config').classList.add('d-none');
     document.getElementById('step-viewer').classList.remove('d-none');
+    document.getElementById('advisor-hero').classList.add('d-none'); // Hide big hero
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-async function navigateStage(direction) {
-    const newIdx = state.viewingIdx + direction;
-    if (newIdx < 0 || newIdx >= state.currentData.num_stages) return;
-    
-    await fetchAndUpdateGuidance(newIdx);
+async function navigateStageRelative(direction) {
+    if (!state.timeline || !state.currentData) return;
+    const currentIdx = state.timeline.micro_stages.findIndex(s => s.code === state.currentData.stage.code);
+    const newIdx = currentIdx + direction;
+    if (newIdx >= 0 && newIdx < state.timeline.micro_stages.length) {
+        const targetStage = state.timeline.micro_stages[newIdx];
+        await fetchAdvisorUpdate(targetStage.start_day);
+    }
 }
 
-async function fetchAndUpdateGuidance(idx) {
+async function fetchAdvisorUpdate(manualDay) {
+    // Subtle loading indicator on the card instead of full screen grey
+    const card = document.getElementById('stage-spotlight-card');
+    if (card) card.style.borderLeft = '4px solid var(--green)';
+    
     try {
-        const response = await fetch('/get_crop_guidance', {
+        const response = await fetch('/api/advisor/query', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 crop: state.selectedCrop,
                 sowing_date: state.sowingDate,
-                stage_idx: idx
+                manual_day: manualDay ? parseInt(manualDay) : null,
+                latitude: state.location.lat,
+                longitude: state.location.lon,
+                lang: state.lang
             })
         });
         
         const data = await response.json();
         if (data.error) throw new Error(data.error);
         
+        if (manualDay === null || manualDay === undefined) {
+            state.liveDay = data.day;
+        }
         state.currentData = data;
-        state.viewingIdx = data.selected_stage_idx;
-        renderViewer(data);
+        state.viewingDay = data.day;
+        
+        if (!state.timeline) {
+            const tlRes = await fetch('/api/advisor/timeline', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ crop: state.selectedCrop })
+            });
+            state.timeline = await tlRes.json();
+        }
+
+        renderDashboard(data);
     } catch (err) {
-        showAppMessage(err.message, true);
+        console.error("Advisor Update Error:", err);
+    } finally {
+        if (card) card.style.borderLeft = '1px solid var(--line-strong)';
     }
 }
 
-function renderViewer(data) {
-    // Mode Badge
-    const modeBadge = document.getElementById('mode-badge');
-    modeBadge.textContent = data.mode === 'live' ? 'Live Mode' : 'Explorer Mode';
-    modeBadge.className = data.mode === 'live' ? 'stage-badge bg-success-subtle' : 'stage-badge bg-info-subtle';
+function renderDashboard(data) {
+    // Stage Icon Logic
+    const familyIcons = {
+        'establishment': '🌱',
+        'vegetative': '🌿',
+        'rapid_growth': '🚀',
+        'reproductive_critical': '🌽',
+        'grain_set': '🌾',
+        'grain_fill': '🥛',
+        'maturity': '🚜'
+    };
+    const stageIcon = familyIcons[data.stage.stage_family] || '🌱';
 
-    // Progress
-    const radius = 60;
+    // Header & Context Updates
+    const cropLabel = document.getElementById('view-crop-label');
+    if (cropLabel) cropLabel.textContent = `${t('crop_' + data.crop)} ${state.selectedEmoji}`;
+    
+    const dayBadge = document.getElementById('view-day-badge');
+    if (dayBadge) dayBadge.textContent = `Day ${data.day}`;
+    
+    // Progress Ring Update
+    const radius = 70;
     const circumference = 2 * Math.PI * radius;
     const progressFill = document.getElementById('progress-circle-fill');
-    const offset = circumference - (data.progress_pct / 100) * circumference;
-    progressFill.style.strokeDashoffset = offset;
-    document.getElementById('progress-val-text').textContent = `${data.progress_pct}%`;
+    if (progressFill) {
+        const offset = circumference - (data.progress_pct / 100) * circumference;
+        progressFill.style.strokeDashoffset = offset;
+    }
+    const progressText = document.getElementById('progress-val-text');
+    if (progressText) progressText.textContent = `${Math.round(data.progress_pct)}%`;
+    
+    // Spotlight Card Updates (CRITICAL: Every field must refresh)
+    const stageIconBox = document.getElementById('view-stage-icon-box');
+    if (stageIconBox) stageIconBox.textContent = stageIcon;
 
-    // Labels
-    document.getElementById('view-crop-name').textContent = data.crop;
-    const dayInfo = document.getElementById('view-day-info');
-    if (data.current_day_live > 0) {
-        dayInfo.textContent = `Current Day: ${data.current_day_live} of ${data.total_days}`;
-    } else {
-        dayInfo.textContent = `Full cycle: ${data.total_days} days`;
+    const stageCode = document.getElementById('view-stage-code');
+    if (stageCode) stageCode.textContent = `STAGE ${data.stage.code}`;
+
+    const spotlightLabel = document.getElementById('spotlight-stage-label');
+    if (spotlightLabel) spotlightLabel.textContent = data.stage.label;
+
+    const sidebarLabel = document.getElementById('sidebar-stage-label');
+    if (sidebarLabel) sidebarLabel.textContent = data.stage.label;
+
+    const dayCounter = document.getElementById('view-day-counter');
+    if (dayCounter) {
+        const totalText = state.lang === 'mr' ? 'एकूण १०' : 'of';
+        dayCounter.textContent = `${state.lang === 'mr' ? 'दिवस' : 'Day'} ${data.day} ${totalText} ${state.timeline?.total_days || '110'}`;
     }
 
-    // Stage Main
-    document.getElementById('view-stage-name').textContent = data.current_stage.name;
-    document.getElementById('view-stage-days').textContent = `Activity Period: Days ${data.current_stage.start_day} - ${data.current_stage.end_day}`;
-    document.getElementById('view-stage-counter').textContent = `Stage ${data.selected_stage_idx + 1} of ${data.num_stages}`;
+    const durationLabel = document.getElementById('stage-duration-label');
+    if (durationLabel) {
+        durationLabel.textContent = `${t('expected_range')}: Day ${data.stage.start_day} - ${data.stage.end_day}`;
+    }
+    
+    const focusHeadline = document.getElementById('focus-headline');
+    if (focusHeadline) focusHeadline.textContent = data.focus;
 
-    // Advice
-    document.getElementById('adv-irrigation').textContent = data.current_stage.advice.irrigation;
-    document.getElementById('adv-fertilizer').textContent = data.current_stage.advice.fertilizer;
-    document.getElementById('adv-protection').textContent = data.current_stage.advice.protection;
-    document.getElementById('adv-tips').textContent = data.current_stage.advice.tips;
+    // Refresh Today's Actions
+    const actionsList = document.getElementById('today-actions-list');
+    if (actionsList) {
+        actionsList.innerHTML = '';
+        data.today_actions.forEach(action => {
+            const div = document.createElement('div');
+            div.className = 'action-item-v2';
+            div.innerHTML = `<i class="bi bi-check-circle-fill"></i><p>${action}</p>`;
+            actionsList.appendChild(div);
+        });
+    }
 
-    // Controls
-    document.getElementById('btn-prev-stage').disabled = !data.has_prev;
-    document.getElementById('btn-next-stage').disabled = !data.has_next;
+    // Refresh Upcoming Outlook
+    const outlookGrid = document.getElementById('next-days-grid');
+    if (outlookGrid) {
+        outlookGrid.innerHTML = '';
+        data.next_5_day_plan.forEach(item => {
+            const col = document.createElement('div');
+            col.className = 'col-md-6';
+            col.innerHTML = `<div class="outlook-chip"><p class="small text-muted mb-0">${item}</p></div>`;
+            outlookGrid.appendChild(col);
+        });
+    }
 
-    // Mini Timeline
-    const timeline = document.getElementById('mini-timeline');
-    timeline.innerHTML = '';
-    data.all_stages.forEach((s, idx) => {
-        const item = document.createElement('a');
-        item.className = `list-group-item list-group-item-action border-0 py-3 ${idx === state.viewingIdx ? 'bg-success text-white' : ''}`;
-        item.href = "javascript:void(0)";
-        item.onclick = () => fetchAndUpdateGuidance(idx);
+    // Refresh AI Insights
+    const aiSuggestion = document.getElementById('ai-suggestion-text');
+    if (aiSuggestion) aiSuggestion.textContent = data.ai_recommendation;
+
+    const aiWhy = document.getElementById('ai-why-text');
+    if (aiWhy) aiWhy.textContent = data.why_this_matters;
+
+    // Refresh Agri-Inputs
+    if (data.inputs) {
+        document.getElementById('input-fertilizer').textContent = data.inputs.fertilizer || '...';
+        document.getElementById('input-herbicide').textContent = data.inputs.herbicide || '...';
+        document.getElementById('input-pesticide').textContent = data.inputs.pesticide || '...';
+    }
+
+    // Motivation Box
+    const motivationBox = document.getElementById('motivation-box');
+    const motivationText = document.getElementById('motivation-text');
+    if (data.confidence_note) {
+        if (motivationBox) motivationBox.classList.remove('d-none');
+        if (motivationText) motivationText.textContent = data.confidence_note;
+    } else {
+        if (motivationBox) motivationBox.classList.add('d-none');
+    }
+
+    // Refresh Risks & Alerts
+    const riskContainer = document.getElementById('risk-alert-container');
+    if (riskContainer) {
+        riskContainer.innerHTML = '';
         
-        let prefix = '';
-        if (data.current_day_live > s.end_day) prefix = '✅ ';
-        else if (data.current_day_live >= s.start_day && data.current_day_live <= s.end_day) prefix = '🌱 ';
-        
-        item.innerHTML = `<div class="d-flex justify-content-between">
-            <span>${prefix}${s.name}</span>
-            <small class="${idx === state.viewingIdx ? 'text-white' : 'text-muted'}">Days ${s.start_day}+</small>
-        </div>`;
-        timeline.appendChild(item);
-    });
+        data.alerts.forEach(alert => {
+            const div = document.createElement('div');
+            div.className = 'alert alert-warning border-0 rounded-4 shadow-sm mb-3 small py-2 d-flex align-items-center gap-2';
+            div.innerHTML = `<i class="bi bi-exclamation-triangle"></i><span>${alert}</span>`;
+            riskContainer.appendChild(div);
+        });
 
-    // Alerts
-    const alerts = document.getElementById('viewer-notifications');
-    alerts.innerHTML = '';
-    if (data.mode === 'live') {
-        createAlert(alerts, 'Daily System Check', 'Current environmental conditions are optimal for the ' + data.current_stage.name + ' phase.', 'bi-check-circle-fill', 'text-success');
+        data.risks.forEach(risk => {
+            const div = document.createElement('div');
+            div.className = `alert ${risk.severity === 'critical' ? 'alert-danger' : 'alert-light border'} rounded-4 shadow-sm mb-3 p-3`;
+            div.innerHTML = `
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-shield-shaded text-danger"></i>
+                    <strong class="text-uppercase" style="font-size: 0.65rem;">${risk.severity}${state.lang === 'en' ? ' Risk' : ''}</strong>
+                </div>
+                <p class="mb-1 small"><strong>${risk.reason}</strong></p>
+            `;
+            riskContainer.appendChild(div);
+        });
+    }
+
+    // Weather Bar Update
+    const weatherBar = document.getElementById('weather-context-bar');
+    if (weatherBar && data.weather) {
+        weatherBar.classList.remove('d-none');
+        weatherBar.innerHTML = `
+            <div class="weather-chip-v2"><i class="bi bi-thermometer-half text-danger"></i> ${data.weather.current.temperature}°C</div>
+            <div class="weather-chip-v2"><i class="bi bi-wind text-primary"></i> ${data.weather.current.wind_speed} km/h</div>
+        `;
+    }
+
+    // Re-render Stepper to update active state
+    renderStepper(state.timeline, data.day);
+    
+    // Update Prev/Next Nav Buttons
+    if (state.timeline) {
+        const currentIdx = state.timeline.micro_stages.findIndex(s => s.code === data.stage.code);
+        const prevBtn = document.getElementById('btn-prev-stage');
+        const nextBtn = document.getElementById('btn-next-stage');
+        if (prevBtn) prevBtn.disabled = currentIdx === 0;
+        if (nextBtn) nextBtn.disabled = currentIdx === state.timeline.micro_stages.length - 1;
     }
 }
 
-function createAlert(container, title, msg, icon, iconClass) {
-    const alert = document.createElement('div');
-    alert.className = 'daily-reminder-card shadow-sm mb-3';
-    alert.innerHTML = `
-        <div class="reminder-icon ${iconClass}"><i class="bi ${icon}"></i></div>
-        <div class="reminder-content">
-            <h5 class="mb-1">${title}</h5>
-            <p class="mb-0 text-muted small">${msg}</p>
-        </div>
-    `;
-    container.appendChild(alert);
+function renderStepper(timeline, currentDay) {
+    const stepper = document.getElementById('stage-stepper');
+    if (!timeline) return;
+
+    // Optimization: If stepper already has items, don't rebuild it (prevents jitter)
+    const existingItems = stepper.querySelectorAll('.stepper-item');
+    if (existingItems.length === timeline.micro_stages.length) {
+        timeline.micro_stages.forEach((stage, idx) => {
+            const item = existingItems[idx];
+            const isActive = currentDay >= stage.start_day && currentDay <= stage.end_day;
+            const isPast = currentDay > stage.end_day;
+            
+            item.classList.toggle('active', isActive);
+            item.classList.toggle('past', isPast);
+            
+            if (isActive) {
+                item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        });
+        return;
+    }
+
+    // Full build (only happens once on crop change)
+    stepper.innerHTML = '';
+    timeline.micro_stages.forEach(stage => {
+        const item = document.createElement('div');
+        const isActive = currentDay >= stage.start_day && currentDay <= stage.end_day;
+        const isPast = currentDay > stage.end_day;
+        
+        item.className = `stepper-item ${isActive ? 'active' : ''} ${isPast ? 'past' : ''}`;
+        
+        item.addEventListener('click', (e) => {
+            if (state.navMode === 'auto') {
+                setNavMode('manual');
+            }
+            fetchAdvisorUpdate(stage.start_day);
+        });
+        
+        const label = (state.lang === 'mr' && stage.farmer_label) ? stage.farmer_label : stage.label;
+        item.innerHTML = `
+            <div class="stepper-dot" title="Jump to ${label}">${stage.code}</div>
+            <div class="stepper-label">${label}</div>
+        `;
+        stepper.appendChild(item);
+        
+        if (isActive) {
+            item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+    });
 }
 </script>
 {% endblock %}

@@ -1,0 +1,794 @@
+{
+  "schema_version": "2.0",
+  "default_locale": "en-IN",
+  "crops": {
+    "Maize": {
+      "emoji": "\ud83c\udf3d",
+      "category": "Cereals",
+      "readiness": "production",
+      "crop_profile": {
+        "duration_days": 110,
+        "season_windows": ["Kharif", "Rabi", "Spring"],
+        "india_notes": [
+          "Maize responds strongly to timely nitrogen, clean weed control, and moisture protection during tasseling and silking.",
+          "Water stress between tasseling and early grain set can sharply reduce kernel number and final yield."
+        ],
+        "regional_suitability": ["Konkan", "Western Maharashtra", "Vidarbha", "Semi-arid plains", "Irrigated belts"],
+        "soil_fit": {
+          "Black": "Good moisture holding. Avoid waterlogging after heavy rain.",
+          "Red": "Faster drainage. Watch for early moisture stress and split irrigation.",
+          "Alluvial": "Good response to balanced nutrition and timely irrigation.",
+          "Other": "Use field observation and drainage status before irrigation decisions."
+        }
+      },
+      "micro_stages": [
+        {
+          "code": "VE",
+          "label": "Germination and Emergence",
+          "farmer_label": "Seedling emergence",
+          "stage_family": "establishment",
+          "start_day": 1,
+          "end_day": 5,
+          "criticality": "high",
+          "objectives": ["Uniform emergence", "Moist seed zone", "Protect stand count"]
+        },
+        {
+          "code": "V1",
+          "label": "1-Leaf Stage",
+          "farmer_label": "First leaf visible",
+          "stage_family": "vegetative",
+          "start_day": 6,
+          "end_day": 8,
+          "criticality": "medium",
+          "objectives": ["Check gaps", "Avoid crusting", "Protect early vigor"]
+        },
+        {
+          "code": "V2",
+          "label": "2-Leaf Stage",
+          "farmer_label": "Early seedling growth",
+          "stage_family": "vegetative",
+          "start_day": 9,
+          "end_day": 12,
+          "criticality": "medium",
+          "objectives": ["Maintain plant stand", "Prevent early weed competition"]
+        },
+        {
+          "code": "V3",
+          "label": "3-Leaf Stage",
+          "farmer_label": "Early leaf build-up",
+          "stage_family": "vegetative",
+          "start_day": 13,
+          "end_day": 16,
+          "criticality": "medium",
+          "objectives": ["Scout leaf color", "Plan first interculture"]
+        },
+        {
+          "code": "V4",
+          "label": "4-Leaf Stage",
+          "farmer_label": "Four-leaf stage",
+          "stage_family": "vegetative",
+          "start_day": 17,
+          "end_day": 20,
+          "criticality": "medium",
+          "objectives": ["Support root growth", "Control first weed flush"]
+        },
+        {
+          "code": "V5",
+          "label": "5-Leaf Stage",
+          "farmer_label": "Rapid leaf expansion starts",
+          "stage_family": "vegetative",
+          "start_day": 21,
+          "end_day": 24,
+          "criticality": "high",
+          "objectives": ["Top-dress nitrogen on time", "Keep field weed free"]
+        },
+        {
+          "code": "V6",
+          "label": "6-Leaf Stage",
+          "farmer_label": "Knee-high stage begins",
+          "stage_family": "vegetative",
+          "start_day": 25,
+          "end_day": 28,
+          "criticality": "high",
+          "objectives": ["Nitrogen uptake acceleration", "Earthing up readiness"]
+        },
+        {
+          "code": "V8",
+          "label": "8-Leaf Stage",
+          "farmer_label": "Active canopy expansion",
+          "stage_family": "rapid_growth",
+          "start_day": 29,
+          "end_day": 34,
+          "criticality": "high",
+          "objectives": ["Preserve moisture", "Prevent stem borer damage"]
+        },
+        {
+          "code": "V10",
+          "label": "10-Leaf Stage",
+          "farmer_label": "Rapid stem growth",
+          "stage_family": "rapid_growth",
+          "start_day": 35,
+          "end_day": 40,
+          "criticality": "high",
+          "objectives": ["Sustain nitrogen supply", "Avoid hidden stress"]
+        },
+        {
+          "code": "V12",
+          "label": "12-Leaf Stage",
+          "farmer_label": "Pre-tassel build-up",
+          "stage_family": "rapid_growth",
+          "start_day": 41,
+          "end_day": 46,
+          "criticality": "high",
+          "objectives": ["Prepare for tasseling", "Stabilize irrigation schedule"]
+        },
+        {
+          "code": "VT",
+          "label": "Tasseling",
+          "farmer_label": "Tassel visible",
+          "stage_family": "reproductive_critical",
+          "start_day": 47,
+          "end_day": 52,
+          "criticality": "critical",
+          "objectives": ["Prevent water stress", "Protect pollen production"]
+        },
+        {
+          "code": "R1",
+          "label": "Silking and Pollination",
+          "farmer_label": "Silks visible",
+          "stage_family": "reproductive_critical",
+          "start_day": 53,
+          "end_day": 60,
+          "criticality": "critical",
+          "objectives": ["Protect pollination", "Avoid nutrient and moisture shock"]
+        },
+        {
+          "code": "R2",
+          "label": "Blister Stage",
+          "farmer_label": "Early grain set",
+          "stage_family": "grain_set",
+          "start_day": 61,
+          "end_day": 66,
+          "criticality": "high",
+          "objectives": ["Secure kernel retention", "Prevent abrupt moisture deficit"]
+        },
+        {
+          "code": "R3",
+          "label": "Milk Stage",
+          "farmer_label": "Milk grain stage",
+          "stage_family": "grain_fill",
+          "start_day": 67,
+          "end_day": 74,
+          "criticality": "high",
+          "objectives": ["Sustain grain filling", "Watch foliar disease pressure"]
+        },
+        {
+          "code": "R4",
+          "label": "Dough Stage",
+          "farmer_label": "Dough grain stage",
+          "stage_family": "grain_fill",
+          "start_day": 75,
+          "end_day": 84,
+          "criticality": "medium",
+          "objectives": ["Protect cob health", "Avoid late lodging"]
+        },
+        {
+          "code": "R5",
+          "label": "Dent Stage",
+          "farmer_label": "Dent stage",
+          "stage_family": "maturity",
+          "start_day": 85,
+          "end_day": 98,
+          "criticality": "medium",
+          "objectives": ["Prepare harvest logistics", "Reduce unnecessary input cost"]
+        },
+        {
+          "code": "R6",
+          "label": "Physiological Maturity",
+          "farmer_label": "Black layer and dry down",
+          "stage_family": "maturity",
+          "start_day": 99,
+          "end_day": 110,
+          "criticality": "medium",
+          "objectives": ["Dry-down monitoring", "Timely harvest", "Storage preparation"]
+        }
+      ],
+      "daily_windows": [
+        {
+          "start_day": 1,
+          "end_day": 3,
+          "focus": "Sowing moisture and stand establishment",
+          "today_actions": [
+            "Check whether the seed zone remains uniformly moist after sowing.",
+            "Inspect seed depth, surface crusting, and any water stagnation in low spots."
+          ],
+          "next_5_day_plan": [
+            "Plan a germination count by day 5 to spot weak patches early.",
+            "Keep re-sowing seed ready only for severely missing stretches."
+          ],
+          "base_risks": [
+            {
+              "severity": "high",
+              "reason": "Dry seed zone or hard crust can cause uneven emergence and weak stand.",
+              "recommended_response": "Use a light life-saving irrigation only if the topsoil is dry and no meaningful rain is expected."
+            }
+          ],
+          "alerts": [
+            "Do not flood the field during germination; oxygen stress can reduce plant stand."
+          ],
+          "ai_recommendation": "Prioritize uniform emergence over aggressive watering.",
+          "why_this_matters": "A patchy start creates non-uniform plant size and weaker yield potential for the full season."
+        },
+        {
+          "start_day": 4,
+          "end_day": 7,
+          "focus": "Emergence count and gap correction",
+          "today_actions": [
+            "Count emerged seedlings and mark weak zones for follow-up.",
+            "Remove standing water pockets around seed rows if present."
+          ],
+          "next_5_day_plan": [
+            "Prepare for gap filling only where stand loss is clearly severe.",
+            "Watch for seed rot, bird damage, and cutworm-type stand loss."
+          ],
+          "base_risks": [
+            {
+              "severity": "medium",
+              "reason": "Early stand loss lowers plant population and final cob count.",
+              "recommended_response": "Use spot correction instead of disturbing healthy rows."
+            }
+          ],
+          "alerts": [
+            "Avoid blanket re-sowing before emergence is complete across the field."
+          ],
+          "ai_recommendation": "Let emergence finish, then repair only clearly missing strips.",
+          "why_this_matters": "Correct plant population in the first week is easier to protect than to rebuild later."
+        },
+        {
+          "start_day": 8,
+          "end_day": 12,
+          "focus": "Early seedling vigor and first weed flush",
+          "today_actions": [
+            "Check seedling color and root anchorage.",
+            "Look for the first flush of weeds between rows and near planting lines."
+          ],
+          "next_5_day_plan": [
+            "Plan the first interculture or early weed control before weeds dominate.",
+            "Keep watch for nutrient stress in pale seedlings on light soils."
+          ],
+          "base_risks": [
+            {
+              "severity": "medium",
+              "reason": "Weed competition begins early and can steal moisture and nutrients from maize seedlings.",
+              "recommended_response": "Act before weeds become taller than seedlings."
+            }
+          ],
+          "alerts": [
+            "Do not delay first weed control until the canopy closes."
+          ],
+          "ai_recommendation": "Protect early vigor by keeping seedling rows clean and lightly moist.",
+          "why_this_matters": "Early stress slows root expansion and weakens later nutrient response."
+        },
+        {
+          "start_day": 13,
+          "end_day": 16,
+          "focus": "V3 stage nutrition scouting",
+          "today_actions": [
+            "Inspect for pale leaves, purpling, or uneven growth.",
+            "Break any surface crust and improve aeration with shallow interculture if the field permits."
+          ],
+          "next_5_day_plan": [
+            "Prepare fertilizer and labor for the upcoming early top-dress window.",
+            "Schedule weed control before V5 if weeds are active."
+          ],
+          "base_risks": [
+            {
+              "severity": "medium",
+              "reason": "Ignoring early nutrient stress reduces leaf area and later yield response.",
+              "recommended_response": "Use timely top-dressing and not cosmetic foliar fixes alone."
+            }
+          ],
+          "alerts": [
+            "Do not place nitrogen on dry soil without moisture support."
+          ],
+          "ai_recommendation": "Use these days to prepare for the first major nutrient push.",
+          "why_this_matters": "The crop is shifting from survival to active vegetative build-up."
+        },
+        {
+          "start_day": 17,
+          "end_day": 20,
+          "focus": "V4 root strengthening and clean field management",
+          "today_actions": [
+            "Control weeds while they are still manageable.",
+            "Check root anchorage and row uniformity before rapid growth starts."
+          ],
+          "next_5_day_plan": [
+            "Prepare nitrogen top-dress for V5-V6.",
+            "Plan light earthing up after weeding if soil condition is suitable."
+          ],
+          "base_risks": [
+            {
+              "severity": "high",
+              "reason": "Unchecked weed pressure around V4-V6 directly cuts early biomass and nutrient uptake.",
+              "recommended_response": "Finish first major weed control before the crop gets too tall."
+            }
+          ],
+          "alerts": [
+            "Avoid deep hoeing close to plants; root pruning can slow crop growth."
+          ],
+          "ai_recommendation": "Keep the root zone loose, moist, and weed-free before knee-high growth begins.",
+          "why_this_matters": "The crop soon enters a stage where nutrient demand rises sharply."
+        },
+        {
+          "start_day": 21,
+          "end_day": 24,
+          "focus": "V5 nitrogen preparation window",
+          "today_actions": [
+            "Finalize the first nitrogen top-dress if basal feeding was conservative.",
+            "Check that soil moisture is adequate for nutrient movement."
+          ],
+          "next_5_day_plan": [
+            "Complete earthing up soon after top-dress if the field is workable.",
+            "Start pest surveillance for stem borer and leaf-feeding damage."
+          ],
+          "base_risks": [
+            {
+              "severity": "high",
+              "reason": "Nitrogen delay at this stage reduces canopy build-up before the reproductive phase.",
+              "recommended_response": "Apply in a timely split and avoid dumping the full dose before strong rain."
+            }
+          ],
+          "alerts": [
+            "Delay fertilizer if heavy rainfall is likely within the next one to two days."
+          ],
+          "ai_recommendation": "Feed the crop ahead of knee-high acceleration, but only when loss risk is low.",
+          "why_this_matters": "V5-V6 is the bridge between early stand survival and strong biomass formation."
+        },
+        {
+          "start_day": 25,
+          "end_day": 28,
+          "focus": "V6 knee-high stage",
+          "today_actions": [
+            "Top-dress nitrogen if still pending and lightly incorporate where possible.",
+            "Carry out earthing up to support roots and reduce lodging risk."
+          ],
+          "next_5_day_plan": [
+            "Monitor leaf color response after nutrient application.",
+            "Keep scouting for stem borer dead-heart symptoms."
+          ],
+          "base_risks": [
+            {
+              "severity": "high",
+              "reason": "Missed nutrient support at knee-high stage weakens canopy expansion and cob potential.",
+              "recommended_response": "Use a timely split rather than a delayed heavy correction."
+            }
+          ],
+          "alerts": [
+            "Do not apply urea over wet leaves during bright heat; it can scorch foliage."
+          ],
+          "ai_recommendation": "This is the prime window to lock in vegetative momentum.",
+          "why_this_matters": "Strong growth now supports better tassel and cob development later."
+        },
+        {
+          "start_day": 29,
+          "end_day": 34,
+          "focus": "Rapid vegetative expansion",
+          "today_actions": [
+            "Check for moisture deficit in lighter soils and ridge tops.",
+            "Inspect the whorl and central shoots for stem borer or armyworm activity."
+          ],
+          "next_5_day_plan": [
+            "Prepare the second nitrogen split if the crop is highly responsive and irrigated.",
+            "Keep the field free from late weed escape."
+          ],
+          "base_risks": [
+            {
+              "severity": "medium",
+              "reason": "Rapid growth increases water and nitrogen demand every day.",
+              "recommended_response": "Avoid long dry gaps, especially on red or light soils."
+            }
+          ],
+          "alerts": [
+            "Do not ignore hidden whorl damage; it is easier to manage when detected early."
+          ],
+          "ai_recommendation": "Protect both canopy growth and pest-free whorls during this acceleration phase.",
+          "why_this_matters": "Hidden stress here reduces the crop's ability to support a high kernel count later."
+        },
+        {
+          "start_day": 35,
+          "end_day": 40,
+          "focus": "V10 canopy build-up and stress prevention",
+          "today_actions": [
+            "Re-check soil moisture and leaf rolling during the hotter part of the day.",
+            "Watch for zinc deficiency or uneven green color in intensively cropped fields."
+          ],
+          "next_5_day_plan": [
+            "Prepare irrigation scheduling for pre-tassel days.",
+            "If the crop is pale, plan a precise correction instead of blanket extra nitrogen."
+          ],
+          "base_risks": [
+            {
+              "severity": "high",
+              "reason": "Hidden pre-tassel stress lowers reproductive potential before symptoms become obvious.",
+              "recommended_response": "Use field scouting, not just calendar-based input application."
+            }
+          ],
+          "alerts": [
+            "Avoid over-irrigation on black soils; temporary waterlogging can stall root function."
+          ],
+          "ai_recommendation": "Keep the crop uniformly green and unstressed before tasseling preparation begins.",
+          "why_this_matters": "A strong pre-tassel canopy supports better pollination and grain set."
+        },
+        {
+          "start_day": 41,
+          "end_day": 46,
+          "focus": "Pre-tassel stabilization",
+          "today_actions": [
+            "Stabilize irrigation intervals so the crop does not enter tasseling under stress.",
+            "Inspect for lodging, stem weakness, or severe foliar damage."
+          ],
+          "next_5_day_plan": [
+            "Keep labor and water ready for tasseling and silking support.",
+            "Avoid disruptive field operations unless necessary."
+          ],
+          "base_risks": [
+            {
+              "severity": "high",
+              "reason": "Stress just before tasseling can reduce the crop's reproductive performance.",
+              "recommended_response": "Keep moisture, nutrient availability, and plant health stable."
+            }
+          ],
+          "alerts": [
+            "Do not postpone irrigation too long if hot dry weather is building."
+          ],
+          "ai_recommendation": "Transition into tasseling with a stable root-zone moisture profile.",
+          "why_this_matters": "The crop is entering its most yield-sensitive stage."
+        },
+        {
+          "start_day": 47,
+          "end_day": 52,
+          "focus": "VT tasseling protection",
+          "today_actions": [
+            "Give priority to moisture conservation and timely irrigation if rain is not likely soon.",
+            "Avoid nutrient shock or aggressive cultivation around the root zone."
+          ],
+          "next_5_day_plan": [
+            "Stay ready for silking support and quick stress response.",
+            "Watch for hot dry winds that can reduce pollen viability."
+          ],
+          "base_risks": [
+            {
+              "severity": "critical",
+              "reason": "Water stress at tasseling can sharply cut pollination success and cob setting.",
+              "recommended_response": "Treat irrigation as yield protection, not optional maintenance."
+            }
+          ],
+          "alerts": [
+            "Skip irrigation only if good rainfall is imminent; this stage should never enter stress by assumption."
+          ],
+          "ai_recommendation": "Keep the crop free from even short moisture shocks during tasseling.",
+          "why_this_matters": "Kernel number is strongly protected by stable moisture at this stage."
+        },
+        {
+          "start_day": 53,
+          "end_day": 60,
+          "focus": "R1 silking and pollination",
+          "today_actions": [
+            "Protect water availability with highest priority if the soil is drying.",
+            "Avoid any avoidable stress such as late heavy fertilizer loading, root disturbance, or prolonged dry spells."
+          ],
+          "next_5_day_plan": [
+            "Monitor silk emergence, pollen shed, and patchy pollination signs.",
+            "Prepare quick action if heat or dry wind conditions intensify."
+          ],
+          "base_risks": [
+            {
+              "severity": "critical",
+              "reason": "Silking is the single most water-sensitive stage in maize and yield loss can be severe under stress.",
+              "recommended_response": "Maintain steady moisture and do not rely on chance rainfall."
+            }
+          ],
+          "alerts": [
+            "Never delay needed irrigation at silking simply because clouds are present."
+          ],
+          "ai_recommendation": "Treat this period as the highest-priority irrigation protection window of the full crop cycle.",
+          "why_this_matters": "Poor pollination directly lowers kernel number and cannot be corrected later."
+        },
+        {
+          "start_day": 61,
+          "end_day": 66,
+          "focus": "Early grain set",
+          "today_actions": [
+            "Maintain moderate, steady soil moisture to support kernel retention.",
+            "Continue scouting for foliar pests and disease pressure after rainfall."
+          ],
+          "next_5_day_plan": [
+            "Avoid moisture swings from severe drying followed by flooding.",
+            "Watch for cob damage and stress symptoms in lighter zones."
+          ],
+          "base_risks": [
+            {
+              "severity": "high",
+              "reason": "Stress after pollination can still reduce kernel retention and grain development.",
+              "recommended_response": "Protect continuity of moisture, not just emergency rescue irrigation."
+            }
+          ],
+          "alerts": [
+            "Do not over-apply nitrogen now unless a field diagnosis clearly supports it."
+          ],
+          "ai_recommendation": "Shift from pollination protection to stable grain-set support.",
+          "why_this_matters": "The crop is converting successful pollination into retained kernels."
+        },
+        {
+          "start_day": 67,
+          "end_day": 74,
+          "focus": "Milk stage grain filling",
+          "today_actions": [
+            "Check for leaf disease, especially after humid or rainy weather.",
+            "Maintain moisture if the profile is drying, but avoid unnecessary standing water."
+          ],
+          "next_5_day_plan": [
+            "Prepare bird and cob protection where local pressure is common.",
+            "Plan the last useful irrigation according to soil and weather."
+          ],
+          "base_risks": [
+            {
+              "severity": "medium",
+              "reason": "Foliar disease and prolonged dry spells can still reduce grain weight at milk stage.",
+              "recommended_response": "Protect healthy green leaf area and avoid moisture crashes."
+            }
+          ],
+          "alerts": [
+            "Spray only when wind and rainfall conditions are suitable."
+          ],
+          "ai_recommendation": "Protect leaf health and moderate moisture to build grain weight efficiently.",
+          "why_this_matters": "Healthy green leaves during milk stage directly support grain filling."
+        },
+        {
+          "start_day": 75,
+          "end_day": 84,
+          "focus": "Dough stage yield finishing",
+          "today_actions": [
+            "Continue moisture support only if the soil profile is clearly drying.",
+            "Watch for lodging, cob rot, and late pest pressure."
+          ],
+          "next_5_day_plan": [
+            "Start harvest planning, bagging, and drying preparation.",
+            "Reduce unnecessary field movement that can damage plants."
+          ],
+          "base_risks": [
+            {
+              "severity": "medium",
+              "reason": "Late stress still affects grain weight, but extra water is less useful than at silking.",
+              "recommended_response": "Use measured irrigation, not calendar-based watering."
+            }
+          ],
+          "alerts": [
+            "Avoid excess irrigation late in the season if the field already holds enough moisture."
+          ],
+          "ai_recommendation": "Use only purposeful water and focus on protecting cobs and standing crop.",
+          "why_this_matters": "The crop is finishing grain filling and moving toward maturity."
+        },
+        {
+          "start_day": 85,
+          "end_day": 98,
+          "focus": "Dent stage and dry-down planning",
+          "today_actions": [
+            "Reduce irrigation decisions to only clear need-based cases.",
+            "Inspect cob maturity and plant dryness across the field."
+          ],
+          "next_5_day_plan": [
+            "Arrange harvest labor, transport, and drying space.",
+            "Watch for lodging after storms or high wind."
+          ],
+          "base_risks": [
+            {
+              "severity": "low",
+              "reason": "Extra late irrigation may add cost without meaningful yield benefit.",
+              "recommended_response": "Shift attention from feeding the crop to protecting harvest quality."
+            }
+          ],
+          "alerts": [
+            "Do not continue routine irrigation out of habit."
+          ],
+          "ai_recommendation": "Start saving water and effort for harvest operations unless the crop clearly still needs support.",
+          "why_this_matters": "Late-season efficiency matters more than blanket input use."
+        },
+        {
+          "start_day": 99,
+          "end_day": 110,
+          "focus": "Maturity and harvest readiness",
+          "today_actions": [
+            "Check husk dryness, black-layer maturity signs, and grain dryness before harvest.",
+            "Keep harvested produce protected from rain and re-wetting."
+          ],
+          "next_5_day_plan": [
+            "Harvest at suitable moisture and dry grain safely before storage.",
+            "Clean storage space and plan insect-safe grain handling."
+          ],
+          "base_risks": [
+            {
+              "severity": "medium",
+              "reason": "Rain on mature crop and poor drying can damage grain quality and storage life.",
+              "recommended_response": "Match harvest timing with the next dry weather window."
+            }
+          ],
+          "alerts": [
+            "Avoid harvest during wet conditions unless lodging or storm risk is severe."
+          ],
+          "ai_recommendation": "Optimize harvest timing for grain quality, not just calendar completion.",
+          "why_this_matters": "A good crop can still lose value through poor harvest and storage timing."
+        }
+      ],
+      "decision_rules": {
+        "irrigation": {
+          "default_suppress_if_rain_mm_24h": 12,
+          "critical_stage_suppress_if_rain_mm_24h": 15,
+          "critical_stage_trigger_if_dry_and_no_rain": true,
+          "black_soil_extra_caution": true
+        },
+        "fertilizer": {
+          "delay_if_rain_mm_24h": 20,
+          "topdress_windows": [[21, 28], [29, 40]],
+          "avoid_late_n_after_day": 66
+        },
+        "spraying": {
+          "avoid_if_wind_kph": 18,
+          "avoid_if_rain_probability_pct": 60
+        },
+        "stress": {
+          "heat_threshold_c": 36,
+          "cold_threshold_c": 12,
+          "high_humidity_pct": 85
+        }
+      },
+      "risk_models": [
+        {
+          "id": "water_stress_reproductive",
+          "stage_families": ["reproductive_critical"],
+          "severity": "critical",
+          "trigger": "dry_weather",
+          "reason": "Water stress during tasseling and silking can sharply reduce pollination and kernel number.",
+          "recommended_response": "Protect moisture early and avoid waiting for visible severe wilting."
+        },
+        {
+          "id": "nitrogen_loss_heavy_rain",
+          "stage_families": ["vegetative", "rapid_growth"],
+          "severity": "high",
+          "trigger": "heavy_rain",
+          "reason": "Top-dressed nitrogen before heavy rain can be lost through runoff or leaching.",
+          "recommended_response": "Delay or split the dose until the rain event passes."
+        },
+        {
+          "id": "humidity_disease_pressure",
+          "stage_families": ["grain_set", "grain_fill"],
+          "severity": "medium",
+          "trigger": "humid_rainy",
+          "reason": "Humid and wet canopies raise foliar disease pressure and reduce green leaf area.",
+          "recommended_response": "Increase scouting and spray only in suitable weather windows if justified."
+        }
+      ]
+    },
+    "Rice": {
+      "emoji": "\ud83c\udf3e",
+      "category": "Cereals",
+      "readiness": "starter",
+      "crop_profile": {
+        "duration_days": 135,
+        "season_windows": ["Kharif", "Rabi"],
+        "india_notes": [
+          "Rice decisions depend strongly on nursery method, transplanting, and standing water management."
+        ],
+        "regional_suitability": ["Irrigated lowlands", "Rainfed lowlands", "Command areas"],
+        "soil_fit": {
+          "Black": "Watch drainage closely.",
+          "Red": "Maintain puddled moisture carefully.",
+          "Alluvial": "Good fit for irrigated rice.",
+          "Other": "Use field water-holding behavior to guide irrigation."
+        }
+      },
+      "micro_stages": [
+        {"code": "NS", "label": "Nursery and Establishment", "farmer_label": "Nursery stage", "stage_family": "establishment", "start_day": 1, "end_day": 20, "criticality": "high", "objectives": ["Healthy seedlings", "Basal nutrition"]},
+        {"code": "TP", "label": "Transplanting and Recovery", "farmer_label": "Transplant recovery", "stage_family": "vegetative", "start_day": 21, "end_day": 35, "criticality": "high", "objectives": ["Root establishment", "Weed suppression"]},
+        {"code": "TL", "label": "Tillering", "farmer_label": "Tillering", "stage_family": "vegetative", "start_day": 36, "end_day": 70, "criticality": "high", "objectives": ["Tillers", "Nitrogen timing"]},
+        {"code": "PI", "label": "Panicle Initiation to Flowering", "farmer_label": "Panicle and flowering", "stage_family": "reproductive_critical", "start_day": 71, "end_day": 105, "criticality": "critical", "objectives": ["Stable water", "Yield protection"]},
+        {"code": "MH", "label": "Maturity and Harvest", "farmer_label": "Maturity", "stage_family": "maturity", "start_day": 106, "end_day": 135, "criticality": "medium", "objectives": ["Drain field", "Harvest timing"]}
+      ],
+      "daily_windows": [
+        {"start_day": 1, "end_day": 20, "focus": "Nursery management", "today_actions": ["Keep nursery moist and disease free."], "next_5_day_plan": ["Prepare main field leveling and basal application."], "base_risks": [{"severity": "medium", "reason": "Weak nursery lowers transplant performance.", "recommended_response": "Protect seedling vigor."}], "alerts": ["Avoid stagnant contaminated water in the nursery."], "ai_recommendation": "Protect nursery health before thinking about yield maximization.", "why_this_matters": "Uniform seedlings improve final stand."},
+        {"start_day": 21, "end_day": 70, "focus": "Transplanting and tillering support", "today_actions": ["Maintain shallow water and keep first weed flush under control."], "next_5_day_plan": ["Plan nitrogen splits and scout for stem borer or leaf folder."], "base_risks": [{"severity": "high", "reason": "Poor early water and weed control weakens tillering.", "recommended_response": "Keep the field managed during establishment."}], "alerts": ["Do not maintain unnecessarily deep water after transplanting."], "ai_recommendation": "Aim for healthy tiller production with balanced water.", "why_this_matters": "Tillering drives panicle potential."},
+        {"start_day": 71, "end_day": 135, "focus": "Reproductive protection and maturity", "today_actions": ["Protect water during panicle initiation and flowering, then drain before harvest."], "next_5_day_plan": ["Watch for blast, hopper pressure, and harvest weather."], "base_risks": [{"severity": "high", "reason": "Stress during flowering lowers grain set.", "recommended_response": "Protect reproductive moisture and crop health."}], "alerts": ["Drain before harvest to support field entry and grain quality."], "ai_recommendation": "Treat flowering as the key protection stage.", "why_this_matters": "This stage has the strongest impact on filled grain."}
+      ],
+      "decision_rules": {"irrigation": {"default_suppress_if_rain_mm_24h": 10, "critical_stage_suppress_if_rain_mm_24h": 14, "critical_stage_trigger_if_dry_and_no_rain": true}, "fertilizer": {"delay_if_rain_mm_24h": 18, "topdress_windows": [[30, 45], [60, 80]], "avoid_late_n_after_day": 95}, "spraying": {"avoid_if_wind_kph": 16, "avoid_if_rain_probability_pct": 60}, "stress": {"heat_threshold_c": 35, "cold_threshold_c": 15, "high_humidity_pct": 88}},
+      "risk_models": []
+    },
+    "Wheat": {
+      "emoji": "\ud83c\udf3e",
+      "category": "Cereals",
+      "readiness": "starter",
+      "crop_profile": {
+        "duration_days": 125,
+        "season_windows": ["Rabi"],
+        "india_notes": ["Crown root initiation, booting, flowering, and milk stage are major water-sensitive checkpoints."],
+        "regional_suitability": ["Irrigated plains", "Cool dry winter belts"],
+        "soil_fit": {
+          "Black": "Monitor crusting and irrigation spacing.",
+          "Red": "Use shorter irrigation intervals if needed.",
+          "Alluvial": "Strong yield response with timely irrigation.",
+          "Other": "Use field moisture and root-zone condition to decide."
+        }
+      },
+      "micro_stages": [
+        {"code": "GE", "label": "Germination", "farmer_label": "Establishment", "stage_family": "establishment", "start_day": 1, "end_day": 20, "criticality": "medium", "objectives": ["Stand establishment", "Healthy root start"]},
+        {"code": "CRI", "label": "Crown Root Initiation", "farmer_label": "CRI stage", "stage_family": "vegetative", "start_day": 21, "end_day": 30, "criticality": "critical", "objectives": ["First irrigation", "Nitrogen support"]},
+        {"code": "TL", "label": "Tillering to Jointing", "farmer_label": "Tillering and stem elongation", "stage_family": "vegetative", "start_day": 31, "end_day": 70, "criticality": "high", "objectives": ["Tillers", "Weed control"]},
+        {"code": "FL", "label": "Booting to Flowering", "farmer_label": "Booting and flowering", "stage_family": "reproductive_critical", "start_day": 71, "end_day": 100, "criticality": "critical", "objectives": ["Protect ear emergence", "Stable moisture"]},
+        {"code": "ML", "label": "Milk to Harvest", "farmer_label": "Grain filling and maturity", "stage_family": "grain_fill", "start_day": 101, "end_day": 125, "criticality": "high", "objectives": ["Support grain filling", "Harvest planning"]}
+      ],
+      "daily_windows": [
+        {"start_day": 1, "end_day": 30, "focus": "Establishment and CRI", "today_actions": ["Prepare for the first decisive irrigation at CRI and protect stand."], "next_5_day_plan": ["Keep an eye on early weeds and termite pressure."], "base_risks": [{"severity": "high", "reason": "Missing the CRI stage hurts root and tiller development.", "recommended_response": "Treat CRI irrigation as non-negotiable if the field is dry."}], "alerts": ["Do not waste the first irrigation before CRI unless emergence is threatened."], "ai_recommendation": "Time the first major irrigation correctly.", "why_this_matters": "CRI drives root system strength."},
+        {"start_day": 31, "end_day": 125, "focus": "Tillering to harvest", "today_actions": ["Support tillers, protect flowering moisture, and manage harvest timing."], "next_5_day_plan": ["Watch for rust, lodging, and grain-fill stress."], "base_risks": [{"severity": "medium", "reason": "Water stress at flowering or milk reduces grain number and size.", "recommended_response": "Prioritize these stages if water is limited."}], "alerts": ["Avoid late unnecessary nitrogen."], "ai_recommendation": "Prioritize critical irrigations over routine watering.", "why_this_matters": "Stage-based irrigation matters more than frequent irrigation."}
+      ],
+      "decision_rules": {"irrigation": {"default_suppress_if_rain_mm_24h": 10, "critical_stage_suppress_if_rain_mm_24h": 12, "critical_stage_trigger_if_dry_and_no_rain": true}, "fertilizer": {"delay_if_rain_mm_24h": 15, "topdress_windows": [[21, 35], [45, 65]], "avoid_late_n_after_day": 90}, "spraying": {"avoid_if_wind_kph": 16, "avoid_if_rain_probability_pct": 55}, "stress": {"heat_threshold_c": 32, "cold_threshold_c": 8, "high_humidity_pct": 85}},
+      "risk_models": []
+    },
+    "Cotton": {
+      "emoji": "\u2601\ufe0f",
+      "category": "Fiber",
+      "readiness": "starter",
+      "crop_profile": {
+        "duration_days": 180,
+        "season_windows": ["Kharif"],
+        "india_notes": ["Square formation, flowering, and boll development are key decision phases in cotton."],
+        "regional_suitability": ["Black soil belts", "Irrigated cotton zones"],
+        "soil_fit": {
+          "Black": "Very suitable, but avoid water stagnation.",
+          "Red": "Use careful moisture scheduling.",
+          "Alluvial": "Monitor nutrient balance closely.",
+          "Other": "Use local field performance history."
+        }
+      },
+      "micro_stages": [
+        {"code": "SD", "label": "Seedling", "farmer_label": "Seedling", "stage_family": "establishment", "start_day": 1, "end_day": 30, "criticality": "medium", "objectives": ["Stand", "Sucking pest control"]},
+        {"code": "SQ", "label": "Square Formation", "farmer_label": "Squaring", "stage_family": "vegetative", "start_day": 31, "end_day": 60, "criticality": "high", "objectives": ["Retain squares", "Balanced nutrition"]},
+        {"code": "FL", "label": "Flowering and Boll Set", "farmer_label": "Flowering", "stage_family": "reproductive_critical", "start_day": 61, "end_day": 120, "criticality": "critical", "objectives": ["Protect flowers", "Manage bollworms"]},
+        {"code": "BO", "label": "Boll Development to Picking", "farmer_label": "Boll opening", "stage_family": "grain_fill", "start_day": 121, "end_day": 180, "criticality": "high", "objectives": ["Clean picking", "Quality retention"]}
+      ],
+      "daily_windows": [
+        {"start_day": 1, "end_day": 60, "focus": "Establishment and square retention", "today_actions": ["Protect early stand and monitor sucking pests."], "next_5_day_plan": ["Prepare for square-stage nutrition and pest scouting."], "base_risks": [{"severity": "medium", "reason": "Early sucking pest damage slows branch and square formation.", "recommended_response": "Scout before damage spreads."}], "alerts": ["Avoid excessive early nitrogen that drives rank growth."], "ai_recommendation": "Build a healthy canopy before flowering stress begins.", "why_this_matters": "A balanced early crop supports better boll load."},
+        {"start_day": 61, "end_day": 180, "focus": "Flowering, boll protection, and clean picking", "today_actions": ["Protect moisture during flowering and stay ahead of bollworm risk."], "next_5_day_plan": ["Prepare harvest hygiene and boll opening protection."], "base_risks": [{"severity": "high", "reason": "Stress during flowering or boll set reduces boll retention.", "recommended_response": "Prioritize reproductive-stage crop protection."}], "alerts": ["Avoid unnecessary wetting near open bolls."], "ai_recommendation": "Focus on boll retention and clean lint quality.", "why_this_matters": "Quality and yield are both decided during the reproductive phase."}
+      ],
+      "decision_rules": {"irrigation": {"default_suppress_if_rain_mm_24h": 12, "critical_stage_suppress_if_rain_mm_24h": 14, "critical_stage_trigger_if_dry_and_no_rain": true}, "fertilizer": {"delay_if_rain_mm_24h": 18, "topdress_windows": [[35, 55], [60, 90]], "avoid_late_n_after_day": 120}, "spraying": {"avoid_if_wind_kph": 16, "avoid_if_rain_probability_pct": 55}, "stress": {"heat_threshold_c": 37, "cold_threshold_c": 14, "high_humidity_pct": 86}},
+      "risk_models": []
+    },
+    "Sugarcane": {
+      "emoji": "\ud83c\udf8b",
+      "category": "Commercial",
+      "readiness": "starter",
+      "crop_profile": {
+        "duration_days": 365,
+        "season_windows": ["Spring", "Adsali", "Pre-seasonal"],
+        "india_notes": ["Sugarcane has a long cycle and management changes greatly between germination, tillering, grand growth, and ripening."],
+        "regional_suitability": ["Irrigated command areas", "Canal belts", "High-input commercial fields"],
+        "soil_fit": {
+          "Black": "Good fit with drainage care.",
+          "Red": "Monitor frequent moisture stress.",
+          "Alluvial": "Strong growth with balanced nutrition.",
+          "Other": "Stage-based irrigation is essential."
+        }
+      },
+      "micro_stages": [
+        {"code": "GM", "label": "Germination", "farmer_label": "Sett germination", "stage_family": "establishment", "start_day": 1, "end_day": 60, "criticality": "high", "objectives": ["Good sprouting", "Gap prevention"]},
+        {"code": "TL", "label": "Tillering", "farmer_label": "Tillering", "stage_family": "vegetative", "start_day": 61, "end_day": 150, "criticality": "high", "objectives": ["Maximize millable canes", "Weed control"]},
+        {"code": "GG", "label": "Grand Growth", "farmer_label": "Fast growth", "stage_family": "rapid_growth", "start_day": 151, "end_day": 270, "criticality": "critical", "objectives": ["Highest water demand", "Strong cane growth"]},
+        {"code": "RP", "label": "Ripening", "farmer_label": "Ripening", "stage_family": "maturity", "start_day": 271, "end_day": 365, "criticality": "medium", "objectives": ["Quality improvement", "Harvest planning"]}
+      ],
+      "daily_windows": [
+        {"start_day": 1, "end_day": 150, "focus": "Establishment and tillering", "today_actions": ["Support germination, weed control, and early nutrient use efficiency."], "next_5_day_plan": ["Prepare earthing up and pest scouting."], "base_risks": [{"severity": "medium", "reason": "Poor early stand and weed competition reduce cane population.", "recommended_response": "Protect early tillers."}], "alerts": ["Do not let waterlogging persist around setts."], "ai_recommendation": "Invest in stand quality early.", "why_this_matters": "Population losses carry through the long crop cycle."},
+        {"start_day": 151, "end_day": 365, "focus": "Grand growth and ripening", "today_actions": ["Prioritize water during grand growth and reduce nitrogen during ripening."], "next_5_day_plan": ["Prepare harvest quality decisions as ripening advances."], "base_risks": [{"severity": "high", "reason": "Water stress during grand growth sharply cuts cane weight.", "recommended_response": "Keep irrigation disciplined in the high-demand stage."}], "alerts": ["Do not push late nitrogen into ripening."], "ai_recommendation": "Shift from growth maximization to juice quality as the crop matures.", "why_this_matters": "Sugar recovery depends on timely ripening management."}
+      ],
+      "decision_rules": {"irrigation": {"default_suppress_if_rain_mm_24h": 14, "critical_stage_suppress_if_rain_mm_24h": 18, "critical_stage_trigger_if_dry_and_no_rain": true}, "fertilizer": {"delay_if_rain_mm_24h": 22, "topdress_windows": [[60, 120], [121, 180]], "avoid_late_n_after_day": 220}, "spraying": {"avoid_if_wind_kph": 18, "avoid_if_rain_probability_pct": 60}, "stress": {"heat_threshold_c": 38, "cold_threshold_c": 12, "high_humidity_pct": 88}},
+      "risk_models": []
+    }
+  }
+}

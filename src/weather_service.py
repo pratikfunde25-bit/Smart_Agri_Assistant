@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 import requests
 
@@ -40,6 +40,48 @@ class WeatherSnapshot:
         }
 
 
+@dataclass
+class ForecastDay:
+    date: str
+    weather_code: int
+    conditions: str
+    weather_group: str
+    temp_max: float
+    temp_min: float
+    precipitation_mm: float
+    precipitation_probability_pct: float
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "date": self.date,
+            "weather_code": self.weather_code,
+            "conditions": self.conditions,
+            "weather_group": self.weather_group,
+            "temp_max": self.temp_max,
+            "temp_min": self.temp_min,
+            "precipitation_mm": self.precipitation_mm,
+            "precipitation_probability_pct": self.precipitation_probability_pct,
+        }
+
+
+@dataclass
+class AdvisoryWeatherContext:
+    source: str
+    current: Optional[WeatherSnapshot]
+    forecast_days: List[ForecastDay]
+    signals: Dict[str, Any]
+    summary: Dict[str, Any]
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "source": self.source,
+            "current": self.current.to_dict() if self.current else None,
+            "forecast_days": [item.to_dict() for item in self.forecast_days],
+            "signals": self.signals,
+            "summary": self.summary,
+        }
+
+
 def weather_lookup_available() -> bool:
     return True
 
@@ -51,6 +93,84 @@ def _request_json(endpoint: str, params: Dict[str, Any], timeout: int = 12) -> D
     except requests.RequestException as exc:
         raise WeatherServiceError(f"Unable to reach the weather service: {exc}") from exc
     return response.json()
+
+
+def _sum_precipitation(days: List[ForecastDay], count: int) -> float:
+    return round(sum(item.precipitation_mm for item in days[:count]), 2)
+
+
+def _max_probability(days: List[ForecastDay], count: int) -> float:
+    if not days:
+        return 0.0
+    return max(float(item.precipitation_probability_pct) for item in days[:count])
+
+
+def _build_weather_signals(current: WeatherSnapshot | None, forecast_days: List[ForecastDay]) -> Dict[str, Any]:
+    today = forecast_days[0] if forecast_days else None
+    tomorrow = forecast_days[1] if len(forecast_days) > 1 else None
+    current_temp = current.temperature if current else 0.0
+    current_humidity = current.humidity if current else 0.0
+    current_wind = current.wind_speed if current else 0.0
+
+    rain_24h = _sum_precipitation(forecast_days, 1)
+    rain_48h = _sum_precipitation(forecast_days, 2)
+    rain_5d = _sum_precipitation(forecast_days, 5)
+    rain_today = bool(today and (today.precipitation_mm >= 5 or today.precipitation_probability_pct >= 60))
+    rain_tomorrow = bool(tomorrow and (tomorrow.precipitation_mm >= 5 or tomorrow.precipitation_probability_pct >= 60))
+    heavy_rain_24h = rain_24h >= 20
+    heavy_rain_48h = rain_48h >= 25
+    heat_stress = bool(today and (today.temp_max >= 36 or current_temp >= 36))
+    cold_stress = bool(today and (today.temp_min <= 12 or current_temp <= 12))
+    humidity_pressure = current_humidity >= 85
+    spray_unsuitable = current_wind >= 18 or rain_today
+
+    return {
+        "rain_expected_today": rain_today,
+        "rain_expected_tomorrow": rain_tomorrow,
+        "rain_expected_24h_mm": rain_24h,
+        "rain_expected_48h_mm": rain_48h,
+        "rain_expected_5d_mm": rain_5d,
+        "heavy_rain_24h": heavy_rain_24h,
+        "heavy_rain_48h": heavy_rain_48h,
+        "max_rain_probability_48h_pct": _max_probability(forecast_days, 2),
+        "heat_stress": heat_stress,
+        "cold_stress": cold_stress,
+        "humidity_pressure": humidity_pressure,
+        "spray_unsuitable": spray_unsuitable,
+        "irrigation_opportunity_window": not rain_today and not heavy_rain_24h,
+    }
+
+
+def _build_weather_summary(
+    latitude: float,
+    longitude: float,
+    current: WeatherSnapshot | None,
+    forecast_days: List[ForecastDay],
+    signals: Dict[str, Any],
+) -> Dict[str, Any]:
+    headline_parts = []
+    if signals["rain_expected_today"]:
+        headline_parts.append("Rain signal today")
+    elif signals["rain_expected_tomorrow"]:
+        headline_parts.append("Rain likely by tomorrow")
+    else:
+        headline_parts.append("No strong rain signal in the next 24 hours")
+
+    if signals["heat_stress"]:
+        headline_parts.append("heat stress risk")
+    if signals["humidity_pressure"]:
+        headline_parts.append("humid canopy pressure")
+
+    return {
+        "location_label": current.location_name if current else f"{latitude:.4f}, {longitude:.4f}",
+        "headline": ", ".join(headline_parts),
+        "current_temperature_c": current.temperature if current else None,
+        "current_humidity_pct": current.humidity if current else None,
+        "wind_kph": current.wind_speed if current else None,
+        "rain_24h_mm": signals["rain_expected_24h_mm"],
+        "rain_48h_mm": signals["rain_expected_48h_mm"],
+        "forecast_days": [item.to_dict() for item in forecast_days[:5]],
+    }
 
 
 def _describe_weather_code(code: int) -> tuple[str, str]:
@@ -122,6 +242,63 @@ class OpenMeteoService:
             wind_speed=float(current.get("wind_speed_10m", 0.0)),
         )
 
+    def fetch_advisory_weather(self, latitude: float, longitude: float) -> AdvisoryWeatherContext:
+        payload = _request_json(
+            self.endpoint,
+            params={
+                "latitude": latitude,
+                "longitude": longitude,
+                "current": "temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m",
+                "daily": "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max",
+                "forecast_days": 6,
+                "timezone": "auto",
+            },
+        )
+
+        current = self.fetch_current_weather(latitude=latitude, longitude=longitude)
+        daily = payload.get("daily") or {}
+        times = daily.get("time") or []
+        weather_codes = daily.get("weather_code") or []
+        temp_max = daily.get("temperature_2m_max") or []
+        temp_min = daily.get("temperature_2m_min") or []
+        precipitation_sum = daily.get("precipitation_sum") or []
+        precipitation_probability = daily.get("precipitation_probability_max") or []
+
+        forecast_days: List[ForecastDay] = []
+        for index, date_value in enumerate(times):
+            code = int(weather_codes[index]) if index < len(weather_codes) else -1
+            conditions, weather_group = _describe_weather_code(code)
+            forecast_days.append(
+                ForecastDay(
+                    date=str(date_value),
+                    weather_code=code,
+                    conditions=conditions,
+                    weather_group=weather_group,
+                    temp_max=float(temp_max[index]) if index < len(temp_max) else 0.0,
+                    temp_min=float(temp_min[index]) if index < len(temp_min) else 0.0,
+                    precipitation_mm=float(precipitation_sum[index]) if index < len(precipitation_sum) else 0.0,
+                    precipitation_probability_pct=float(precipitation_probability[index])
+                    if index < len(precipitation_probability)
+                    else 0.0,
+                )
+            )
+
+        signals = _build_weather_signals(current=current, forecast_days=forecast_days)
+        summary = _build_weather_summary(
+            latitude=latitude,
+            longitude=longitude,
+            current=current,
+            forecast_days=forecast_days,
+            signals=signals,
+        )
+        return AdvisoryWeatherContext(
+            source="open-meteo",
+            current=current,
+            forecast_days=forecast_days,
+            signals=signals,
+            summary=summary,
+        )
+
 
 class OpenWeatherService:
     endpoint = "https://api.openweathermap.org/data/2.5/weather"
@@ -169,4 +346,27 @@ class OpenWeatherService:
             conditions=str(weather.get("description") or "unavailable").title(),
             weather_group=str(weather.get("main") or "Unknown"),
             wind_speed=float((payload.get("wind") or {}).get("speed", 0.0)),
+        )
+
+    def fetch_advisory_weather(self, latitude: float, longitude: float) -> AdvisoryWeatherContext:
+        fallback = OpenMeteoService().fetch_advisory_weather(latitude=latitude, longitude=longitude)
+        if not self.api_key:
+            return fallback
+
+        current = self.fetch_current_weather(latitude=latitude, longitude=longitude)
+        current.wind_speed = round(current.wind_speed * 3.6, 2)
+        signals = _build_weather_signals(current=current, forecast_days=fallback.forecast_days)
+        summary = _build_weather_summary(
+            latitude=latitude,
+            longitude=longitude,
+            current=current,
+            forecast_days=fallback.forecast_days,
+            signals=signals,
+        )
+        return AdvisoryWeatherContext(
+            source="open-weather+open-meteo",
+            current=current,
+            forecast_days=fallback.forecast_days,
+            signals=signals,
+            summary=summary,
         )

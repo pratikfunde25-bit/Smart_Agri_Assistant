@@ -258,6 +258,9 @@ function renderHybridResult(panel, data) {
   const cropPrediction = data.crop || data.crop_prediction || {};
   const hybrid = data.disease || data.hybrid_prediction || {};
   const cropItems = cropPrediction.predictions || [];
+  const previewUrl = hybrid.preview_url || data.preview_url || "";
+  const heatmapUrl = hybrid.heatmap_url || data.heatmap_url || "";
+  const tips = hybrid.tips || data.tips || [];
   const diseaseItems = (hybrid.top_predictions || []).map((item) => ({
     confidence: item.confidence,
     label: `${item.crop_name} - ${item.disease_name}`,
@@ -291,16 +294,16 @@ function renderHybridResult(panel, data) {
       <div class="result-media-grid">
         <article class="result-media-card">
           <h3>Leaf preview</h3>
-          <img class="result-image" src="${escapeHtml(hybrid.preview_url)}" alt="Uploaded leaf">
+          <img class="result-image" src="${escapeHtml(previewUrl)}" alt="Uploaded leaf">
         </article>
         <article class="result-media-card">
           <h3>Grad-CAM heatmap</h3>
-          <img class="result-image" src="${escapeHtml(hybrid.heatmap_url)}" alt="Grad-CAM heatmap">
+          <img class="result-image" src="${escapeHtml(heatmapUrl)}" alt="Grad-CAM heatmap">
         </article>
       </div>
       <div class="result-card-lite">
         <h3 class="mb-3">Ranked crop predictions</h3>
-        ${createConfidenceRows(cropItems, (item) => item.label)}
+        ${createConfidenceRows(cropItems, (item) => item.crop)}
       </div>
       <div class="result-card-lite">
         <h3 class="mb-3">Ranked disease candidates</h3>
@@ -312,7 +315,7 @@ function renderHybridResult(panel, data) {
       </div>
       <div class="result-card-lite">
         <h3 class="mb-3">Additional field tips</h3>
-        <ul class="tip-list">${(hybrid.tips || []).map((tip) => `<li>${escapeHtml(tip)}</li>`).join("")}</ul>
+        <ul class="tip-list">${tips.map((tip) => `<li>${escapeHtml(tip)}</li>`).join("")}</ul>
       </div>
     </div>
   `;

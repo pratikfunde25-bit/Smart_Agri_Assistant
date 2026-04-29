@@ -92,12 +92,16 @@ class HybridDiseasePredictor:
             return {}, False, None
 
         ranked, rule_used = self.crop_predictor.predict_distribution(crop_features, apply_rules=True)
+        if not ranked:
+            return {}, rule_used, None
+
+        primary_crop = ranked[0]["crop"]
         fertilizer = self.crop_predictor.fertilizer_recommendation(
-            crop_label=ranked[0][0],
+            crop_label=primary_crop,
             soil_type=crop_features.get("soil_type", "Other"),
             region=crop_features.get("region", "Unknown"),
         )
-        return {crop: score for crop, score in ranked}, rule_used, fertilizer
+        return {item["crop"]: float(item["confidence"]) for item in ranked}, rule_used, fertilizer
 
     def _build_crop_mask(
         self,

@@ -18,6 +18,7 @@ from werkzeug.utils import secure_filename
 from src.predictor import Predictor
 from src.weather_service import OpenWeatherService, WeatherServiceError, weather_lookup_available
 from src.crop_advisor import CropAdvisor
+from src.dynamic_engine_v3 import DynamicAdvisorEngine
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,6 +60,7 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "smart-agri-assistant-dev")
 
 crop_predictor = Predictor()
 crop_advisor = CropAdvisor()
+advisor_v2 = DynamicAdvisorEngine()
 _hybrid_predictor = None
 _hybrid_predictor_error = None
 _gradcam_tools = None
@@ -321,7 +323,7 @@ def advisor_page():
     return render_template(
         "crop_advisor.html", 
         active_page="advisor", 
-        supported_crops=supported_crops,
+        supported_crops=advisor_v2.get_crops(),
         current_date=current_date
     )
 
@@ -342,6 +344,44 @@ def get_crop_guidance():
         
     result = crop_advisor.get_guidance(crop, sowing_date, stage_idx)
     return jsonify(result)
+
+@app.route("/api/advisor/query", methods=["POST"])
+def advisor_query():
+    payload = request.get_json(silent=True) or {}
+    crop = payload.get("crop")
+    sowing_date = payload.get("sowing_date")
+    manual_day = payload.get("manual_day")
+    lat = payload.get("latitude")
+    lon = payload.get("longitude")
+    lang = payload.get("lang", "en")
+    
+    if not crop:
+        return json_error("Crop name is required.")
+        
+    # Ensure manual_day is an integer if provided
+    try:
+        if manual_day is not None:
+            manual_day = int(manual_day)
+    except (ValueError, TypeError):
+        manual_day = None
+
+    result = advisor_v2.query(
+        crop_name=crop,
+        sowing_date=sowing_date,
+        manual_day=manual_day,
+        lat=lat,
+        lon=lon,
+        lang=lang
+    )
+    return jsonify(result)
+
+@app.route("/api/advisor/timeline", methods=["POST"])
+def advisor_timeline():
+    payload = request.get_json(silent=True) or {}
+    crop = payload.get("crop")
+    if not crop:
+        return json_error("Crop name is required.")
+    return jsonify(advisor_v2.get_timeline(crop))
 
 
 @app.route("/hybrid", methods=["GET"])
@@ -475,6 +515,11 @@ def hybrid_predict():
             image,
             crop_features=features,
             provided_crop=provided_crop,
+        )
+        disease_result["tips"] = build_field_tips(
+            disease_result,
+            humidity=features.get("humidity"),
+            rainfall=features.get("rainfall"),
         )
         
         preview_url = save_preview_image(image, filename)
