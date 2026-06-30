@@ -27,6 +27,7 @@ REPORTS_DIR = ROOT / "reports"
 VIS_DIR = ROOT / "visualizations"
 MODELS_DIR = ROOT / "models"
 DISEASE_REPORTS_DIR = REPORTS_DIR / "disease"
+JOINT_DISEASE_REPORTS_DIR = REPORTS_DIR / "disease_joint"
 
 GENERATED_DIR = APP_DIR / "static" / "generated"
 UPLOADS_DIR = GENERATED_DIR / "uploads"
@@ -77,9 +78,53 @@ def has_tensorflow_runtime() -> bool:
 
 
 def disease_model_files_exist() -> bool:
-    return (MODELS_DIR / "disease" / "leaf_disease_classifier.keras").exists() and (
+    joint_ready = (MODELS_DIR / "disease" / "leaf_disease_joint_classifier.keras").exists() and (
+        MODELS_DIR / "disease" / "leaf_disease_joint_metadata.json"
+    ).exists()
+    legacy_ready = (MODELS_DIR / "disease" / "leaf_disease_classifier.keras").exists() and (
         MODELS_DIR / "disease" / "leaf_disease_metadata.json"
     ).exists()
+    return joint_ready or legacy_ready
+
+
+def get_disease_artifact_status() -> Dict[str, Any]:
+    joint_model = MODELS_DIR / "disease" / "leaf_disease_joint_classifier.keras"
+    joint_metadata = MODELS_DIR / "disease" / "leaf_disease_joint_metadata.json"
+    legacy_model = MODELS_DIR / "disease" / "leaf_disease_classifier.keras"
+    legacy_metadata = MODELS_DIR / "disease" / "leaf_disease_metadata.json"
+
+    if joint_model.exists():
+        status = {
+            "active_model": "joint",
+            "model_path": str(joint_model),
+            "metadata_path": str(joint_metadata),
+            "ready": joint_metadata.exists(),
+            "metadata_missing": not joint_metadata.exists(),
+            "display_name": "Joint crop+disease model",
+        }
+        if joint_metadata.exists():
+            status.update(load_json_file(joint_metadata))
+        return status
+
+    if legacy_model.exists():
+        status = {
+            "active_model": "legacy",
+            "model_path": str(legacy_model),
+            "metadata_path": str(legacy_metadata),
+            "ready": legacy_metadata.exists(),
+            "metadata_missing": not legacy_metadata.exists(),
+            "display_name": "Legacy disease-only model",
+        }
+        if legacy_metadata.exists():
+            status.update(load_json_file(legacy_metadata))
+        return status
+
+    return {
+        "active_model": None,
+        "ready": False,
+        "metadata_missing": False,
+        "display_name": "No disease model saved yet",
+    }
 
 
 def load_json_file(path: Path) -> Dict[str, Any]:
@@ -99,15 +144,19 @@ def load_crop_comparison() -> list[Dict[str, Any]]:
 
 def load_dashboard_payload() -> Dict[str, Any]:
     crop_metrics = load_json_file(REPORTS_DIR / "metrics.json")
-    disease_metrics = load_json_file(DISEASE_REPORTS_DIR / "evaluation_metrics.json")
+    disease_metrics = load_json_file(JOINT_DISEASE_REPORTS_DIR / "evaluation_metrics.json")
+    if not disease_metrics:
+        disease_metrics = load_json_file(DISEASE_REPORTS_DIR / "evaluation_metrics.json")
+    disease_status = get_disease_artifact_status()
 
     return {
         "crop_metrics": crop_metrics,
         "crop_comparison": load_crop_comparison(),
         "disease_metrics": disease_metrics,
+        "disease_status": disease_status,
         "weather_ready": weather_lookup_available(),
         "crop_ready": (MODELS_DIR / "best_model.pkl").exists() and (MODELS_DIR / "class_labels.json").exists(),
-        "disease_ready": disease_model_files_exist() and has_tensorflow_runtime(),
+        "disease_ready": disease_status.get("ready", False) and has_tensorflow_runtime(),
         "disease_runtime_note": None
         if has_tensorflow_runtime()
         else "TensorFlow is not installed in this environment yet, so disease inference routes will stay unavailable.",
@@ -259,6 +308,9 @@ def build_field_tips(result: Dict[str, Any], humidity: float | None = None, rain
         tips.append("The leaf looks healthy, but continue weekly scouting to catch symptoms early.")
     else:
         tips.append(f"Isolate heavily affected leaves and monitor nearby plants for {disease_name} spread.")
+
+    if result.get("review_required"):
+        tips.append(str(result.get("review_reason") or "This prediction needs manual review before treatment action."))
 
     if humidity is not None and humidity >= 80:
         tips.append("High humidity can accelerate fungal disease pressure, so improve spacing and airflow if possible.")

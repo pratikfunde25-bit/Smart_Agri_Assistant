@@ -7,6 +7,8 @@
 
 **Smart Agri Assistant** is a data-driven decision support platform designed specifically for Indian agriculture. It leverages Machine Learning, Explainable AI (XAI), and real-time weather data to provide high-accuracy crop recommendations, disease detection, and actionable analytics for farmers.
 
+The disease pipeline is being expanded toward Maharashtra-first crop coverage through `data/maharashtra_disease_targets.json` and the audit script `scripts/check_disease_coverage.py`.
+
 ---
 
 ## 🚀 Key Features

@@ -218,6 +218,7 @@ function renderDiseaseResult(panel, data) {
     </div>
     <div class="result-layout">
       <div class="result-chip"><i class="bi bi-clipboard2-pulse"></i> ${data.is_healthy ? "Healthy leaf detected" : "Disease symptoms detected"}</div>
+      ${data.review_required ? `<div class="inline-note">${escapeHtml(data.review_reason || "Manual review is recommended for this prediction.")}</div>` : ""}
       <div class="result-stat-grid">
         <article class="stat-card">
           <span>Crop</span>
@@ -273,6 +274,7 @@ function renderHybridResult(panel, data) {
     </div>
     <div class="result-layout">
       <div class="result-chip"><i class="bi bi-diagram-3"></i> Hybrid decision confidence ${(Number(hybrid.disease_confidence || 0) * 100).toFixed(2)}%</div>
+      ${hybrid.review_required ? `<div class="inline-note">${escapeHtml(hybrid.review_reason || "Manual review is recommended for this prediction.")}</div>` : ""}
       <div class="result-stat-grid">
         <article class="stat-card">
           <span>Crop from structured model</span>
@@ -324,10 +326,12 @@ function renderHybridResult(panel, data) {
 function renderErrorPanel(panel, title, message) {
   panel.innerHTML = `
     <div class="panel-heading">
-      <span class="section-kicker">Request failed</span>
+      <span class="section-kicker" style="color: var(--danger);">Validation failed</span>
       <h2>${escapeHtml(title)}</h2>
     </div>
-    <div class="inline-note">${escapeHtml(message)}</div>
+    <div class="inline-note" style="background: rgba(182, 71, 57, 0.1); border-color: rgba(182, 71, 57, 0.3); color: var(--danger); font-weight: 500;">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i> ${escapeHtml(message)}
+    </div>
   `;
 }
 

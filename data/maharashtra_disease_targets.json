@@ -1,0 +1,208 @@
+{
+  "region": "Maharashtra, India",
+  "purpose": "Priority crop and disease coverage targets for the leaf disease vision model.",
+  "notes": [
+    "This file is a planning target, not a claim that the trained model already supports every crop below.",
+    "Class folders for training should follow the existing naming convention: Crop___Disease_Name.",
+    "Add one healthy class per crop whenever possible so the model can distinguish disease from normal variation."
+  ],
+  "priority_crops": [
+    {
+      "crop_name": "Rice",
+      "aliases": ["Paddy", "Dhan"],
+      "priority": "high",
+      "target_classes": [
+        "Rice___Healthy",
+        "Rice___Blast",
+        "Rice___Brown_Spot",
+        "Rice___Bacterial_Leaf_Blight",
+        "Rice___Sheath_Blight",
+        "Rice___False_Smut",
+        "Rice___Tungro"
+      ]
+    },
+    {
+      "crop_name": "Wheat",
+      "aliases": ["Gehu"],
+      "priority": "high",
+      "target_classes": [
+        "Wheat___Healthy",
+        "Wheat___Leaf_Rust",
+        "Wheat___Stem_Rust",
+        "Wheat___Stripe_Rust",
+        "Wheat___Powdery_Mildew",
+        "Wheat___Septoria_Blotch"
+      ]
+    },
+    {
+      "crop_name": "Jowar",
+      "aliases": ["Sorghum"],
+      "priority": "high",
+      "target_classes": [
+        "Jowar___Healthy",
+        "Jowar___Anthracnose",
+        "Jowar___Downy_Mildew",
+        "Jowar___Grain_Mold",
+        "Jowar___Leaf_Blight",
+        "Jowar___Rust",
+        "Jowar___Smut"
+      ]
+    },
+    {
+      "crop_name": "Maize",
+      "aliases": ["Corn", "Makka"],
+      "priority": "high",
+      "target_classes": [
+        "Maize___Healthy",
+        "Maize___Common_Rust",
+        "Maize___Northern_Leaf_Blight",
+        "Maize___Gray_Leaf_Spot",
+        "Maize___Turcicum_Leaf_Blight",
+        "Maize___Maydis_Leaf_Blight"
+      ]
+    },
+    {
+      "crop_name": "Cotton",
+      "aliases": ["Kapas"],
+      "priority": "high",
+      "target_classes": [
+        "Cotton___Healthy",
+        "Cotton___Bacterial_Blight",
+        "Cotton___Alternaria_Leaf_Spot",
+        "Cotton___Anthracnose",
+        "Cotton___Fusarium_Wilt",
+        "Cotton___Grey_Mildew",
+        "Cotton___Leaf_Curl_Virus"
+      ]
+    },
+    {
+      "crop_name": "Sugarcane",
+      "aliases": ["Ganna"],
+      "priority": "high",
+      "target_classes": [
+        "Sugarcane___Healthy",
+        "Sugarcane___Red_Rot",
+        "Sugarcane___Smut",
+        "Sugarcane___Wilt",
+        "Sugarcane___Pokkah_Boeng",
+        "Sugarcane___Rust",
+        "Sugarcane___Leaf_Scald"
+      ]
+    },
+    {
+      "crop_name": "Banana",
+      "aliases": ["Kela"],
+      "priority": "high",
+      "target_classes": [
+        "Banana___Healthy",
+        "Banana___Sigatoka",
+        "Banana___Black_Sigatoka",
+        "Banana___Panama_Wilt",
+        "Banana___Bunchy_Top_Virus",
+        "Banana___Cordana_Leaf_Spot"
+      ]
+    },
+    {
+      "crop_name": "Tomato",
+      "aliases": ["Tamatar"],
+      "priority": "high",
+      "target_classes": [
+        "Tomato___Healthy",
+        "Tomato___Early_Blight",
+        "Tomato___Late_Blight",
+        "Tomato___Bacterial_Spot",
+        "Tomato___Leaf_Mold",
+        "Tomato___Septoria_Leaf_Spot",
+        "Tomato___Target_Spot",
+        "Tomato___Yellow_Leaf_Curl_Virus",
+        "Tomato___Mosaic_Virus"
+      ]
+    },
+    {
+      "crop_name": "Soybean",
+      "aliases": ["Soyabean"],
+      "priority": "medium",
+      "target_classes": [
+        "Soybean___Healthy",
+        "Soybean___Rust",
+        "Soybean___Bacterial_Blight",
+        "Soybean___Frog_Eye_Leaf_Spot",
+        "Soybean___Anthracnose",
+        "Soybean___Charcoal_Rot"
+      ]
+    },
+    {
+      "crop_name": "Chili",
+      "aliases": ["Chilli", "Mirchi"],
+      "priority": "medium",
+      "target_classes": [
+        "Chili___Healthy",
+        "Chili___Anthracnose",
+        "Chili___Leaf_Curl_Virus",
+        "Chili___Powdery_Mildew",
+        "Chili___Damping_Off",
+        "Chili___Fruit_Rot"
+      ]
+    },
+    {
+      "crop_name": "Onion",
+      "aliases": ["Kanda"],
+      "priority": "medium",
+      "target_classes": [
+        "Onion___Healthy",
+        "Onion___Purple_Blotch",
+        "Onion___Stemphylium_Blight",
+        "Onion___Downy_Mildew",
+        "Onion___Basal_Rot"
+      ]
+    },
+    {
+      "crop_name": "Pomegranate",
+      "aliases": ["Dalimb"],
+      "priority": "medium",
+      "target_classes": [
+        "Pomegranate___Healthy",
+        "Pomegranate___Bacterial_Blight",
+        "Pomegranate___Anthracnose",
+        "Pomegranate___Cercospora_Fruit_Spot",
+        "Pomegranate___Wilt"
+      ]
+    },
+    {
+      "crop_name": "Tur",
+      "aliases": ["Pigeonpea", "Arhar"],
+      "priority": "medium",
+      "target_classes": [
+        "Tur___Healthy",
+        "Tur___Wilt",
+        "Tur___Phytophthora_Blight",
+        "Tur___Sterility_Mosaic",
+        "Tur___Alternaria_Blight"
+      ]
+    },
+    {
+      "crop_name": "Gram",
+      "aliases": ["Chickpea", "Harbhara"],
+      "priority": "medium",
+      "target_classes": [
+        "Gram___Healthy",
+        "Gram___Ascochyta_Blight",
+        "Gram___Botrytis_Gray_Mold",
+        "Gram___Dry_Root_Rot",
+        "Gram___Wilt"
+      ]
+    },
+    {
+      "crop_name": "Groundnut",
+      "aliases": ["Peanut", "Shengdana"],
+      "priority": "medium",
+      "target_classes": [
+        "Groundnut___Healthy",
+        "Groundnut___Tikka_Leaf_Spot",
+        "Groundnut___Rust",
+        "Groundnut___Collar_Rot",
+        "Groundnut___Bud_Necrosis"
+      ]
+    }
+  ]
+}

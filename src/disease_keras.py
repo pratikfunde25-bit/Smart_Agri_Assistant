@@ -20,12 +20,30 @@ def resnet50_preprocess(x):
     return tf.keras.applications.resnet50.preprocess_input(x)
 
 
+@tf.keras.utils.register_keras_serializable(package="smart_agri")
+def resnet50v2_preprocess(x):
+    return tf.keras.applications.resnet_v2.preprocess_input(x)
+
+
+@tf.keras.utils.register_keras_serializable(package="smart_agri")
+def densenet121_preprocess(x):
+    return tf.keras.applications.densenet.preprocess_input(x)
+
+
+@tf.keras.utils.register_keras_serializable(package="smart_agri")
+def xception_preprocess(x):
+    return tf.keras.applications.xception.preprocess_input(x)
+
+
 def get_backbone_preprocess(backbone: str):
     key = backbone.lower()
     mapping = {
         "mobilenetv2": mobilenetv2_preprocess,
         "efficientnetb0": efficientnetb0_preprocess,
         "resnet50": resnet50_preprocess,
+        "resnet50v2": resnet50v2_preprocess,
+        "densenet121": densenet121_preprocess,
+        "xception": xception_preprocess,
     }
     if key not in mapping:
         raise ValueError(f"Unsupported backbone '{backbone}' for preprocessing.")
@@ -37,6 +55,9 @@ def get_custom_objects(backbone: str | None = None) -> dict:
         "mobilenetv2_preprocess": mobilenetv2_preprocess,
         "efficientnetb0_preprocess": efficientnetb0_preprocess,
         "resnet50_preprocess": resnet50_preprocess,
+        "resnet50v2_preprocess": resnet50v2_preprocess,
+        "densenet121_preprocess": densenet121_preprocess,
+        "xception_preprocess": xception_preprocess,
     }
 
     if backbone:

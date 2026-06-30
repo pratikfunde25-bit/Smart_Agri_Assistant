@@ -3,253 +3,323 @@
 {% block content %}
 
 <section class="page-hero dashboard-hero">
-  <div class="hero-content">
-    <span class="section-kicker">Data-Driven Decision Support</span>
-    <h1 class="hero-title">Model Insights & Explainability</h1>
-    <p>Understanding the "Why" behind agricultural predictions. We combine high-accuracy XGBoost models with real-world farming constraints to provide actionable intelligence.</p>
-  </div>
+    <div class="hero-content">
+        <span class="section-kicker">Data-Driven Decision Support</span>
+        <h1 class="hero-title">Model Insights & Explainability</h1>
+        <p>Understanding the "Why" behind agricultural predictions. We combine high-accuracy XGBoost models with
+            real-world farming constraints to provide actionable intelligence.</p>
+    </div>
 </section>
 
 <div class="dashboard-layout mt-4">
-  <!-- Top Row: Performance Metrics -->
-  <div class="row g-4 mb-4">
-    <div class="col-md-3">
-        <div class="glass-panel metric-card animate-in" style="--delay: 0.1s">
-            <span class="metric-label text-success">Crop Accuracy</span>
-            <div class="metric-value">99.2%</div>
-            <div class="metric-trend"><i class="bi bi-graph-up text-success"></i> Highly Robust</div>
+    <!-- Top Row: Performance Metrics -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="glass-panel metric-card animate-in" style="--delay: 0.1s">
+                <span class="metric-label text-success">Crop Accuracy</span>
+                <div class="metric-value">94.59%</div>
+                <div class="metric-trend"><i class="bi bi-graph-up text-success"></i> Highly Robust</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-panel metric-card animate-in" style="--delay: 0.2s">
+                <span class="metric-label text-info">Disease F1-Score</span>
+                <div class="metric-value">77.8%</div>
+                <div class="metric-trend">Vision-Transformer Based</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-panel metric-card animate-in" style="--delay: 0.3s">
+                <span class="metric-label text-warning">Features Analyzed</span>
+                <div class="metric-value">10+</div>
+                <div class="metric-trend">N,P,K, Climate, Soil</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-panel metric-card animate-in" style="--delay: 0.4s">
+                <span class="metric-label text-primary">Regional Data</span>
+                <div class="metric-value">Maharashtra</div>
+                <div class="metric-trend">High Local Relevance</div>
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="glass-panel metric-card animate-in" style="--delay: 0.2s">
-            <span class="metric-label text-info">Disease F1-Score</span>
-            <div class="metric-value">97.8%</div>
-            <div class="metric-trend">Vision-Transformer Based</div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="glass-panel metric-card animate-in" style="--delay: 0.3s">
-            <span class="metric-label text-warning">Features Analyzed</span>
-            <div class="metric-value">10+</div>
-            <div class="metric-trend">N,P,K, Climate, Soil</div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="glass-panel metric-card animate-in" style="--delay: 0.4s">
-            <span class="metric-label text-primary">Regional Data</span>
-            <div class="metric-value">Maharashtra</div>
-            <div class="metric-trend">High Local Relevance</div>
-        </div>
-    </div>
-  </div>
 
-  <div class="row g-4">
-    <!-- Main Analytical Column -->
-    <div class="col-lg-8">
-        <!-- Feature Importance Section -->
-        <div class="glass-panel analytics-section mb-4">
-            <div class="section-header d-flex justify-content-between align-items-center mb-4">
-                <div>
-                   <span class="section-kicker">Explainability</span>
-                   <h2 class="mb-0">Feature Importance Analysis</h2>
+    <div class="row g-4">
+        <!-- Main Analytical Column -->
+        <div class="col-lg-8">
+            <!-- Feature Importance Section -->
+            <div class="glass-panel analytics-section mb-4">
+                <div class="section-header d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <span class="section-kicker">Explainability</span>
+                        <h2 class="mb-0">Feature Importance Analysis</h2>
+                    </div>
+                    <div class="badge bg-success-subtle text-success p-2">Algorithm: XGBoost</div>
                 </div>
-                <div class="badge bg-success-subtle text-success p-2">Algorithm: XGBoost</div>
-            </div>
-            
-            <div class="chart-container" style="position: relative; height:350px;">
-                <canvas id="featureImportanceChart"></canvas>
+
+                <div class="chart-container" style="position: relative; height:350px;">
+                    <canvas id="featureImportanceChart"></canvas>
+                </div>
+
+                <div class="insight-explanation mt-4 p-3 rounded bg-light border-start border-4 border-success">
+                    <h5 class="d-flex align-items-center"><i class="bi bi-robot me-2 text-success"></i> AI Insight</h5>
+                    <p id="importance-description" class="mb-0 text-muted">
+                        Loading AI reasoning...
+                    </p>
+                </div>
             </div>
 
-            <div class="insight-explanation mt-4 p-3 rounded bg-light border-start border-4 border-success">
-                <h5 class="d-flex align-items-center"><i class="bi bi-robot me-2 text-success"></i> AI Insight</h5>
-                <p id="importance-description" class="mb-0 text-muted">
-                    Loading AI reasoning...
-                </p>
-            </div>
-        </div>
+            <!-- Correlation Analysis -->
+            <div class="glass-panel analytics-section mb-4">
+                <div class="section-header mb-4">
+                    <span class="section-kicker">Relationships</span>
+                    <h2>Feature Correlation Patterns</h2>
+                </div>
 
-        <!-- Correlation Analysis -->
-        <div class="glass-panel analytics-section mb-4">
-            <div class="section-header mb-4">
-                <span class="section-kicker">Relationships</span>
-                <h2>Feature Correlation Patterns</h2>
-            </div>
-            
-            <div class="text-center">
-                <img src="{{ url_for('visualizations', filename='correlation_heatmap.png') }}" class="img-fluid rounded-4 shadow-sm" alt="Correlation Heatmap">
-            </div>
+                <div class="text-center">
+                    <img src="{{ url_for('visualizations', filename='correlation_heatmap.png') }}"
+                        class="img-fluid rounded-4 shadow-sm" alt="Correlation Heatmap">
+                </div>
 
-            <div class="row g-3 mt-4">
-                <div class="col-md-6">
-                    <div class="p-3 rounded-3 bg-secondary-subtle">
-                        <h6 class="fw-bold">High Correlation Pair</h6>
-                        <p class="small mb-0 text-muted">Humidity and Rainfall often show strong linear relationships, especially in tropical climates.</p>
+                <div class="row g-3 mt-4">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 bg-secondary-subtle">
+                            <h6 class="fw-bold">High Correlation Pair</h6>
+                            <p class="small mb-0 text-muted">Humidity and Rainfall often show strong linear
+                                relationships, especially in tropical climates.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 bg-secondary-subtle">
+                            <h6 class="fw-bold">Soil Impact</h6>
+                            <p class="small mb-0 text-muted">Nitrogen (N) and pH levels are critical drivers for
+                                leaf-based disease vulnerability.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="p-3 rounded-3 bg-secondary-subtle">
-                        <h6 class="fw-bold">Soil Impact</h6>
-                        <p class="small mb-0 text-muted">Nitrogen (N) and pH levels are critical drivers for leaf-based disease vulnerability.</p>
+            </div>
+        </div>
+
+        <!-- Sidebar Column -->
+        <div class="col-lg-4">
+            <!-- AI Advice Card -->
+            <div class="glass-panel sidebar-ai-card mb-4 bg-success text-white">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="ai-avatar me-2"><i class="bi bi-stars"></i></div>
+                    <h4 class="mb-0 fw-bold">Daily Smart Pulse</h4>
+                </div>
+                <p class="mb-4 opacity-75">According to current training data, Phosphorous (P) levels are becoming more
+                    predictive for Kharif crops due to soil depletion patterns observed in Western Maharashtra.</p>
+                <button class="btn btn-light w-100 fw-bold text-success rounded-pill">View Full Report</button>
+            </div>
+
+            <!-- Saved Visuals Mini Grid -->
+            <div class="glass-panel analytics-section mb-4">
+                <h5 class="fw-bold mb-3"><i class="bi bi-images me-2 text-muted"></i> Artifact Explorer</h5>
+                <div class="visual-mini-grid">
+                    {% for visual in visuals if visual != 'correlation_heatmap.png' %}
+                    <div class="mini-visual-item mb-2" onclick="openVisual('{{ visual }}')">
+                        <img src="{{ url_for('visualizations', filename=visual) }}" class="img-fluid rounded border"
+                            alt="{{ visual }}">
+                        <p class="small text-center mt-1 text-muted">{{ visual.replace('.png','').replace('_','
+                            ').title() }}</p>
                     </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Decision Support Constraint info -->
+            <div class="glass-panel analytics-section border-start border-4 border-primary">
+                <h5 class="fw-bold"><i class="bi bi-clock-history me-2 text-primary"></i> Decision Support</h5>
+                <p class="text-muted small">We now integrate <strong>Cultivation Duration</strong> as a smart filter.
+                    This ensures you only receive recommendations for crops that can reach maturity within your
+                    available window.</p>
+                <hr class="my-3 opacity-25">
+                <div class="d-flex gap-2">
+                    <span class="badge bg-primary-subtle text-primary">Slack: 15 Days</span>
+                    <span class="badge bg-primary-subtle text-primary">Validation: Active</span>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Sidebar Column -->
-    <div class="col-lg-4">
-        <!-- AI Advice Card -->
-        <div class="glass-panel sidebar-ai-card mb-4 bg-success text-white">
-            <div class="d-flex align-items-center mb-3">
-                <div class="ai-avatar me-2"><i class="bi bi-stars"></i></div>
-                <h4 class="mb-0 fw-bold">Daily Smart Pulse</h4>
-            </div>
-            <p class="mb-4 opacity-75">According to current training data, Phosphorous (P) levels are becoming more predictive for Kharif crops due to soil depletion patterns observed in Western Maharashtra.</p>
-            <button class="btn btn-light w-100 fw-bold text-success rounded-pill">View Full Report</button>
-        </div>
-
-        <!-- Saved Visuals Mini Grid -->
-        <div class="glass-panel analytics-section mb-4">
-            <h5 class="fw-bold mb-3"><i class="bi bi-images me-2 text-muted"></i> Artifact Explorer</h5>
-            <div class="visual-mini-grid">
-                {% for visual in visuals if visual != 'correlation_heatmap.png' %}
-                <div class="mini-visual-item mb-2" onclick="openVisual('{{ visual }}')">
-                    <img src="{{ url_for('visualizations', filename=visual) }}" class="img-fluid rounded border" alt="{{ visual }}">
-                    <p class="small text-center mt-1 text-muted">{{ visual.replace('.png','').replace('_',' ').title() }}</p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Decision Support Constraint info -->
-        <div class="glass-panel analytics-section border-start border-4 border-primary">
-            <h5 class="fw-bold"><i class="bi bi-clock-history me-2 text-primary"></i> Decision Support</h5>
-            <p class="text-muted small">We now integrate <strong>Cultivation Duration</strong> as a smart filter. This ensures you only receive recommendations for crops that can reach maturity within your available window.</p>
-            <hr class="my-3 opacity-25">
-            <div class="d-flex gap-2">
-                <span class="badge bg-primary-subtle text-primary">Slack: 15 Days</span>
-                <span class="badge bg-primary-subtle text-primary">Validation: Active</span>
-            </div>
-        </div>
-    </div>
-  </div>
 </div>
 
 <!-- Modal for full size visuals -->
 <div class="modal fade" id="visualModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content glass-panel border-0">
-      <div class="modal-body p-0">
-         <img id="modalImg" src="" class="img-fluid rounded-4 w-100">
-         <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"></button>
-      </div>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content glass-panel border-0">
+            <div class="modal-body p-0">
+                <img id="modalImg" src="" class="img-fluid rounded-4 w-100">
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-3"
+                    data-bs-dismiss="modal"></button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
-    const featureChartCtx = document.getElementById('featureImportanceChart').getContext('2d');
-    
-    try {
-        const response = await fetch('/api/insights');
-        const data = await response.json();
-        
-        if (data.feature_importance) {
-            const labels = Object.keys(data.feature_importance);
-            const values = Object.values(data.feature_importance);
-            
-            // Sort them for cleaner look
-            const sortedData = labels.map((l, i) => ({ l, v: values[i] }))
-                                    .sort((a,b) => b.v - a.v);
+    document.addEventListener('DOMContentLoaded', async () => {
+        const featureChartCtx = document.getElementById('featureImportanceChart').getContext('2d');
 
-            new Chart(featureChartCtx, {
-                type: 'bar',
-                data: {
-                    labels: sortedData.map(d => d.l),
-                    datasets: [{
-                        label: 'Relative Importance Score',
-                        data: sortedData.map(d => d.v),
-                        backgroundColor: 'rgba(45, 107, 65, 0.7)',
-                        borderColor: 'rgb(45, 107, 65)',
-                        borderWidth: 2,
-                        borderRadius: 8,
-                        hoverBackgroundColor: 'rgba(45, 107, 65, 1)',
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: (ctx) => `Score: ${ctx.parsed.x.toFixed(4)}`
+        try {
+            const response = await fetch('/api/insights');
+            const data = await response.json();
+
+            if (data.feature_importance) {
+                const labels = Object.keys(data.feature_importance);
+                const values = Object.values(data.feature_importance);
+
+                // Sort them for cleaner look
+                const sortedData = labels.map((l, i) => ({ l, v: values[i] }))
+                    .sort((a, b) => b.v - a.v);
+
+                new Chart(featureChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: sortedData.map(d => d.l),
+                        datasets: [{
+                            label: 'Relative Importance Score',
+                            data: sortedData.map(d => d.v),
+                            backgroundColor: 'rgba(45, 107, 65, 0.7)',
+                            borderColor: 'rgb(45, 107, 65)',
+                            borderWidth: 2,
+                            borderRadius: 8,
+                            hoverBackgroundColor: 'rgba(45, 107, 65, 1)',
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => `Score: ${ctx.parsed.x.toFixed(4)}`
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                grid: { display: false },
+                                ticks: { font: { weight: 'bold' } }
+                            },
+                            y: {
+                                grid: { display: false },
+                                ticks: { font: { weight: 'bold' } }
                             }
                         }
-                    },
-                    scales: {
-                        x: { 
-                            beginAtZero: true, 
-                            grid: { display: false },
-                            ticks: { font: { weight: 'bold' } }
-                        },
-                        y: { 
-                            grid: { display: false },
-                            ticks: { font: { weight: 'bold' } }
-                        }
                     }
-                }
-            });
+                });
 
-            // Update AI explanation
-            const topFeature = sortedData[0].l;
-            document.getElementById('importance-description').textContent = 
-                `Our model determines that "${topFeature}" is the most influential factor in differentiating between crops in this dataset. ` +
-                `The high weights on climate features like rainfall and temperature indicate that local environmental conditions drive 85% of the classification logic.`;
+                // Update AI explanation
+                const topFeature = sortedData[0].l;
+                document.getElementById('importance-description').textContent =
+                    `Our model determines that "${topFeature}" is the most influential factor in differentiating between crops in this dataset. ` +
+                    `The high weights on climate features like rainfall and temperature indicate that local environmental conditions drive 85% of the classification logic.`;
+            }
+        } catch (err) {
+            console.error("Dashboard error:", err);
         }
-    } catch (err) {
-        console.error("Dashboard error:", err);
-    }
-});
+    });
 
-function openVisual(src) {
-    const modal = new bootstrap.Modal(document.getElementById('visualModal'));
-    document.getElementById('modalImg').src = `/visualizations/${src}`;
-    modal.show();
-}
+    function openVisual(src) {
+        const modal = new bootstrap.Modal(document.getElementById('visualModal'));
+        document.getElementById('modalImg').src = `/visualizations/${src}`;
+        modal.show();
+    }
 </script>
 
 <style>
-.dashboard-hero {
-    background: linear-gradient(135deg, #1e3a2b 0%, #2d6b41 100%);
-    color: white;
-    padding: 60px 40px;
-    border-radius: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-}
-.metric-card {
-    padding: 24px;
-    text-align: center;
-    border-radius: 20px;
-    transition: transform 0.3s ease;
-}
-.metric-card:hover { transform: translateY(-5px); }
-.metric-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
-.metric-value { font-size: 2rem; font-weight: 900; color: var(--ink); margin-bottom: 4px; }
-.metric-trend { font-size: 0.8rem; opacity: 0.7; }
-.analytics-section { padding: 30px; border-radius: 25px; }
-.ai-avatar { width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
-.visual-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.mini-visual-item { cursor: pointer; transition: opacity 0.2s; }
-.mini-visual-item:hover { opacity: 0.8; }
-.animate-in { opacity: 0; transform: translateY(20px); animation: fadeInUp 0.5s forwards; animation-delay: var(--delay); }
-@keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    .dashboard-hero {
+        background: linear-gradient(135deg, #1e3a2b 0%, #2d6b41 100%);
+        color: white;
+        padding: 60px 40px;
+        border-radius: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .metric-card {
+        padding: 24px;
+        text-align: center;
+        border-radius: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .metric-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .metric-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 900;
+        color: var(--ink);
+        margin-bottom: 4px;
+    }
+
+    .metric-trend {
+        font-size: 0.8rem;
+        opacity: 0.7;
+    }
+
+    .analytics-section {
+        padding: 30px;
+        border-radius: 25px;
+    }
+
+    .ai-avatar {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .visual-mini-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .mini-visual-item {
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .mini-visual-item:hover {
+        opacity: 0.8;
+    }
+
+    .animate-in {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.5s forwards;
+        animation-delay: var(--delay);
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
 
 {% endblock %}

@@ -64,6 +64,10 @@ class Predictor:
         self._ensure_loaded()
         df = self._build_dataframe(features)
         
+        # 0.0 duration means "Any"
+        if duration_months is not None and duration_months <= 0:
+            duration_months = None
+
         # Get probabilities
         proba = self.model.predict_proba(df)[0]
         rule_used = False
@@ -81,41 +85,42 @@ class Predictor:
         for i, score in enumerate(proba):
             crop_name = self.class_labels[i]
             
-            # 1. Skip excluded crops (Stage 1: Data Cleaning)
+            # 1. Skip excluded crops
             if crop_name in excluded:
                 continue
             
-            # 2. Duration Filtering (Stage 3: Logic Upgrade)
+            # 2. Duration Filtering
             duration_match = True
             duration_info = durations.get(crop_name)
             
             if duration_months is not None and duration_info:
-                # Add 0.5 month (~15 days) slack as requested
+                # Add 0.5 month (~15 days) slack
                 slack = 0.5
                 if duration_months < (duration_info["min"] - slack):
                     duration_match = False
-                elif duration_months > (duration_info["max"] + slack * 2): # more slack for longer periods
-                    # usually users don't mind if it takes less time, but if they want exactly X months, 
-                    # we keep it relative.
-                    pass 
+                # No upper bound restriction for duration matching usually,
+                # but we could add one if the user wants "at most" X months.
+                # However, for agriculture, "available duration" usually means 
+                # how long the land is free. If a crop finishes sooner, that's fine.
 
-            results.append({
-                "crop": crop_name,
-                "confidence": float(score),
-                "duration_match": duration_match,
-                "duration_range": f"{duration_info['min']}-{duration_info['max']} months" if duration_info else "Unknown"
-            })
+            # 3. Only include if there is some confidence or it's a top candidate
+            # We filter out absolute zero matches to avoid clutter
+            if score > 0.0001:
+                results.append({
+                    "crop": crop_name,
+                    "confidence": float(score),
+                    "duration_match": duration_match,
+                    "duration_range": f"{duration_info['min']}-{duration_info['max']} months" if duration_info else "Unknown"
+                })
 
-        # Sort by confidence
+        # Sort by confidence first
         results = sorted(results, key=lambda x: x["confidence"], reverse=True)
         
-        # Apply strict duration filter if there are matches, otherwise show all with warnings
+        # Re-sort to prioritize duration matches ONLY if confidence is meaningful (> 2%)
         if duration_months is not None:
-             matches = [r for r in results if r["duration_match"]]
-             if matches:
-                 # If we have matches, we can still show non-matches at the bottom or filter them
-                 # For "Clean Output" we'll just prioritize matches
-                 results = matches + [r for r in results if not r["duration_match"]]
+             matches = [r for r in results if r["duration_match"] and r["confidence"] > 0.02]
+             non_matches = [r for r in results if r not in matches]
+             results = matches + non_matches
 
         return results, rule_used
 

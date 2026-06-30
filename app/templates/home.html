@@ -22,7 +22,7 @@
           </div>
           <div class="status-pill {% if dashboard.disease_ready %}is-ready{% else %}is-pending{% endif %}">
             <i class="bi bi-virus"></i>
-            <span>Disease pipeline {% if dashboard.disease_ready %}ready{% else %}setup required{% endif %}</span>
+            <span>{{ dashboard.disease_status.display_name }} {% if dashboard.disease_ready %}ready{% else %}setup required{% endif %}</span>
           </div>
           <div class="status-pill {% if dashboard.weather_ready %}is-ready{% else %}is-pending{% endif %}">
             <i class="bi bi-cloud-sun"></i>
@@ -56,12 +56,12 @@
           <article>
             <span>Disease Accuracy</span>
             <strong>
-              {% if dashboard.disease_metrics %}{{ '%.1f'|format(dashboard.disease_metrics.accuracy * 100) }}%{% else %}--{% endif %}
+              {% if dashboard.disease_metrics %}{{ '%.1f'|format((dashboard.disease_metrics.pair_accuracy or dashboard.disease_metrics.accuracy) * 100) }}%{% else %}--{% endif %}
             </strong>
           </article>
           <article>
             <span>Backbone</span>
-            <strong>{{ dashboard.disease_metrics.backbone if dashboard.disease_metrics else 'MobileNetV2' }}</strong>
+            <strong>{{ dashboard.disease_metrics.backbone if dashboard.disease_metrics else (dashboard.disease_status.backbone if dashboard.disease_status else 'Unknown') }}</strong>
           </article>
         </div>
         <div class="insight-stack">

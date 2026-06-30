@@ -27,11 +27,11 @@
           <h1 class="hero-title" data-t="hero_title">Daily Agronomy Advisor</h1>
       </div>
       <div class="btn-group btn-group-sm rounded-pill p-1 bg-white bg-opacity-10 border border-white border-opacity-25 shadow-sm" role="group">
-          <input type="radio" class="btn-check" name="lang-toggle" id="lang-en" autocomplete="off" checked onclick="setLanguage('en')">
-          <label class="btn btn-outline-light border-0 rounded-pill px-3" for="lang-en">EN</label>
+          <input type="radio" class="btn-check" name="lang-toggle-hero" id="lang-en-hero" autocomplete="off" checked onclick="setLanguage('en')">
+          <label class="btn btn-outline-light border-0 rounded-pill px-3" for="lang-en-hero" style="font-size: 0.7rem;">EN</label>
           
-          <input type="radio" class="btn-check" name="lang-toggle" id="lang-mr" autocomplete="off" onclick="setLanguage('mr')">
-          <label class="btn btn-outline-light border-0 rounded-pill px-3" for="lang-mr">मराठी</label>
+          <input type="radio" class="btn-check" name="lang-toggle-hero" id="lang-mr-hero" autocomplete="off" onclick="setLanguage('mr')">
+          <label class="btn btn-outline-light border-0 rounded-pill px-3" for="lang-mr-hero" style="font-size: 0.7rem;">मराठी</label>
       </div>
   </div>
   <p data-t="hero_desc">Real-time, weather-aware intelligence for your crops. We analyze local conditions and growth stages to provide daily action plans and risk mitigation.</p>
@@ -88,7 +88,7 @@
       <div class="col-lg-7">
         <div class="glass-panel form-panel">
           <button class="btn btn-link btn-sm position-absolute top-0 start-0 m-3 text-muted text-decoration-none" onclick="goBackToSelection()">
-            <i class="bi bi-arrow-left me-1"></i> Change Crop
+            <i class="bi bi-arrow-left me-1"></i> <span data-t="btn_back">Change Crop</span>
           </button>
           
           <div class="text-center mb-5 mt-2">
@@ -101,22 +101,22 @@
             <!-- Sowing Date -->
             <div class="col-md-12">
               <div class="glass-panel bg-white p-4 border-dashed">
-                <label class="field-label mb-2" for="sowing_date">Sowing Date</label>
+                <label class="field-label mb-2" for="sowing_date" data-t="sowing_date">Sowing Date</label>
                 <input type="date" id="sowing_date" class="form-control form-control-lg border-0 bg-light" max="{{ current_date }}" value="{{ current_date }}">
-                <p class="field-hint mb-0 mt-2">Required for Live Tracking Mode.</p>
+                <p class="field-hint mb-0 mt-2" data-t="sowing_hint">Required for Live Tracking Mode.</p>
               </div>
             </div>
 
             <!-- Location for Weather -->
             <div class="col-md-12">
               <div class="glass-panel bg-white p-4">
-                <label class="field-label mb-3">Field Location (for Live Weather)</label>
+                <label class="field-label mb-3" data-t="location_label">Field Location (for Live Weather)</label>
                 <div class="row g-2">
                     <div class="col-md-5">
-                        <input type="number" step="any" id="lat" class="form-control" placeholder="Latitude">
+                        <input type="number" step="any" id="lat" class="form-control" placeholder="Latitude" data-t-placeholder="location_placeholder_lat">
                     </div>
                     <div class="col-md-5">
-                        <input type="number" step="any" id="lon" class="form-control" placeholder="Longitude">
+                        <input type="number" step="any" id="lon" class="form-control" placeholder="Longitude" data-t-placeholder="location_placeholder_lon">
                     </div>
                     <div class="col-md-2">
                         <button class="btn btn-outline-success w-100 h-100" onclick="detectLocation()" title="Detect My Location">
@@ -124,17 +124,17 @@
                         </button>
                     </div>
                 </div>
-                <p class="field-hint mt-2 mb-0">Detecting location enables weather-aware irrigation and safety alerts.</p>
+                <p class="field-hint mt-2 mb-0" data-t="location_hint">Detecting location enables weather-aware irrigation and safety alerts.</p>
               </div>
             </div>
           </div>
           
           <div class="mt-5 d-grid gap-3">
              <button class="btn btn-success btn-lg py-3 shadow-lg" onclick="startGuidance('live')">
-               <i class="bi bi-lightning-charge-fill me-2"></i> Launch Smart Dashboard
+               <i class="bi bi-lightning-charge-fill me-2"></i> <span data-t="btn_launch">Launch Smart Dashboard</span>
              </button>
              <button class="btn btn-outline-secondary py-3" onclick="startGuidance('explorer')">
-               <i class="bi bi-search me-2"></i> Explore Crop Lifecycle
+               <i class="bi bi-search me-2"></i> <span data-t="btn_explore">Explore Crop Lifecycle</span>
              </button>
           </div>
         </div>
@@ -155,12 +155,20 @@
                 <h4 id="view-crop-label" class="mb-0 h5">Crop Name</h4>
                 <div class="d-flex align-items-center gap-2">
                     <span id="view-mode-badge" class="badge rounded-pill bg-success">LIVE TRACKING</span>
-                    <span id="view-day-badge" class="text-muted small">Day 45</span>
                 </div>
             </div>
         </div>
         
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2">
+            <!-- Integrated Language Toggle -->
+            <div class="btn-group btn-group-sm rounded-pill p-1 bg-light border me-2" role="group">
+                <input type="radio" class="btn-check" name="lang-toggle-viewer" id="lang-en-viewer" autocomplete="off" checked onclick="setLanguage('en')">
+                <label class="btn btn-outline-success border-0 rounded-pill px-2" for="lang-en-viewer" style="font-size: 0.6rem;">EN</label>
+                
+                <input type="radio" class="btn-check" name="lang-toggle-viewer" id="lang-mr-viewer" autocomplete="off" onclick="setLanguage('mr')">
+                <label class="btn btn-outline-success border-0 rounded-pill px-2" for="lang-mr-viewer" style="font-size: 0.6rem;">मराठी</label>
+            </div>
+
             <div class="btn-group btn-group-sm rounded-pill p-1 bg-light border" role="group">
                 <input type="radio" class="btn-check" name="nav-mode" id="nav-auto" autocomplete="off" checked onclick="setNavMode('auto')">
                 <label class="btn btn-outline-success border-0 rounded-pill px-3" for="nav-auto" data-t="nav_auto"><i class="bi bi-magic me-1"></i> Auto</label>
@@ -169,7 +177,7 @@
                 <label class="btn btn-outline-secondary border-0 rounded-pill px-3" for="nav-manual" data-t="nav_manual"><i class="bi bi-hand-index-thumb me-1"></i> Manual</label>
             </div>
             
-            <div id="weather-context-bar" class="d-flex align-items-center gap-3 d-none d-lg-flex">
+            <div id="weather-context-bar" class="d-flex align-items-center gap-2 d-none d-lg-flex ms-2">
                 <!-- Weather signals injected here -->
             </div>
         </div>
@@ -546,6 +554,7 @@ const translations = {
         crop_Rice: "Rice",
         crop_Wheat: "Wheat",
         crop_Cotton: "Cotton",
+        crop_Sugarcane: "Sugarcane",
         crop_Chili: "Chili",
         crop_Jowar: "Jowar",
         crop_Bajra: "Bajra",
@@ -561,7 +570,19 @@ const translations = {
         inputs_title: "Agri-Inputs Recommendation",
         fertilizer_label: "Fertilizer",
         herbicide_label: "Herbicide (Weed Control)",
-        pesticide_label: "Pesticide (Pest Control)"
+        pesticide_label: "Pesticide (Pest Control)",
+        location_placeholder_lat: "Latitude",
+        location_placeholder_lon: "Longitude",
+        expected_range: "Expected Range",
+        day: "Day",
+        of: "of",
+        stage: "STAGE",
+        low: "Low",
+        medium: "Medium",
+        high: "High",
+        critical: "Critical",
+        risk: "Risk",
+        language: "Language"
     },
     mr: {
         hero_kicker: "स्मार्ट शेती सल्लागार",
@@ -583,7 +604,7 @@ const translations = {
         risks_title: "धोके आणि सूचना",
         complete: "पूर्ण",
         current_phase: "सध्याची अवस्था",
-        expected_range: "अपेक्षित दिवस",
+        expected_range: "अपेक्षित टप्पा",
         msg_location: "स्थान यशस्वीरित्या प्राप्त झाले!",
         msg_manual: "मॅन्युअल मोड सुरू झाला. तुम्ही सर्व टप्पे पाहू शकता.",
         stage_prefix: "टप्पा",
@@ -616,7 +637,18 @@ const translations = {
         inputs_title: "खते आणि औषधे",
         fertilizer_label: "खत व्यवस्थापन",
         herbicide_label: "तणनाशक (औषध)",
-        pesticide_label: "कीटकनाशक / बुरशीनाशक"
+        pesticide_label: "कीटकनाशक / बुरशीनाशक",
+        location_placeholder_lat: "अक्षांश (Lat)",
+        location_placeholder_lon: "रेखांश (Lon)",
+        day: "दिवस",
+        of: "एकूण",
+        stage: "टप्पा",
+        low: "कमी",
+        medium: "मध्यम",
+        high: "उच्च",
+        critical: "धोकादायक",
+        risk: "धोका",
+        language: "भाषा"
     }
 };
 
@@ -632,18 +664,17 @@ function updateStaticUI() {
         el.textContent = t(key);
     });
     
+    // Update placeholders
+    document.querySelectorAll('[data-t-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-t-placeholder');
+        el.placeholder = t(key);
+    });
+
     // Update Crop Names in Selection Grid
     document.querySelectorAll('[data-crop-name]').forEach(el => {
         const cropKey = 'crop_' + el.getAttribute('data-crop-name');
         el.textContent = t(cropKey);
     });
-
-    // Update labels and placeholders
-    const sowingLabel = document.querySelector('label[for="sowing_date"]');
-    if (sowingLabel) sowingLabel.textContent = t('sowing_date');
-
-    const configDesc = document.querySelector('.config-step p');
-    if (configDesc) configDesc.textContent = t('config_desc');
 }
 
 function setLanguage(lang) {
@@ -651,11 +682,12 @@ function setLanguage(lang) {
     localStorage.setItem('agri_lang', lang);
     updateStaticUI();
     
-    // Sync radio buttons
-    const enRadio = document.getElementById('lang-en');
-    const mrRadio = document.getElementById('lang-mr');
-    if (lang === 'en' && enRadio) enRadio.checked = true;
-    if (lang === 'mr' && mrRadio) mrRadio.checked = true;
+    // Sync all radio buttons (Hero and Viewer)
+    const enRadios = document.querySelectorAll('#lang-en-hero, #lang-en-viewer');
+    const mrRadios = document.querySelectorAll('#lang-mr-hero, #lang-mr-viewer');
+    
+    enRadios.forEach(r => r.checked = (lang === 'en'));
+    mrRadios.forEach(r => r.checked = (lang === 'mr'));
 
     // Refresh data if already in dashboard
     if (state.selectedCrop && (document.getElementById('step-viewer').classList.contains('d-none') === false)) {
@@ -819,7 +851,7 @@ function renderDashboard(data) {
     if (cropLabel) cropLabel.textContent = `${t('crop_' + data.crop)} ${state.selectedEmoji}`;
     
     const dayBadge = document.getElementById('view-day-badge');
-    if (dayBadge) dayBadge.textContent = `Day ${data.day}`;
+    if (dayBadge) dayBadge.textContent = `${t('day')} ${data.day}`;
     
     // Progress Ring Update
     const radius = 70;
@@ -832,12 +864,8 @@ function renderDashboard(data) {
     const progressText = document.getElementById('progress-val-text');
     if (progressText) progressText.textContent = `${Math.round(data.progress_pct)}%`;
     
-    // Spotlight Card Updates (CRITICAL: Every field must refresh)
-    const stageIconBox = document.getElementById('view-stage-icon-box');
-    if (stageIconBox) stageIconBox.textContent = stageIcon;
-
     const stageCode = document.getElementById('view-stage-code');
-    if (stageCode) stageCode.textContent = `STAGE ${data.stage.code}`;
+    if (stageCode) stageCode.textContent = `${t('stage')} ${data.stage.code}`;
 
     const spotlightLabel = document.getElementById('spotlight-stage-label');
     if (spotlightLabel) spotlightLabel.textContent = data.stage.label;
@@ -847,13 +875,12 @@ function renderDashboard(data) {
 
     const dayCounter = document.getElementById('view-day-counter');
     if (dayCounter) {
-        const totalText = state.lang === 'mr' ? 'एकूण १०' : 'of';
-        dayCounter.textContent = `${state.lang === 'mr' ? 'दिवस' : 'Day'} ${data.day} ${totalText} ${state.timeline?.total_days || '110'}`;
+        dayCounter.textContent = `${t('day')} ${data.day} ${t('of')} ${state.timeline?.total_days || '110'}`;
     }
 
     const durationLabel = document.getElementById('stage-duration-label');
     if (durationLabel) {
-        durationLabel.textContent = `${t('expected_range')}: Day ${data.stage.start_day} - ${data.stage.end_day}`;
+        durationLabel.textContent = `${t('expected_range')}: ${t('day')} ${data.stage.start_day} - ${data.stage.end_day}`;
     }
     
     const focusHeadline = document.getElementById('focus-headline');
@@ -921,11 +948,13 @@ function renderDashboard(data) {
 
         data.risks.forEach(risk => {
             const div = document.createElement('div');
+            const severityKey = risk.severity.toLowerCase();
+            const localizedSeverity = t(severityKey);
             div.className = `alert ${risk.severity === 'critical' ? 'alert-danger' : 'alert-light border'} rounded-4 shadow-sm mb-3 p-3`;
             div.innerHTML = `
                 <div class="d-flex align-items-center gap-2 mb-2">
                     <i class="bi bi-shield-shaded text-danger"></i>
-                    <strong class="text-uppercase" style="font-size: 0.65rem;">${risk.severity}${state.lang === 'en' ? ' Risk' : ''}</strong>
+                    <strong class="text-uppercase" style="font-size: 0.65rem;">${localizedSeverity} ${t('risk')}</strong>
                 </div>
                 <p class="mb-1 small"><strong>${risk.reason}</strong></p>
             `;

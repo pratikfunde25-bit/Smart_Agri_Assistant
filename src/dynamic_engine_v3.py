@@ -431,67 +431,134 @@ class DynamicAdvisorEngine:
 
     def _localize_to_marathi(self, result: Dict):
         # Universal Marathi Mapping
+        # We use full sentences as keys to avoid "mixed" language results
         mr_dict = {
             # Categories
             "Cereals": "धान्ये", "Oilseeds": "गळित धान्ये (तेलबीया)", "Commercial": "नगदी पिके",
-            "Vegetables": "भाजीपाला", "Pulses": "कडधान्ये",
+            "Vegetables": "भाजीपाला", "Pulses": "कडधान्ये", "Fruits": "फळे", "Spices": "मसाले",
 
-            # Phase Names
-            "establishment": "उगवण अवस्था",
-            "vegetative": "शाकीय वाढीची अवस्था",
-            "flowering": "फुलोरा आणि पुनरुत्पादन",
-            "yield_formation": "दाणे/फळ भरण्याची अवस्था",
-            "maturity": "परिपक्वता आणि काढणी",
+            # Phase Labels (Universal)
+            "Seedling (V1-V3)": "रोपावस्था (V1-V3)",
+            "Vegetative Growth (V4-VT)": "शाकीय वाढ (V4-VT)",
+            "Silking & Tasseling (R1)": "तुरा आणि सिल्क येणे (R1)",
+            "Grain Filling (R2-R4)": "दाणे भरणे (R2-R4)",
+            "Maturity (R5-R6)": "परिपक्वता (R5-R6)",
+            "Germination": "उगवण अवस्था",
+            "Tillering": "फुटवे फुटण्याची अवस्था",
+            "Grand Growth": "जोमदार वाढीचा काळ",
+            "Sugar Accumulation": "साखर साठवण काळ",
+            "Ripening": "परिपक्वता / पक्व होणे",
+            "CRI (Crown Root Initiation)": "मुकुट मूळ सुरूवात (CRI)",
+            "Tillering to Jointing": "फुटवे ते कांडी अवस्था",
+            "Booting to Heading": "बोंड येणे ते तुरा येणे",
+            "Milking to Dough stage": "चिकाची अवस्था",
+            "Hard Dough to Maturity": "दाणे कडक होणे ते काढणी",
+            "Transplanting": "पुनर्लागवड",
+            "Vegetative Growth": "शाकीय वाढ",
+            "Flowering & Fruit Set": "फुलोरा आणि फळधारणा",
+            "Fruit Enlargement": "फळांची वाढ",
+            "Harvesting": "काढणी",
+            "Branching (Nipper stage)": "फांद्या फुटणे (शेंडा खुडणे)",
+            "Pod Formation": "घाटे आणि शेंगा लागणे",
+            "Bulb Initiation": "कांदा बसणे (सुरुवात)",
+            "Bulb Development": "कांद्याचा आकार वाढणे",
+            "Neck Fall & Curing": "मान पडणे आणि सुकवणे",
+            "Nursery / Transplanting": "रोपवाटिका आणि पुनर्लागवड",
+            "Active Tillering": "फुटवे फुटणे (सक्रिय)",
+            "Panicle Initiation": "लोंब्या येण्याची सुरुवात",
+            "Flowering & Milk Stage": "फुलोरा आणि दुभती अवस्था",
+            "Dough Stage & Ripening": "चिकाची अवस्था आणि पक्व होणे",
+            "Growth Phase": "वाढीचा टप्पा",
+            "Booting & Flowering": "बोंड आणि फुलोरा",
+            "Heading": "तुरा येणे",
+            "Grain Development": "दाणे भरणे",
+            "Branching": "फांद्या फुटणे",
+            "Pod Filling": "शेंगा भरणे",
+            "Pruning & Sprouting": "छाटणी आणि फुटवे",
+            "Berry Development": "मण्यांची वाढ",
+            "Ripening (Veraison)": "रंग बदलणे आणि पक्व होणे",
 
-            # General Agronomy Actions
-            "Ensure optimal soil moisture": "जमिनीत योग्य ओलावा राखा.",
-            "Monitor for early cutworms": "सुरुवातीच्या किडींवर (कटवर्म) लक्ष ठेवा.",
-            "Apply pre-emergence herbicide": "तणनाशकाची फवारणी करा (असल्यास).",
-            "Ensure proper drainage": "पाण्याचा निचरा व्यवस्थित करा.",
-            "Top dress nitrogen fertilizer": "नत्र खताचा (युरिया) डोस द्या.",
-            "Scout for foliar pests": "पानांवरील किडींची पाहणी करा.",
-            "Maintain weed-free environment": "शेत तणमुक्त ठेवा (कोळपणी/निंदणी करा).",
-            "Apply post-emergence herbicide": "उगवणीनंतरचे तणनाशक फवारा.",
-            "Ensure absolutely NO moisture stress": "पिकाला पाण्याचा अजिबात ताण पडू देऊ नका.",
-            "Apply protective fungicide": "बुरशीनाशक/कीटकनाशकाची फवारणी करा.",
-            "Stop heavy mechanical operations": "शेतात मोठी यांत्रिक कामे टाळा.",
-            "Apply irrigation immediately": "जमीन कोरडी असल्यास त्वरित पाणी द्या.",
-            "Maintain adequate moisture": "दाणे भरण्यासाठी योग्य ओलावा ठेवा.",
-            "Monitor for fruit borers": "अळी आणि बोंडअळीसाठी पाहणी करा.",
-            "Apply foliar potassium": "पोटॅशयुक्त खताची फवारणी करा.",
-            "Spray target-specific insecticide": "योग्य कीटकनाशक फवारा.",
-            "Stop irrigation to allow drying": "पीक वाळण्यासाठी पाणी देणे थांबवा.",
-            "Prepare harvesting equipment": "काढणीच्या यंत्राची तयारी करा.",
-            "Monitor for weather delays": "हवामानाचा अंदाज घेत राहा.",
-            "Harvest promptly": "पीक पक्व झाल्यावर त्वरित काढणी करा.",
-            "Ensure field drainage": "पाणी साचू नये म्हणून चर काढा.",
+            # Focus Areas
+            "Root establishment and weed control": "मुळांची वाढ आणि तण नियंत्रण",
+            "Rapid canopy expansion and nutrient uptake": "पानांची वाढ आणि अन्नद्रव्ये शोषण",
+            "Pollination and critical moisture management": "परागीकरण आणि पाणी व्यवस्थापन",
+            "Kernel weight accumulation": "दाण्यांचे वजन वाढणे",
+            "Dry down and harvest preparation": "पीक सुकवणे आणि काढणीची तयारी",
+            "Ensure uniform plant stand": "समान उगवण सुनिश्चित करा",
+            "Nodule formation and weed management": "मुळांवरील गाठी आणि तण व्यवस्थापन",
+            "Protect from moisture stress": "पाण्याच्या ताणापासून संरक्षण",
+            "Seed filling and pest protection": "दाणे भरणे आणि कीड संरक्षण",
+            "Leaf drop and harvest": "पाने गळणे आणि काढणी",
 
+            # Actions (Full Sentences)
+            "Ensure optimal soil moisture for establishment.": "उगवण होण्यासाठी जमिनीत पुरेसा ओलावा ठेवा.",
+            "Monitor for early cutworms or soil-borne pests.": "सुरुवातीच्या किडींवर (कटवर्म) आणि जमिनीतील किडींवर लक्ष ठेवा.",
+            "Apply pre-emergence herbicide if not already done.": "तणनाशकाची (Pre-emergence) फवारणी केली नसल्यास त्वरित करा.",
+            "Top dress nitrogen fertilizer.": "नत्र खताचा (Urea) दुसरा हप्ता द्या.",
+            "Scout for foliar pests.": "पानांवरील किडींची पाहणी (Scouting) करा.",
+            "Maintain weed-free environment.": "शेत तणमुक्त ठेवा (कोळपणी किंवा निंदणी करा).",
+            "Ensure absolutely NO moisture stress.": "पिकाला पाण्याचा अजिबात ताण पडू देऊ नका.",
+            "Apply protective fungicide/insecticide if pest pressure is high.": "कीड जास्त असल्यास प्रतिबंधात्मक बुरशीनाशक/कीटकनाशक फवारा.",
+            "Stop heavy mechanical operations.": "शेतात मोठी यांत्रिक कामे (उदा. कोळपणी) आता टाळा.",
+            "Apply irrigation immediately if soil is dry.": "जमीन कोरडी असल्यास त्वरित पाणी (Irrigation) द्या.",
+            "Maintain adequate moisture for grain/fruit filling.": "दाणे/फळ भरण्यासाठी योग्य ओलावा ठेवा.",
+            "Monitor for fruit borers or pod bugs.": "फळ पोखरणाऱ्या अळीवर किंवा शेंगावरील ढेकणांवर लक्ष ठेवा.",
+            "Apply foliar potassium (K) if recommended.": "शिफारशीनुसार पोटॅशयुक्त (K) खताची फवारणी करा.",
+            "Spray target-specific insecticide.": "शिफारस केलेले योग्य कीटकनाशक फवारा.",
+            "Stop irrigation to allow drying.": "पीक काढणीसाठी सुकण्यासाठी पाणी देणे थांबवा.",
+            "Prepare harvesting equipment.": "काढणीच्या यंत्रांची (Harvesting equipment) जुळवाजुळव करा.",
+            "Monitor for weather delays.": "हवामानाचा अंदाज घेऊन काढणीचे नियोजन करा.",
+            "Harvest promptly when physiological maturity is reached.": "पीक पक्व झाल्यावर त्वरित काढणी करा.",
+            "Ensure field drainage is clear to prevent waterlogging.": "पाणी साचू नये म्हणून पाण्याचा निचरा (Drainage) करा.",
+            "Continue phase-specific monitoring.": "पीक वाढीच्या टप्प्यानुसार देखरेख सुरू ठेवा.",
+            "Check weather forecast for sudden changes.": "हवामानातील बदलांकडे लक्ष द्या.",
+            
             # AI Recommendations
-            "Focus strictly on achieving": "समान उगवण होण्यावर भर द्या. आता झालेले नुकसान नंतर भरून निघत नाही.",
-            "This is the canopy building phase": "ही महत्त्वाची वाढीची अवस्था आहे. इथे दिलेले खत पिकाचा आकार ठरवते.",
-            "TREAT AS CRITICAL": "हा अतिशय महत्त्वाचा टप्पा आहे! फुलोऱ्याच्या काळात ताण पडल्यास उत्पादनात मोठी घट होते.",
-            "Focus shifts to moving energy": "आता पिकाची सर्व ताकद फळ/दाणे भरण्यात जाते. पोटॅश खत फायदेशीर ठरेल.",
-            "Crop has reached physiological maturity": "पीक पूर्ण पक्व झाले आहे. सुरक्षित आणि लवकर काढणी करणे हेच मुख्य ध्येय आहे.",
+            "Focus strictly on achieving a uniform plant stand. Gaps now will permanently lower yield.": "समान उगवण (Uniform stand) मिळवण्यावर भर द्या. आता पडलेली नांगे नंतर भरून निघत नाहीत आणि उत्पादनात घट होते.",
+            "This is the canopy building phase. Nutrient availability here directly drives the plant's factory size.": "हा पिकाच्या पानांची आणि फांद्यांची वाढीचा काळ आहे. इथे दिलेले खत पिकाचे भविष्य ठरवते.",
+            "TREAT AS CRITICAL. Any stress during flowering causes irreversible yield loss due to poor fruit/grain setting.": "अतिशय महत्त्वाचा टप्पा! फुलोऱ्याच्या काळात ताण पडल्यास परागीकरण नीट होत नाही आणि उत्पादनात मोठी घट होते.",
+            "Focus shifts to moving energy from leaves to the harvestable part. Potassium is highly beneficial here.": "आता पिकाची ऊर्जा दाणे/फळ भरण्यात जाते. या काळात पोटॅश (Potassium) खताचा वापर फायदेशीर ठरतो.",
+            "Crop has reached physiological maturity. Rapid and safe harvesting is the only priority.": "पीक पूर्ण पक्व झाले आहे. आता सुरक्षित आणि लवकर काढणी करणे हेच मुख्य उद्दिष्ट आहे.",
+            
+            # Risks & Reasons
+            "Damping off or poor germination": "रोपे कुजणे किंवा कमी उगवण होणे",
+            "Ensure proper drainage.": "पाण्याचा निचरा व्यवस्थित असल्याची खात्री करा.",
+            "Weed competition": "तणांशी स्पर्धा",
+            "Apply post-emergence herbicide or manual weeding.": "उगवणीनंतरचे तणनाशक फवारा किंवा निंदणी करा.",
+            "Moisture stress during pollination": "परागीकरणाच्या वेळी पाण्याचा ताण",
+            "Pest attack on developing fruit/grain": "वाढणाऱ्या फळांवर/दाण्यांवर किडींचा हल्ला",
+            "Late rains causing quality deterioration": "उशिरा पाऊस पडल्यास प्रत खराब होण्याचा धोका",
+            "Heat Stress": "उष्णतेचा ताण",
+            "Apply light irrigation in the evening to cool the micro-climate.": "पीक थंड ठेवण्यासाठी सायंकाळी हलके पाणी द्या.",
+            "Stage-specific management is the core of precision agriculture.": "पिकाच्या अवस्थेनुसार व्यवस्थापन करणे हेच अचूक शेतीचे सूत्र आहे.",
 
-            # Weather
-            "Heavy rainfall": "मुसळधार पाऊस", "Do not irrigate": "पाणी देऊ नका, फवारणी टाळा.",
-            "Light rain expected": "हलक्या पावसाची शक्यता आहे.",
-            "Extreme heat detected": "कडक उन्हाळा जाणवत आहे. पिकाला हलके पाणी द्या.",
+            # Alerts
+            "Extreme heat detected. Plants may show temporary wilting.": "☀️ कडक ऊन! झाडे कोमेजण्याची शक्यता आहे. हलके पाणी द्या.",
+            "Light rain expected. Good for top-dressing fertilizer, but avoid foliar sprays.": "🌦️ हलक्या पावसाची शक्यता. खते देण्यास योग्य वेळ, पण फवारणी टाळा.",
+            "Heavy rainfall expected. Do not irrigate. Postpone fertilizer/pesticide sprays.": "🚨 मुसळधार पाऊस अपेक्षित! पाणी देऊ नका आणि फवारणी पुढे ढकला.",
+            "Rainfall": "पाऊस",
 
-            # Risks
-            "high": "उच्च धोका", "critical": "अतिशय धोकादायक", "medium": "मध्यम धोका",
-            "Heat Stress": "उष्णतेचा ताण", "Weed competition": "तणांचा प्रादुर्भाव",
-            "Moisture stress": "पाण्याचा ताण", "Pest attack": "किडींचा हल्ला"
+            # Input Sections Labels (Handled in frontend but keys might be used)
+            "fertilizer": "खत व्यवस्थापन",
+            "herbicide": "तणनाशक (औषध)",
+            "pesticide": "कीटकनाशक / बुरशीनाशक"
         }
 
         def translate(text):
             if not text: return text
-            # Replace full matches or substrings
-            for eng, mr in mr_dict.items():
-                if eng.lower() in text.lower():
-                    text = text.replace(eng, mr).replace(eng.lower(), mr).replace(eng.capitalize(), mr)
-            return text
+            # 1. Try exact match first
+            if text in mr_dict:
+                return mr_dict[text]
+            
+            # 2. Try substring replacements for more complex items
+            processed = text
+            # Sort by length descending to match longest phrases first
+            for eng in sorted(mr_dict.keys(), key=len, reverse=True):
+                if eng in processed:
+                    processed = processed.replace(eng, mr_dict[eng])
+            return processed
 
+        # Apply translations
         result["stage"]["label"] = translate(result["stage"]["label"])
         result["stage"]["stage_family_label"] = mr_dict.get(result["stage"].get("stage_family"), "अवस्था")
         

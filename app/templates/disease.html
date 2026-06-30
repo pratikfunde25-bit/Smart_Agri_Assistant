@@ -5,6 +5,33 @@
   <span class="section-kicker">Leaf image diagnosis</span>
   <h1 class="section-title">Detect plant disease from an uploaded image or browser webcam</h1>
   <p>Upload a clean leaf image, or capture one live. Optionally provide the crop name to tighten disease filtering.</p>
+  <div class="status-strip mt-3">
+    <div class="status-pill {% if dashboard.disease_ready %}is-ready{% else %}is-pending{% endif %}">
+      <i class="bi bi-cpu"></i>
+      <span>{{ dashboard.disease_status.display_name }}</span>
+    </div>
+    <div class="status-pill {% if dashboard.disease_status.metadata_missing %}is-pending{% else %}is-ready{% endif %}">
+      <i class="bi bi-journal-check"></i>
+      <span>
+        {% if dashboard.disease_status.metadata_missing %}
+        Metadata missing
+        {% else %}
+        Metadata ready
+        {% endif %}
+      </span>
+    </div>
+    <div class="status-pill {% if dashboard.disease_metrics %}is-ready{% else %}is-pending{% endif %}">
+      <i class="bi bi-bar-chart"></i>
+      <span>
+        {% if dashboard.disease_metrics %}
+        Accuracy {{ '%.1f'|format((dashboard.disease_metrics.pair_accuracy or dashboard.disease_metrics.accuracy) * 100)
+        }}%
+        {% else %}
+        Metrics unavailable
+        {% endif %}
+      </span>
+    </div>
+  </div>
 </section>
 
 <div class="row g-4">
@@ -34,7 +61,8 @@
         <div class="row g-3 mt-1">
           <div class="col-md-6">
             <label class="field-label">Optional crop name
-              <input class="form-control form-control-lg" name="provided_crop" type="text" placeholder="Tomato, Potato, Rice...">
+              <input class="form-control form-control-lg" name="provided_crop" type="text"
+                placeholder="Tomato, Potato, Rice...">
             </label>
           </div>
           <div class="col-md-6">
@@ -69,10 +97,18 @@
       <p class="result-placeholder">
         The result panel will show crop name, disease name, confidence, Grad-CAM heatmap, and treatment guidance.
       </p>
+      {% if dashboard.disease_status.trained_at %}
+      <div class="inline-note mt-3">
+        Active model trained at <code>{{ dashboard.disease_status.trained_at }}</code> with
+        <code>{{ dashboard.disease_status.num_pair_classes or dashboard.disease_metrics.num_pair_classes or dashboard.disease_metrics.num_classes or '--' }}</code>
+        classes.
+      </div>
+      {% endif %}
       {% if not dashboard.disease_ready %}
-        <div class="inline-note mt-3">
-          Disease inference becomes available after TensorFlow is installed and the disease model files exist under <code>models/disease/</code>.
-        </div>
+      <div class="inline-note mt-3">
+        Disease inference becomes available after TensorFlow is installed and a model plus metadata exist under
+        <code>models/disease/</code>.
+      </div>
       {% endif %}
     </section>
   </div>

@@ -1,0 +1,367 @@
+{
+  "class_names": [
+    "Apple___Apple_scab",
+    "Apple___Black_rot",
+    "Apple___Cedar_apple_rust",
+    "Apple___healthy",
+    "Blueberry___healthy",
+    "Cherry_(including_sour)___Powdery_mildew",
+    "Cherry_(including_sour)___healthy",
+    "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
+    "Corn_(maize)___Common_rust_",
+    "Corn_(maize)___Northern_Leaf_Blight",
+    "Corn_(maize)___healthy",
+    "Grape___Black_rot",
+    "Grape___Esca_(Black_Measles)",
+    "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)",
+    "Grape___healthy",
+    "Orange___Haunglongbing_(Citrus_greening)",
+    "Peach___Bacterial_spot",
+    "Peach___healthy",
+    "Pepper,_bell___Bacterial_spot",
+    "Pepper,_bell___healthy",
+    "Potato___Early_blight",
+    "Potato___Late_blight",
+    "Potato___healthy",
+    "Raspberry___healthy",
+    "Soybean___healthy",
+    "Squash___Powdery_mildew",
+    "Strawberry___Leaf_scorch",
+    "Strawberry___healthy",
+    "Tomato___Bacterial_spot",
+    "Tomato___Early_blight",
+    "Tomato___Late_blight",
+    "Tomato___Leaf_Mold",
+    "Tomato___Septoria_leaf_spot",
+    "Tomato___Spider_mites Two-spotted_spider_mite",
+    "Tomato___Target_Spot",
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+    "Tomato___Tomato_mosaic_virus",
+    "Tomato___healthy"
+  ],
+  "class_metadata": [
+    {
+      "class_name": "Apple___Apple_scab",
+      "crop_name": "Apple",
+      "disease_name": "Apple Scab",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Apple___Black_rot",
+      "crop_name": "Apple",
+      "disease_name": "Black Rot",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Apple___Cedar_apple_rust",
+      "crop_name": "Apple",
+      "disease_name": "Cedar Apple Rust",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Apple___healthy",
+      "crop_name": "Apple",
+      "disease_name": "Healthy",
+      "is_healthy": true
+    },
+    {
+      "class_name": "Blueberry___healthy",
+      "crop_name": "Blueberry",
+      "disease_name": "Healthy",
+      "is_healthy": true
+    },
+    {
+      "class_name": "Cherry_(including_sour)___Powdery_mildew",
+      "crop_name": "Cherry (Including Sour)",
+      "disease_name": "Powdery Mildew",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Cherry_(including_sour)___healthy",
+      "crop_name": "Cherry (Including Sour)",
+      "disease_name": "Healthy",
+      "is_healthy": true
+    },
+    {
+      "class_name": "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
+      "crop_name": "Corn (Maize)",
+      "disease_name": "Cercospora Leaf Spot Gray Leaf Spot",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Corn_(maize)___Common_rust_",
+      "crop_name": "Corn (Maize)",
+      "disease_name": "Common Rust",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Corn_(maize)___Northern_Leaf_Blight",
+      "crop_name": "Corn (Maize)",
+      "disease_name": "Northern Leaf Blight",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Corn_(maize)___healthy",
+      "crop_name": "Corn (Maize)",
+      "disease_name": "Healthy",
+      "is_healthy": true
+    },
+    {
+      "class_name": "Grape___Black_rot",
+      "crop_name": "Grape",
+      "disease_name": "Black Rot",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Grape___Esca_(Black_Measles)",
+      "crop_name": "Grape",
+      "disease_name": "Esca (Black Measles)",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)",
+      "crop_name": "Grape",
+      "disease_name": "Leaf Blight (Isariopsis Leaf Spot)",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Grape___healthy",
+      "crop_name": "Grape",
+      "disease_name": "Healthy",
+      "is_healthy": true
+    },
+    {
+      "class_name": "Orange___Haunglongbing_(Citrus_greening)",
+      "crop_name": "Orange",
+      "disease_name": "Haunglongbing (Citrus Greening)",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Peach___Bacterial_spot",
+      "crop_name": "Peach",
+      "disease_name": "Bacterial Spot",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Peach___healthy",
+      "crop_name": "Peach",
+      "disease_name": "Healthy",
+      "is_healthy": true
+    },
+    {
+      "class_name": "Pepper,_bell___Bacterial_spot",
+      "crop_name": "Pepper, Bell",
+      "disease_name": "Bacterial Spot",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Pepper,_bell___healthy",
+      "crop_name": "Pepper, Bell",
+      "disease_name": "Healthy",
+      "is_healthy": true
+    },
+    {
+      "class_name": "Potato___Early_blight",
+      "crop_name": "Potato",
+      "disease_name": "Early Blight",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Potato___Late_blight",
+      "crop_name": "Potato",
+      "disease_name": "Late Blight",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Potato___healthy",
+      "crop_name": "Potato",
+      "disease_name": "Healthy",
+      "is_healthy": true
+    },
+    {
+      "class_name": "Raspberry___healthy",
+      "crop_name": "Raspberry",
+      "disease_name": "Healthy",
+      "is_healthy": true
+    },
+    {
+      "class_name": "Soybean___healthy",
+      "crop_name": "Soybean",
+      "disease_name": "Healthy",
+      "is_healthy": true
+    },
+    {
+      "class_name": "Squash___Powdery_mildew",
+      "crop_name": "Squash",
+      "disease_name": "Powdery Mildew",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Strawberry___Leaf_scorch",
+      "crop_name": "Strawberry",
+      "disease_name": "Leaf Scorch",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Strawberry___healthy",
+      "crop_name": "Strawberry",
+      "disease_name": "Healthy",
+      "is_healthy": true
+    },
+    {
+      "class_name": "Tomato___Bacterial_spot",
+      "crop_name": "Tomato",
+      "disease_name": "Bacterial Spot",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Tomato___Early_blight",
+      "crop_name": "Tomato",
+      "disease_name": "Early Blight",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Tomato___Late_blight",
+      "crop_name": "Tomato",
+      "disease_name": "Late Blight",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Tomato___Leaf_Mold",
+      "crop_name": "Tomato",
+      "disease_name": "Leaf Mold",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Tomato___Septoria_leaf_spot",
+      "crop_name": "Tomato",
+      "disease_name": "Septoria Leaf Spot",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Tomato___Spider_mites Two-spotted_spider_mite",
+      "crop_name": "Tomato",
+      "disease_name": "Spider Mites Two-Spotted Spider Mite",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Tomato___Target_Spot",
+      "crop_name": "Tomato",
+      "disease_name": "Target Spot",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+      "crop_name": "Tomato",
+      "disease_name": "Tomato Yellow Leaf Curl Virus",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Tomato___Tomato_mosaic_virus",
+      "crop_name": "Tomato",
+      "disease_name": "Tomato Mosaic Virus",
+      "is_healthy": false
+    },
+    {
+      "class_name": "Tomato___healthy",
+      "crop_name": "Tomato",
+      "disease_name": "Healthy",
+      "is_healthy": true
+    }
+  ],
+  "crop_to_classes": {
+    "Apple": [
+      "Apple___Apple_scab",
+      "Apple___Black_rot",
+      "Apple___Cedar_apple_rust",
+      "Apple___healthy"
+    ],
+    "Blueberry": [
+      "Blueberry___healthy"
+    ],
+    "Cherry (Including Sour)": [
+      "Cherry_(including_sour)___Powdery_mildew",
+      "Cherry_(including_sour)___healthy"
+    ],
+    "Corn (Maize)": [
+      "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
+      "Corn_(maize)___Common_rust_",
+      "Corn_(maize)___Northern_Leaf_Blight",
+      "Corn_(maize)___healthy"
+    ],
+    "Grape": [
+      "Grape___Black_rot",
+      "Grape___Esca_(Black_Measles)",
+      "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)",
+      "Grape___healthy"
+    ],
+    "Orange": [
+      "Orange___Haunglongbing_(Citrus_greening)"
+    ],
+    "Peach": [
+      "Peach___Bacterial_spot",
+      "Peach___healthy"
+    ],
+    "Pepper, Bell": [
+      "Pepper,_bell___Bacterial_spot",
+      "Pepper,_bell___healthy"
+    ],
+    "Potato": [
+      "Potato___Early_blight",
+      "Potato___Late_blight",
+      "Potato___healthy"
+    ],
+    "Raspberry": [
+      "Raspberry___healthy"
+    ],
+    "Soybean": [
+      "Soybean___healthy"
+    ],
+    "Squash": [
+      "Squash___Powdery_mildew"
+    ],
+    "Strawberry": [
+      "Strawberry___Leaf_scorch",
+      "Strawberry___healthy"
+    ],
+    "Tomato": [
+      "Tomato___Bacterial_spot",
+      "Tomato___Early_blight",
+      "Tomato___Late_blight",
+      "Tomato___Leaf_Mold",
+      "Tomato___Septoria_leaf_spot",
+      "Tomato___Spider_mites Two-spotted_spider_mite",
+      "Tomato___Target_Spot",
+      "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+      "Tomato___Tomato_mosaic_virus",
+      "Tomato___healthy"
+    ]
+  },
+  "trained_at": "2026-05-02T18:53:11.640179+00:00",
+  "backbone": "densenet121",
+  "image_size": 224,
+  "batch_size": 16,
+  "model_type": "joint_crop_disease",
+  "class_output_name": "class_output",
+  "crop_output_name": "crop_output",
+  "crop_names": [
+    "Apple",
+    "Blueberry",
+    "Cherry (Including Sour)",
+    "Corn (Maize)",
+    "Grape",
+    "Orange",
+    "Peach",
+    "Pepper, Bell",
+    "Potato",
+    "Raspberry",
+    "Soybean",
+    "Squash",
+    "Strawberry",
+    "Tomato"
+  ],
+  "num_pair_classes": 38,
+  "num_crops": 14,
+  "backbone_reason": "DenseNet121 is a strong fine-grained visual backbone for leaf texture, lesion pattern, and vein-level cues.",
+  "notes": "Primary head predicts the exact crop+disease class. Auxiliary crop head stabilizes crop identity and improves confidence consistency for deployment. Training includes heavier augmentation and extra intermediate dense blocks to reduce overfitting to crop-specific visual shortcuts."
+}

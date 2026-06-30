@@ -21,6 +21,7 @@ TRAIN_AUGMENTER = tf.keras.Sequential(
         tf.keras.layers.RandomFlip("horizontal"),
         tf.keras.layers.RandomRotation(0.12),
         tf.keras.layers.RandomZoom(0.12),
+        tf.keras.layers.RandomTranslation(0.08, 0.08),
         tf.keras.layers.RandomContrast(0.2),
     ],
     name="leaf_train_augmenter",
@@ -36,7 +37,9 @@ class DatasetBundle:
     val_df: pd.DataFrame
     test_df: pd.DataFrame
     class_names: List[str]
+    crop_names: List[str]
     class_weights: Dict[int, float]
+    crop_weights: Dict[int, float]
     class_metadata: List[dict]
 
 
@@ -187,6 +190,42 @@ def build_tf_dataset(
     return dataset
 
 
+def build_joint_tf_dataset(
+    frame: pd.DataFrame,
+    image_size: tuple[int, int],
+    batch_size: int,
+    training: bool = False,
+    class_weights: Dict[int, float] | None = None,
+    crop_weights: Dict[int, float] | None = None,
+) -> tf.data.Dataset:
+    dataset = tf.data.Dataset.from_tensor_slices(
+        (
+            frame["filepath"].tolist(),
+            frame["label_idx"].astype(np.int32).tolist(),
+            frame["crop_idx"].astype(np.int32).tolist(),
+        )
+    )
+
+    if training:
+        dataset = dataset.shuffle(len(frame), reshuffle_each_iteration=True)
+
+    def _load(path: tf.Tensor, class_label: tf.Tensor, crop_label: tf.Tensor):
+        image = _decode_image(path, image_size=image_size)
+        if training:
+            image = augment_leaf_image(image)
+
+        labels = {
+            "class_output": class_label,
+            "crop_output": crop_label,
+        }
+
+        return image, labels
+
+    dataset = dataset.map(_load, num_parallel_calls=AUTOTUNE)
+    dataset = dataset.batch(batch_size).prefetch(AUTOTUNE)
+    return dataset
+
+
 def build_dataset_bundle(
     dataset_dirs: Sequence[str | Path],
     image_size: tuple[int, int],
@@ -197,6 +236,9 @@ def build_dataset_bundle(
     samples = collect_plant_disease_samples(dataset_dirs)
     samples = sample_per_class(samples, max_images_per_class=max_images_per_class, random_state=random_state)
     class_names = sorted(samples["class_name"].unique().tolist())
+    crop_names = sorted(samples["crop_name"].unique().tolist())
+    crop_to_idx = {crop_name: idx for idx, crop_name in enumerate(crop_names)}
+    samples["crop_idx"] = samples["crop_name"].map(crop_to_idx).astype(np.int32)
     train_df, val_df, test_df = split_samples(samples, random_state=random_state)
     class_metadata = build_class_metadata(class_names)
 
@@ -208,6 +250,8 @@ def build_dataset_bundle(
         val_df=val_df,
         test_df=test_df,
         class_names=class_names,
+        crop_names=crop_names,
         class_weights=compute_balanced_class_weights(train_df["label_idx"].tolist()),
+        crop_weights=compute_balanced_class_weights(train_df["crop_idx"].tolist()),
         class_metadata=[item.__dict__ for item in class_metadata],
     )
