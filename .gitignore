@@ -60,6 +60,7 @@ models/**/*.tflite
 data/raw/
 data/processed/
 data/external/
+*.csv
 !data/.gitkeep
 
 # Reports
@@ -87,3 +88,14 @@ temp/
 # Documentation build
 docs/_build/
 site/
+
+# Heavy / Large Files
+*.zip
+*.pdf
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+*.mdb
+*.accdb
