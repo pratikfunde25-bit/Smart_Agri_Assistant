@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: smart-agri-assistant
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app.app:app --bind 0.0.0.0:$PORT --timeout 600"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0

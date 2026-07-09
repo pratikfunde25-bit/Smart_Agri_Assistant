@@ -6,8 +6,8 @@ matplotlib
 seaborn
 flask
 joblib
-tensorflow
-opencv-python
+tensorflow-cpu
+opencv-python-headless
 Pillow
 requests
 python-dotenv
