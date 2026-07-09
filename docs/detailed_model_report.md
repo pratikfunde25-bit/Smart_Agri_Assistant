@@ -10,6 +10,18 @@ This report contains the evaluation metrics (Accuracy, Precision, Recall, F1-Sco
 - **Recall (Macro)**: 0.7573
 - **F1 Score (Macro)**: 0.7717
 
+### Exploratory Data Analysis & Feature Insights
+The following visualizations highlight the data distribution and feature correlations that power the crop recommendation engine:
+
+**Dataset Distribution**
+![Crop Distribution](../visualizations/crop_distribution.png)
+
+**Feature Correlation Heatmap**
+![Correlation Heatmap](../visualizations/correlation_heatmap.png)
+
+**Regional Patterns**
+![Regional Patterns](../visualizations/regional_patterns.png)
+
 ### Annotated Confusion Matrix
 The confusion matrix is annotated with exact counts of True Positives, True Negatives, False Positives, and False Negatives per class.
 
@@ -54,6 +66,16 @@ The confusion matrix is annotated with exact counts of True Positives, True Nega
 - **F1 Score (Macro)**: 0.7510
 
 - **Auxiliary Crop Head Accuracy**: 0.8947
+
+### Training Performance & Explainability (Grad-CAM)
+The following curve visualizes the accuracy and loss metrics throughout the training epochs, demonstrating the model's convergence and stability due to the joint-task regularization:
+
+**Training Curves**
+![Training Curves](../reports/disease_joint/training_curves.png)
+
+**Explainability Example (Grad-CAM Heatmap)**
+To ensure our model predictions are transparent and visually verifiable by farmers, we use Grad-CAM to highlight the regions of the leaf that triggered the disease classification.
+![Grad-CAM Explainability Heatmap](../visualizations/sample_gradcam.jpg)
 
 ### Annotated Confusion Matrix
 The confusion matrix is annotated with exact counts of True Positives, True Negatives, False Positives, and False Negatives per class.
