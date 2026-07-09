@@ -4,10 +4,9 @@ This module extends the existing CSV-based crop recommendation system into a rea
 
 ## Model Strategy
 
-- The legacy production path is a single-head `MobileNetV2` classifier.
-- The upgraded training path uses a joint crop+disease classifier with a primary pair-class head and an auxiliary crop head.
-- The default upgraded backbone is `DenseNet121`, with `ResNet50V2` and `Xception` available for benchmarking.
-- This joint design is more stable than the earlier experimental EfficientNet multitask script because it preserves exact crop+disease supervision instead of splitting crop and disease into loosely aligned label spaces.
+- The production path uses a joint crop+disease classifier with a primary pair-class head and an auxiliary crop head.
+- The default backbone is `DenseNet121`.
+- This joint design is highly stable because it preserves exact crop+disease supervision instead of splitting crop and disease into loosely aligned label spaces.
 
 ## Folder-Style Dataset Assumption
 
@@ -25,13 +24,9 @@ You can pass more than one `--dataset-dir` when adding real-world images. Keep t
 
 ## Training
 
-Legacy single-head training:
 
-```bash
-python scripts/train_disease_model.py --dataset-dir data/plantvillage --dataset-dir data/real_world_leaf_images --backbone mobilenetv2 --image-size 224 --batch-size 32
-```
 
-Upgraded joint crop+disease training:
+Joint crop+disease training:
 
 ```bash
 python scripts/train_multitask_local.py --dataset-dir "data/external/plantvillage dataset/color" --backbone densenet121 --image-size 224 --batch-size 16
@@ -46,12 +41,7 @@ Training pipeline features:
 - fine-tuning of deeper convolution blocks
 - early stopping and learning-rate reduction
 
-Legacy artifacts are written to:
 
-- `models/disease/leaf_disease_classifier.keras`
-- `models/disease/leaf_disease_metadata.json`
-- `reports/disease/evaluation_metrics.json`
-- `reports/disease/confusion_matrix.png`
 
 Joint-model artifacts are written to:
 
