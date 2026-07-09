@@ -126,3 +126,16 @@ The confusion matrix is annotated with exact counts of True Positives, True Nega
 
 ---
 
+## Reproducibility & Verifiable Proofs
+
+To ensure the integrity of this research and to confirm that the presented results are strictly analytical rather than randomly generated, the exact evaluation outputs, test splits, and raw accuracy matrices have been preserved in the repository.
+
+Researchers and evaluators can independently verify the global Accuracy, Precision, Recall, and F1-Scores by auditing the following raw data artifacts generated directly by our model evaluation pipelines:
+
+- **Crop Recommendation Raw Metrics & Confusion Matrix**: [reports/metrics.json](../reports/metrics.json)
+- **Hybrid Disease Raw Metrics & Classification Report**: [reports/disease_joint/evaluation_metrics.json](../reports/disease_joint/evaluation_metrics.json)
+- **Hybrid Disease Raw Confusion Matrix**: [reports/disease_joint/confusion_matrix.csv](../reports/disease_joint/confusion_matrix.csv)
+- **Hybrid Disease Test Set Predictions**: [reports/disease_joint/test_predictions.csv](../reports/disease_joint/test_predictions.csv)
+
+These files serve as the absolute mathematical proof for the reported results, containing the exact test samples, probability scores, and exact class weights utilized during the validation phase.
+
