@@ -57,10 +57,10 @@ models/**/*.tflite
 !models/.gitkeep
 
 # Data files (keep structure but ignore large data)
-data/raw/
-data/processed/
-data/external/
 *.csv
+!data/raw/*.csv
+!data/processed/*.csv
+data/external/
 !data/.gitkeep
 
 # Reports
