@@ -11,7 +11,7 @@ if __name__ == "__main__":
     ensure_generated_dirs()
     
     port = int(os.getenv("PORT", 5000))
-    print(f"🚀 Starting Production Server on http://0.0.0.0:{port}")
-    print("Press Ctrl+C to stop.")
+    print(f"[*] Starting Production Server on http://127.0.0.1:{port} (http://localhost:{port})")
+    print("[*] Press Ctrl+C to stop.")
     
     serve(app, host="0.0.0.0", port=port)
