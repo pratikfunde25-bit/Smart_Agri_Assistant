@@ -46,7 +46,7 @@ blackbox_mcp_settings.json
 .ipynb_checkpoints/
 *.ipynb_checkpoints
 
-# Model files (keep structure but ignore large weights)
+# Model files (track the current trained artifacts; ignore other model weights)
 models/**/*.h5
 models/**/*.pth
 models/**/*.pkl
@@ -55,6 +55,11 @@ models/**/*.keras
 models/**/*.onnx
 models/**/*.tflite
 !models/.gitkeep
+!models/best_model.pkl
+!models/label_encoder.pkl
+!models/final_multitask_crop_disease.h5
+!models/disease/leaf_disease_classifier.keras
+!models/disease/leaf_disease_joint_classifier.keras
 
 # Data files (keep structure but ignore large data)
 *.csv
